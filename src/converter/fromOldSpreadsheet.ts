@@ -14,8 +14,8 @@ export default {
       // dialogs
       else if (/[\S]+_[\da-f]{8}/.test(curr[0])) {
         const attrMatch = curr[1].match(/^(?:s|y|n|m|mc)(?: [\w]+)?/);
-        const origMatch = curr[1].match(/^(?:(?:s|y|n|m|mc) (?:[\w]+ )?"|)(.*)"?$/);
-        const tranMatch = curr[2].match(/^(?:(?:s|y|n|m|mc) (?:[\w]+ )?"|)(.*)"?$/);
+        const origMatch = curr[1].match(/^(?:(?:s|y|n|m|mc) (?:[\w]+ )?"|)(.*?)"?$/);
+        const tranMatch = curr[2].match(/^(?:(?:s|y|n|m|mc) (?:[\w]+ )?"|)(.*?)"?$/);
         if (!origMatch || !tranMatch) throw new Error('dialog not found.');
         const attr = attrMatch ? attrMatch[0] : '';
         array.push(new DialogsTranslate(curr[0], attr, origMatch[1], tranMatch[1]));

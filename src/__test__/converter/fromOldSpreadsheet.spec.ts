@@ -12,7 +12,7 @@ describe(`class FromOldSpreadsheet`, () => {
           '"私たちの中には小さな悪魔がいる"',
         ],
       ];
-      expect(FromOldSpreadsheet.convert(sheet)).toStrictEqual([
+      expect(FromOldSpreadsheet.convert(sheet)).toMatchObject([
         { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
         {
           id: 'ch0_main_41e273ca',
