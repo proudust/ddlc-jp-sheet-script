@@ -1,7 +1,7 @@
 import DialogsTranslate from '../../transrate/dialogsTranslate';
 import FileTranslate from '../../transrate/fileTranslate';
 import StringsTranslate from '../../transrate/stringsTranslate';
-import TestResource from './testResource';
+import TestResource from '../testResource';
 
 describe(`class DialogsTranslate`, () => {
   describe(`DialogsTranslate#inflate`, () => {
