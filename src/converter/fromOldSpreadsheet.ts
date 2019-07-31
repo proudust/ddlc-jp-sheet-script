@@ -13,11 +13,9 @@ export default {
       if (curr[0] === 'strings') array.push(new StringsTranslate(curr[1], curr[2]));
       // dialogs
       else if (/[\S]+_[\da-f]{8}/.test(curr[0])) {
-        const attrMatch = curr[1].match(/^(?:s|y|n|m|mc)(?: [\w]+)?/);
-        const origMatch = curr[1].match(/^(?:(?:s|y|n|m|mc) (?:[\w]+ )?"|)(.*?)"?$/);
-        const tranMatch = curr[2].match(
-          /^(?:(?:s|y|n|m|mc) (?:[\w]+ )?"|)(.*?|(?:"[\d\D]+?")+)"?$/,
-        );
+        const attrMatch = curr[1].match(/^[\w]+(?: [\w]+)?(?= ")/);
+        const origMatch = curr[1].match(/^(?:[\w]+(?: [\w]+)? ")?([\s\S]+?)"?$/);
+        const tranMatch = curr[2].match(/^(?:[\w]+(?: [\w]+)? ")?("[\s\S]+"|[\s\S]+?)"?$/);
         if (!origMatch || !tranMatch)
           throw new Error(`dialog not found. orig: ${curr[1]}, tran: ${curr[2]}`);
         const attr = attrMatch ? attrMatch[0] : '';
