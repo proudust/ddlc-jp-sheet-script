@@ -11,7 +11,7 @@ export default {
    */
   convert: (name: string, translates: Translate[]): File[] => {
     const defalutFile = { fileName: `${name}.rpy`, content: '' };
-    return translates
+    const files = translates
       .sort((a, b) => {
         if (a.constructor.name < b.constructor.name) {
           return -1;
@@ -21,18 +21,17 @@ export default {
         }
         return 0;
       })
-      .reduce<File[]>(
-        (array, curr, index, source) => {
-          const before = index > 0 ? source[index - 1] : null;
-          const output = curr.inflate(before);
-          if (typeof output === 'string') {
-            defalutFile.content += (before ? '\n' : '') + output;
-          } else {
-            array.push(output);
-          }
-          return array;
-        },
-        [defalutFile],
-      );
+      .reduce<File[]>((array, curr, index, source) => {
+        const before = index > 0 ? source[index - 1] : null;
+        const output = curr.inflate(before);
+        if (typeof output === 'string') {
+          defalutFile.content += (before ? '\n' : '') + output;
+        } else {
+          array.push(output);
+        }
+        return array;
+      }, []);
+    if (defalutFile.content) files.unshift(defalutFile);
+    return files;
   },
 };

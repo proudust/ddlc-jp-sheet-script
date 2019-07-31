@@ -33,5 +33,21 @@ translate Japanese strings:
         },
       ]);
     });
+
+    it('FileTranslate only', () => {
+      const sheet = [
+        new FileTranslate(
+          'CAN YOU HEAR ME.txt',
+          TestResource.fileContent.orifinal,
+          TestResource.fileContent.translate,
+        ),
+      ];
+      expect(ToTranslationFile.convert('test', sheet)).toStrictEqual([
+        {
+          fileName: 'CAN YOU HEAR ME.txt',
+          content: TestResource.fileContent.translate,
+        },
+      ]);
+    });
   });
 });
