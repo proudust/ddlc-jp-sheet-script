@@ -22,7 +22,7 @@ export default {
         array.push(new DialogsTranslate(curr[0], attr, origMatch[1], tranMatch[1]));
       }
       // file
-      else if (/.txt/.test(curr[0])) array.push(new FileTranslate(curr[0], curr[1], curr[2]));
+      else if (/.txt$/.test(curr[0])) array.push(new FileTranslate(curr[0], curr[1], curr[2]));
 
       return array;
     }, []);
