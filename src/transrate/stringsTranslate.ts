@@ -30,13 +30,13 @@ export default class StringsTranslate implements Translate {
         ? 'translate Japanese strings:\n'
         : '';
     if (!this.original.match(/\n/g)) {
-      return String.raw`${prefix}    old "${this.original}"
+      return `${prefix}    old "${this.original}"
     new "${this.translate}"
 `;
     } else {
-      return String.raw`${prefix}    old """\
+      return `${prefix}    old """\\
 ${this.original.replace(/"/g, '\\"')}"""
-    new """\
+    new """\\
 ${this.translate}"""
 `;
     }

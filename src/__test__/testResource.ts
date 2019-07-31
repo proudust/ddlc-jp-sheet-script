@@ -2,7 +2,7 @@
 
 export default {
   dialog: {
-    script: String.raw`translate Japanese ch0_main_41e273ca:
+    script: `translate Japanese ch0_main_41e273ca:
     s "「おーはーよーーー！」"
 `,
   },
@@ -17,7 +17,7 @@ export default {
 `,
   },
   fileContent: {
-    orifinal: String.raw`"There's a little devil inside all of us."
+    orifinal: `"There's a little devil inside all of us."
 
 Beneath their manufactured perception - their artificial reality - is a
 writhing, twisted mess of dread. Loathing. Judgment. Elitism. Self-doubt.
@@ -30,7 +30,7 @@ Such a deplorable, tangled mass is already present in every single one of them.
 That's why I choose not to blame myself for their actions.
 
 All I did was untie the knot.`,
-    translate: String.raw`"私たちの中には小さな悪魔がいる"
+    translate: `"私たちの中には小さな悪魔がいる"
 
 創られた知覚の下で - 人工現実 - は
 恐怖の混乱に捩じれてのたうち回る。嫌悪。審判。選民主義。自信喪失。
@@ -47,12 +47,12 @@ All I did was untie the knot.`,
   poemTitle: {
     orifinal: 'Ghost Under the Light',
     translate: '燈の下の幽霊',
-    script: String.raw`    old "Ghost Under the Light"
+    script: `    old "Ghost Under the Light"
     new "燈の下の幽霊"
 `,
   },
   poemContent: {
-    orifinal: String.raw`An old tale tells of a lady who wanders Earth.
+    orifinal: `An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,
 All meaning,
@@ -93,7 +93,7 @@ I am not your legend.
 Your legend does not exist."
 
 And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
-    translate: String.raw`地上のどこかを渡り歩く女性の、古い言い伝え。
+    translate: `地上のどこかを渡り歩く女性の、古い言い伝え。
 全てを知る女性。
 全ての真理を突き止めた美しい女性。
 全ての意味を、

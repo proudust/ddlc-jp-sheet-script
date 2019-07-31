@@ -19,7 +19,7 @@ describe(`class ToTranslationFile`, () => {
       expect(ToTranslationFile.convert('test', sheet)).toStrictEqual([
         {
           fileName: 'test.rpy',
-          content: String.raw`translate Japanese ch0_main_41e273ca:
+          content: `translate Japanese ch0_main_41e273ca:
     s "「おーはーよーーー！」"
 
 translate Japanese strings:
