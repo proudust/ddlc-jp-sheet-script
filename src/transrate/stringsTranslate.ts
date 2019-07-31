@@ -21,15 +21,20 @@ export default class StringsTranslate implements Translate {
 
   /**
    * Translate インスタンスをスクリプトに変換する。
+   * @param before 一つ前に変換した Translate インスタンス、無い場合は null
    * @returns 変換後のスクリプト
    */
-  public inflate(): string {
+  public inflate(before: Translate | null): string {
+    const prefix =
+      !before || before.constructor.name != 'StringsTranslate'
+        ? 'translate Japanese strings:\n'
+        : '';
     if (!this.original.match(/\n/g)) {
-      return String.raw`    old "${this.original}"
+      return String.raw`${prefix}    old "${this.original}"
     new "${this.translate}"
 `;
     } else {
-      return String.raw`    old """\
+      return String.raw`${prefix}    old """\
 ${this.original.replace(/"/g, '\\"')}"""
     new """\
 ${this.translate}"""
