@@ -5,7 +5,7 @@ import TestResource from '../testResource';
 
 describe(`class DialogsTranslate`, () => {
   describe(`DialogsTranslate#inflate`, () => {
-    it('normal', () => {
+    it('character dialog', () => {
       const t = new DialogsTranslate(
         'ch0_main_41e273ca',
         's',
@@ -13,6 +13,16 @@ describe(`class DialogsTranslate`, () => {
         '「おーはーよーーー！」',
       );
       expect(t.inflate()).toBe(TestResource.dialog.script);
+    });
+
+    it('monologue', () => {
+      const t = new DialogsTranslate(
+        'ch0_main_bcc5bb00',
+        '',
+        TestResource.mcDialog.orifinal,
+        TestResource.mcDialog.translate,
+      );
+      expect(t.inflate()).toBe(TestResource.mcDialog.script);
     });
 
     it('split dialog', () => {

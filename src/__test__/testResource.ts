@@ -6,6 +6,14 @@ export default {
     s "「おーはーよーーー！」"
 `,
   },
+  mcDialog: {
+    orifinal: `I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.`,
+    translate:
+      '遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。',
+    script: `translate Japanese ch0_main_bcc5bb00:
+    "遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。"
+`,
+  },
   longDialog: {
     orifinal:
       'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
