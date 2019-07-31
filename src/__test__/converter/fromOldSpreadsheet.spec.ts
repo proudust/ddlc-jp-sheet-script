@@ -1,4 +1,5 @@
 import FromOldSpreadsheet from '../../converter/fromOldSpreadsheet';
+import TestResource from '../testResource';
 
 describe(`class FromOldSpreadsheet`, () => {
   describe(`FromOldSpreadsheet#convert`, () => {
@@ -6,10 +7,11 @@ describe(`class FromOldSpreadsheet`, () => {
       const sheet = [
         ['strings', 'Sayori', 'サヨリ'],
         ['ch0_main_41e273ca', 's "Heeeeeeeyyy!!"', 's "「おーはーよーーー！」"'],
+        ['ch0_main_cb634d94', TestResource.longDialog.orifinal, TestResource.longDialog.translate],
         [
           'CAN YOU HEAR ME.txt',
-          `"There's a little devil inside all of us."`,
-          '"私たちの中には小さな悪魔がいる"',
+          TestResource.fileContent.orifinal,
+          TestResource.fileContent.translate,
         ],
       ];
       expect(FromOldSpreadsheet.convert(sheet)).toMatchObject([
@@ -21,10 +23,16 @@ describe(`class FromOldSpreadsheet`, () => {
           translate: '「おーはーよーーー！」',
         },
         {
+          id: 'ch0_main_cb634d94',
+          attribute: '',
+          original: TestResource.longDialog.orifinal,
+          translate: TestResource.longDialog.translate,
+        },
+        {
           id: 'CAN YOU HEAR ME.txt',
           attribute: 'file',
-          original: `"There's a little devil inside all of us."`,
-          translate: '"私たちの中には小さな悪魔がいる"',
+          original: TestResource.fileContent.orifinal,
+          translate: TestResource.fileContent.translate,
         },
       ]);
     });

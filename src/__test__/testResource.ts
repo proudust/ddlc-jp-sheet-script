@@ -6,6 +6,16 @@ export default {
     s "「おーはーよーーー！」"
 `,
   },
+  longDialog: {
+    orifinal:
+      'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
+    translate: `"やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
+"着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"`,
+    script: `translate Japanese ch0_main_cb634d94:
+    "やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
+    "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"
+`,
+  },
   fileContent: {
     orifinal: String.raw`"There's a little devil inside all of us."
 

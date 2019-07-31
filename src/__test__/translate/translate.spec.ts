@@ -5,7 +5,7 @@ import TestResource from '../testResource';
 
 describe(`class DialogsTranslate`, () => {
   describe(`DialogsTranslate#inflate`, () => {
-    it('do', () => {
+    it('normal', () => {
       const t = new DialogsTranslate(
         'ch0_main_41e273ca',
         's',
@@ -13,6 +13,16 @@ describe(`class DialogsTranslate`, () => {
         '「おーはーよーーー！」',
       );
       expect(t.inflate()).toBe(TestResource.dialog.script);
+    });
+
+    it('split dialog', () => {
+      const t = new DialogsTranslate(
+        'ch0_main_cb634d94',
+        '',
+        TestResource.longDialog.orifinal,
+        TestResource.longDialog.translate,
+      );
+      expect(t.inflate()).toBe(TestResource.longDialog.script);
     });
   });
 });

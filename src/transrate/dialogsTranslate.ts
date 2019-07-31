@@ -28,8 +28,18 @@ export default class DialogsTranslate implements Translate {
    * @returns 変換後のスクリプト
    */
   public inflate(): string {
-    return String.raw`translate Japanese ${this.id}:
+    const dialogs = this.translate.match(/"(.*?)"/g);
+    // 台詞分割無し
+    if (!dialogs) {
+      return `translate Japanese ${this.id}:
     ${this.attribute} "${this.translate}"
 `;
+    }
+    // 台詞分割あり
+    else {
+      return `translate Japanese ${this.id}:
+    ${dialogs.map(d => (this.attribute ? `${this.attribute} ${d}` : d)).join('\n    ')}
+`;
+    }
   }
 }
