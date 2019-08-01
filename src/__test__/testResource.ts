@@ -14,6 +14,13 @@ export default {
     "遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。"
 `,
   },
+  nointeractDialog: {
+    orifinal: `Just think of the club, okay?`,
+    translate: '「とにかくこの部のことを考えましょう、ね？」',
+    script: `translate Japanese ch3_end_sayori_dd9616f1:
+    m "「とにかくこの部のことを考えましょう、ね？」" nointeract
+`,
+  },
   longDialog: {
     orifinal:
       'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
