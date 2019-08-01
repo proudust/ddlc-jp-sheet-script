@@ -7,14 +7,15 @@ export default {
    * スクリプトから Translate 配列に変換する
    */
   convert: (script: string): Translate[] => {
-    const dialogs = script.match(/translate \S+ \S+_[\da-f]{8}:(?:\s+(?:\w+ ){0,2}"\S+")+/g) || [];
+    const dialogs =
+      script.match(/translate \S+ \S+_[\da-f]{8}:(?:\s+(?:[\d\w]+ ){0,2}"[\s\S]+?")+/g) || [];
     const strings =
       script.match(/old (?:"""\\|")[\s\S]+?(?:"""|").?\s+new (?:"""\\|")[\s\S]+?(?:"""|")/g) || [];
 
     return [
       ...dialogs.map(s => {
-        const props = s.match(/translate \S+ (\S+_[\da-f]{8}):\s+(?:(\w+(?: \w+)?) )?"/);
-        const dialog = s.match(/"(\S+)"+/g);
+        const props = s.match(/translate \S+ (\S+_[\da-f]{8}):\s+(?:(\w+(?: [\d\w]+)?) )?"/);
+        const dialog = s.match(/"([\s\S]+?)"+/g);
         if (!props || !dialog) throw new Error(`dialog not found. script: ${s}`);
         const translate = dialog.length === 1 ? dialog[0].split('"')[1] : dialog.join('\n');
         return new DialogsTranslate(props[1], props[2] || '', '', translate);
