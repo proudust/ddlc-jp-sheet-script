@@ -7,6 +7,11 @@ describe(`class FromOldSpreadsheet`, () => {
       const sheet = [
         ['strings', 'Sayori', 'サヨリ'],
         ['ch0_main_41e273ca', 's "Heeeeeeeyyy!!"', 's "「おーはーよーーー！」"'],
+        [
+          'ch3_end_sayori_dd9616f1',
+          `m "${TestResource.nointeractDialog.orifinal}" nointeract`,
+          `m "${TestResource.nointeractDialog.translate}" nointeract`,
+        ],
         ['ch0_main_cb634d94', TestResource.longDialog.orifinal, TestResource.longDialog.translate],
         [
           'CAN YOU HEAR ME.txt',
@@ -21,6 +26,12 @@ describe(`class FromOldSpreadsheet`, () => {
           attribute: 's',
           original: 'Heeeeeeeyyy!!',
           translate: '「おーはーよーーー！」',
+        },
+        {
+          id: 'ch3_end_sayori_dd9616f1',
+          attribute: 'm nointeract',
+          original: TestResource.nointeractDialog.orifinal,
+          translate: TestResource.nointeractDialog.translate,
         },
         {
           id: 'ch0_main_cb634d94',

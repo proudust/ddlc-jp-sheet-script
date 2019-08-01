@@ -31,7 +31,7 @@ export default class DialogsTranslate implements Translate {
     character: string,
     original: string,
     translate: string,
-    nointeract?: true,
+    nointeract?: boolean,
   ) {
     this.id = id;
     this.character = character;

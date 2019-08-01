@@ -14,12 +14,15 @@ export default {
       // dialogs
       else if (/[\S]+_[\da-f]{8}/.test(curr[0])) {
         const attrMatch = curr[1].match(/^[\w]+(?: [\w]+)?(?= ")/);
-        const origMatch = curr[1].match(/^(?:[\w]+(?: [\w]+)? ")?([\s\S]+?)"?$/);
-        const tranMatch = curr[2].match(/^(?:[\w]+(?: [\w]+)? ")?("[\s\S]+"|[\s\S]+?)"?$/);
+        const origMatch = curr[1].match(/^(?:[\w]+(?: [\w]+)? ")?([\s\S]+?)"?( nointeract)?$/);
+        const tranMatch = curr[2].match(
+          /^(?:[\w]+(?: [\w]+)? ")?("[\s\S]+"|[\s\S]+?)"?( nointeract)?$/,
+        );
         if (!origMatch || !tranMatch)
           throw new Error(`dialog not found. orig: ${curr[1]}, tran: ${curr[2]}`);
         const attr = attrMatch ? attrMatch[0] : '';
-        array.push(new DialogsTranslate(curr[0], attr, origMatch[1], tranMatch[1]));
+        const nointeract = origMatch[2] != undefined;
+        array.push(new DialogsTranslate(curr[0], attr, origMatch[1], tranMatch[1], nointeract));
       }
       // file
       else if (/.txt$/.test(curr[0])) array.push(new FileTranslate(curr[0], curr[1], curr[2]));
