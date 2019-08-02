@@ -7,6 +7,7 @@ describe(`class FromSpreadsheet`, () => {
       const sheet = [
         ['', 'strings', 'Sayori', 'サヨリ'],
         ['ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],
+        ['ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],
         [
           'ch3_end_sayori_dd9616f1',
           'm nointeract',
@@ -30,6 +31,12 @@ describe(`class FromSpreadsheet`, () => {
         { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
         {
           id: 'ch0_main_41e273ca',
+          attribute: 's',
+          original: 'Heeeeeeeyyy!!',
+          translate: '「おーはーよーーー！」',
+        },
+        {
+          id: 'ch0_main_41e273ca_1',
           attribute: 's',
           original: 'Heeeeeeeyyy!!',
           translate: '「おーはーよーーー！」',
