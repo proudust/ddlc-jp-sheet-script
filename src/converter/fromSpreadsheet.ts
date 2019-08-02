@@ -16,7 +16,7 @@ export default {
       else if (/[\S]+_[\da-f]{8}/.test(curr[0])) {
         const attrs = curr[1].split(' ');
         const character = attrs.filter(s => s != 'nointeract').join(' ');
-        const nointeract = attrs.includes('nointeract');
+        const nointeract = attrs.some(s => s === 'nointeract');
         array.push(new DialogsTranslate(curr[0], character, curr[2], curr[3], nointeract));
       }
       // file
