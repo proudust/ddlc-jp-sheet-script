@@ -7,6 +7,7 @@ describe(`class FromOldSpreadsheet`, () => {
       const sheet = [
         ['strings', 'Sayori', 'サヨリ'],
         ['ch0_main_41e273ca', 's "Heeeeeeeyyy!!"', 's "「おーはーよーーー！」"'],
+        ['ch0_main_41e273ca_1', 's "Heeeeeeeyyy!!"', 's "「おーはーよーーー！」"'],
         [
           'ch3_end_sayori_dd9616f1',
           `m "${TestResource.nointeractDialog.orifinal}" nointeract`,
@@ -23,6 +24,12 @@ describe(`class FromOldSpreadsheet`, () => {
         { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
         {
           id: 'ch0_main_41e273ca',
+          attribute: 's',
+          original: 'Heeeeeeeyyy!!',
+          translate: '「おーはーよーーー！」',
+        },
+        {
+          id: 'ch0_main_41e273ca_1',
           attribute: 's',
           original: 'Heeeeeeeyyy!!',
           translate: '「おーはーよーーー！」',

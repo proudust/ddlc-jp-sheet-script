@@ -10,6 +10,7 @@ describe(`class ToTranslationFile`, () => {
       const sheet = [
         new StringsTranslate('Sayori', 'サヨリ'),
         new DialogsTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
+        new DialogsTranslate('ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
         new FileTranslate(
           'CAN YOU HEAR ME.txt',
           TestResource.fileContent.orifinal,
@@ -20,6 +21,9 @@ describe(`class ToTranslationFile`, () => {
         {
           fileName: 'test.rpy',
           content: `translate Japanese ch0_main_41e273ca:
+    s "「おーはーよーーー！」"
+
+translate Japanese ch0_main_41e273ca_1:
     s "「おーはーよーーー！」"
 
 translate Japanese strings:
