@@ -12,6 +12,7 @@ export default {
   convert: (name: string, translates: Translate[]): File[] => {
     const defalutFile = { fileName: `${name}.rpy`, content: '' };
     const files = translates
+      .filter(t => t.translate)
       .sort((a, b) => {
         if (a.constructor.name < b.constructor.name) {
           return -1;
