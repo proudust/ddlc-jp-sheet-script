@@ -1,8 +1,8 @@
-import FromScript from '../../converter/fromScript';
+import FromTranslateScript from '../../converter/fromTranslateScript';
 import TestResource from '../testResource';
 
-describe(`class FromScript`, () => {
-  describe(`FromScript#convert`, () => {
+describe(`class FromTranslateScript`, () => {
+  describe(`FromTranslateScript#convert`, () => {
     it('do', () => {
       const sheet = `translate Japanese ch0_main_41e273ca:
     s "「おーはーよーーー！」"
@@ -18,7 +18,7 @@ translate Japanese strings:
     old "Sayori"
     new "サヨリ"
 `;
-      expect(FromScript.convert(sheet)).toMatchObject([
+      expect(FromTranslateScript.convert(sheet)).toMatchObject([
         {
           id: 'ch0_main_41e273ca',
           attribute: 's',

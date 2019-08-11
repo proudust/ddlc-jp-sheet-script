@@ -4,7 +4,7 @@ import Translate from '../transrate/translate';
 
 export default {
   /**
-   * スクリプトから Translate 配列に変換する
+   * 翻訳スクリプトから Translate 配列に変換する
    */
   convert: (script: string): Translate[] => {
     const dialogs =

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { promisify } from 'util';
-import FromScript from './converter/fromScript';
+import FromTranslateScript from './converter/fromTranslateScript';
 import ToCsv from './converter/toCsv';
 
 // eslint-disable-next-line no-undef
@@ -13,7 +13,7 @@ fs.readdirSync(target)
     const content = await promisify(fs.readFile)(target + fileName, { encoding: 'utf-8' });
     return {
       fileName: fileName,
-      content: FromScript.convert(content),
+      content: FromTranslateScript.convert(content),
     };
   })
   .forEach(async p => {
