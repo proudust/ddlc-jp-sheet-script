@@ -2,6 +2,8 @@ import OutputFolder from './appscript/outputFolder';
 import FromOldSpreadsheet from './converter/fromOldSpreadsheet';
 import FromSpreadsheet from './converter/fromSpreadsheet';
 import ToTranslationFile from './converter/toTranslationFile';
+import SheetModifier from './appscript/sheetModifier';
+import ScriptProperties from './appscript/scriptProperties';
 import ToCsv from './converter/toCsv';
 import Timer from './util/timer';
 
@@ -9,11 +11,22 @@ declare var global: { [key: string]: Function };
 
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
+    { name: 'スプレッドシートの書式再設定', functionName: 'fixSpreadsheet' },
     { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFileNew' },
     { name: '翻訳 CSV の出力', functionName: 'genelateCsvNew' },
     { name: '翻訳ファイルの出力(旧)', functionName: 'genelateTranslationFileOld' },
     { name: '翻訳 CSV の出力(旧)', functionName: 'genelateCsvOld' },
   ]);
+};
+
+global.fixSpreadsheet = () => {
+  const properties = new ScriptProperties();
+  const modifier = new SheetModifier(properties);
+
+  SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .forEach(s => modifier.apply(s));
 };
 
 global.genelateTranslationFileNew = () => {
