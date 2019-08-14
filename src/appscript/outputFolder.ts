@@ -34,9 +34,7 @@ export default class OutputFolder {
         content,
         'utf-8',
       );
-      // Blob is not implemented Blob Source, but createFile() accept Blob.
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      folder.createFile(blob as any);
+      folder.createFile(blob);
     }
   }
 }
