@@ -7,6 +7,46 @@ type Modifier = (sheet: Sheet) => void;
 type ModifierFactory = (properties: ScriptProperties) => Modifier;
 
 /**
+ * シートから余計な列を削除します。
+ */
+const deleteColumns = (sheet: Sheet): void => {
+  const lastColumn = sheet.getMaxColumns();
+  if (7 < lastColumn) {
+    sheet.deleteColumns(8, lastColumn - 7);
+  }
+};
+
+/**
+ * シートの書式を再設定します。
+ */
+const fixFormat = (sheet: Sheet): void => {
+  sheet
+    .getRange(1, 1, 2, 7)
+    .setValues([
+      ['ID', '属性', '原文', '翻訳', '機械翻訳', 'タグ', 'コメント'],
+      ['', '', '', '', '', '', ''],
+    ])
+    .setBackground('#CFE2F3');
+
+  const lastRow = sheet.getMaxRows();
+  const valueRows = lastRow - 3;
+  sheet.getRange(3, 1, valueRows, 3).setBackground('#CCCCCC');
+  sheet.getRange(3, 4, valueRows, 4).setBackground(null as any);
+  sheet.getRange(3, 1, valueRows, 2).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
+  sheet.getRange(3, 3, valueRows, 5).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
+
+  sheet
+    .getRange(lastRow, 1, 1, 7)
+    .setValues([['', '', '', '', '', '', '']])
+    .setBackground('#CFE2F3');
+
+  sheet.setColumnWidths(1, 2, 40);
+  sheet.setColumnWidths(3, 3, 260);
+  sheet.setColumnWidth(6, 40);
+  sheet.setColumnWidth(7, 260);
+};
+
+/**
  * シートの保護を再設定します。
  * @param sheet 翻訳シート
  */
@@ -81,6 +121,8 @@ export default class SheetModifier {
    */
   public constructor(properties: ScriptProperties) {
     this.modifiers = [
+      deleteColumns,
+      fixFormat,
       fixProtect,
       clearFormatRules,
       addTagsFormatRules(properties),

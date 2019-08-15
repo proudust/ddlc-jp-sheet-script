@@ -42,13 +42,11 @@ global.genelateSheet = (script: string) => {
   ]);
 
   const sheet = SpreadsheetApp.getActive().insertSheet();
-  modifier.apply(sheet);
-
   const rowsCountDiff = values.length - sheet.getMaxRows() - 2;
   if (0 < rowsCountDiff) sheet.insertRows(3, rowsCountDiff);
   else if (rowsCountDiff < 0) sheet.deleteRows(3, -rowsCountDiff);
-
   sheet.getRange(3, 1, values.length, 4).setValues(values);
+  modifier.apply(sheet);
 };
 
 global.fixSpreadsheet = () => {
