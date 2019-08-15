@@ -1,6 +1,7 @@
 import OutputFolder from './appscript/outputFolder';
 import FromOldSpreadsheet from './converter/fromOldSpreadsheet';
 import FromSpreadsheet from './converter/fromSpreadsheet';
+import FromRenpyScript from './converter/fromRenpyScript';
 import ToTranslationFile from './converter/toTranslationFile';
 import SheetModifier from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
@@ -8,7 +9,7 @@ import ToCsv from './converter/toCsv';
 import Timer from './util/timer';
 import UploderHtml from './uploder.html';
 
-declare var global: { [key: string]: Function };
+declare let global: { [key: string]: Function };
 
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
@@ -30,7 +31,24 @@ global.showUploder = () => {
 };
 
 global.genelateSheet = (script: string) => {
-  console.log(script);
+  const properties = new ScriptProperties();
+  const modifier = new SheetModifier(properties);
+
+  const values = FromRenpyScript.convert(script).map(t => [
+    t.id,
+    t.attribute,
+    t.original,
+    t.translate,
+  ]);
+
+  const sheet = SpreadsheetApp.getActive().insertSheet();
+  modifier.apply(sheet);
+
+  const rowsCountDiff = values.length - sheet.getMaxRows() - 2;
+  if (0 < rowsCountDiff) sheet.insertRows(3, rowsCountDiff);
+  else if (rowsCountDiff < 0) sheet.deleteRows(3, -rowsCountDiff);
+
+  sheet.getRange(3, 1, values.length, 4).setValues(values);
 };
 
 global.fixSpreadsheet = () => {
