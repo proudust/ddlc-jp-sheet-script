@@ -42,7 +42,7 @@ const fixFormat = (sheet: Sheet): void => {
 
   sheet.setColumnWidths(1, 2, 40);
   sheet.setColumnWidths(3, 3, 260);
-  sheet.setColumnWidth(6, 40);
+  sheet.setColumnWidth(6, 70);
   sheet.setColumnWidth(7, 260);
 };
 
@@ -60,6 +60,21 @@ const fixProtect: Modifier = (() => {
       .setUnprotectedRanges([sheet.getRange('D2:G')]);
   };
 })();
+
+/**
+ * シートにタグによる条件付き書式を設定します。
+ * @param properties プロパティ
+ */
+const addDataValidation: ModifierFactory = (properties: ScriptProperties): Modifier => {
+  const dataValidation = SpreadsheetApp.newDataValidation()
+    .requireValueInList(properties.tags.map(t => t.name), true)
+    .build();
+
+  return (sheet: Sheet): void => {
+    sheet.getDataRange().clearDataValidations();
+    sheet.getRange('F2:F').setDataValidation(dataValidation);
+  };
+};
 
 /**
  * シートの条件付き書式を削除します。
@@ -124,6 +139,7 @@ export default class SheetModifier {
       deleteColumns,
       fixFormat,
       fixProtect,
+      addDataValidation(properties),
       clearFormatRules,
       addTagsFormatRules(properties),
       addEmptyFormatRules,
