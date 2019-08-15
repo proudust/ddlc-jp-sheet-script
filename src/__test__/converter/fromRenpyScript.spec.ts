@@ -1,4 +1,17 @@
+import Crypto from 'crypto';
 import FromRenpyScript from '../../converter/fromRenpyScript';
+
+// ダミー
+declare let global: { Utilities: { computeDigest: Function; DigestAlgorithm: { MD5: null } } };
+global.Utilities = {
+  computeDigest: (algorithm: GoogleAppsScript.Utilities.DigestAlgorithm, value: string): number[] =>
+    Crypto.createHash('md5')
+      .update(value)
+      .digest('hex')
+      .split('')
+      .map(c => parseInt(c, 16)),
+  DigestAlgorithm: { MD5: null },
+};
 
 describe(`class FromRenpyScript`, () => {
   describe(`FromRenpyScript#convert`, () => {

@@ -1,9 +1,7 @@
 import DialogsTranslate from '../transrate/dialogsTranslate';
 import Translate from '../transrate/translate';
-import Md5Factory from '../util/md5';
+import Md5 from '../util/md5';
 import StringsTranslate from '../transrate/stringsTranslate';
-
-const md5 = Md5Factory('node');
 
 const ids: string[] = [];
 /**
@@ -12,7 +10,7 @@ const ids: string[] = [];
  * @param code コード
  */
 function getId(label: string, code: string, isNointeract: boolean): string {
-  const hash = md5(code + (isNointeract ? ' nointeract' : '') + '\r\n');
+  const hash = Md5(code + (isNointeract ? ' nointeract' : '') + '\r\n');
   const baseId = label + '_' + hash;
   let id = baseId;
   let i = 1;
