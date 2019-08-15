@@ -15,6 +15,17 @@ module.exports = {
         test: /\.ts$/,
         use: 'ts-loader',
       },
+      {
+        test: /\.html?$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            minimize: true,
+            removeComments: false,
+            collapseWhitespace: false,
+          },
+        },
+      },
     ],
   },
   resolve: {
