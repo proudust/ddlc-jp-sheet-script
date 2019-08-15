@@ -6,17 +6,31 @@ import SheetModifier from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
 import ToCsv from './converter/toCsv';
 import Timer from './util/timer';
+import UploderHtml from './uploder.html';
 
 declare var global: { [key: string]: Function };
 
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
+    { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
     { name: 'スプレッドシートの書式再設定', functionName: 'fixSpreadsheet' },
     { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFileNew' },
     { name: '翻訳 CSV の出力', functionName: 'genelateCsvNew' },
     { name: '翻訳ファイルの出力(旧)', functionName: 'genelateTranslationFileOld' },
     { name: '翻訳 CSV の出力(旧)', functionName: 'genelateCsvOld' },
   ]);
+};
+
+global.showUploder = () => {
+  const html = HtmlService.createHtmlOutput(UploderHtml)
+    .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+    .setWidth(400)
+    .setHeight(200);
+  SpreadsheetApp.getUi().showModalDialog(html, 'スクリプトからシートを作成');
+};
+
+global.genelateSheet = (script: string) => {
+  console.log(script);
 };
 
 global.fixSpreadsheet = () => {

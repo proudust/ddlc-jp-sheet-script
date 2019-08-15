@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <title>アップローダー</title>
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+</head>
+
+<body>
+  <form method="post" enctype="multipart/form-data">
+    <input type="file" id="files" name="files" accept=".rpy" multiple />
+    <input type="button" class="action" value="Submit" onclick="Submit()" />
+  </form>
+  <script>
+    function Submit() {
+      const files = document.getElementById('files').files;
+      for (const file of files) {
+        const reader = new FileReader();
+        reader.onload = () => resolve();
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => google.script.run.genelateSheet(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        })
+      }
+    }
+  </script>
+</body>
+
+</html>
