@@ -38,6 +38,8 @@ export default {
         const { blockLevel, code } = curr;
         const menuBlockLebel = menus ? menus[menus.length - 1] : null;
 
+        if (code.slice(0, 6) === 'return') return array;
+
         const labelMatch = code.match(/^label ([\w]+?):$/) || code.match(/^call .+? from (.+?)$/);
         if (labelMatch) {
           label = labelMatch[1];
