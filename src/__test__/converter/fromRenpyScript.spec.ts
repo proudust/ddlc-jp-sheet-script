@@ -1,18 +1,7 @@
-import Crypto from 'crypto';
+import setupUtilities from '../mock/setupUtilities';
 import FromRenpyScript from '../../converter/fromRenpyScript';
 
-// ダミー
-declare let global: { Utilities: { computeDigest: Function; DigestAlgorithm: { MD5: null } } };
-global.Utilities = {
-  computeDigest: (algorithm: GoogleAppsScript.Utilities.DigestAlgorithm, value: string): number[] =>
-    (
-      Crypto.createHash('md5')
-        .update(value)
-        .digest('hex')
-        .match(/.{2}/g) || []
-    ).map(c => parseInt(c, 16)),
-  DigestAlgorithm: { MD5: null },
-};
+setupUtilities();
 
 describe(`class FromRenpyScript`, () => {
   describe(`FromRenpyScript#convert`, () => {
