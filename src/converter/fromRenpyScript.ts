@@ -60,7 +60,8 @@ export default {
           return array;
         }
 
-        const stringsMatch = code.match(/^"([\s\S]+?)":$/) || code.match(/_\("([\s\S]+?)"\)/);
+        const stringsMatch =
+          code.match(/^"([\s\S]+?)"(?: if .*)?:$/) || code.match(/_\("([\s\S]+?)"\)/);
         if (stringsMatch) {
           array.push(new StringsTranslate(stringsMatch[1], ''));
           return array;
