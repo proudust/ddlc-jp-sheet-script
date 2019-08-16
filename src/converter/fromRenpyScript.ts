@@ -38,7 +38,7 @@ export default {
         const { blockLevel, code } = curr;
         const menuBlockLebel = menus ? menus[menus.length - 1] : null;
 
-        const labelMatch = code.match(/^label (.+?):$/);
+        const labelMatch = code.match(/^label (.+?):$/) || code.match(/^call .+? from (.+?)$/);
         if (labelMatch) {
           label = labelMatch[1];
           return array;
