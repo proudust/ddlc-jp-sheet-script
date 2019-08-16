@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts --fix .",
-    "test": "jest",
+    "lint:ci": "npm run lint -- --format junit --output-file reports/eslint.xml",
+    "test": "jest --reporters=default",
+    "test:ci": "jest --ci --reporters=jest-junit",
     "build": "npm run lint && npm run test && rimraf dist && webpack && cpx src/appsscript.json dist",
+    "build:ci": "npm run lint:ci && npm run test:ci && rimraf dist && webpack && cpx src/appsscript.json dist",
     "deploy": "npm run build && clasp push",
     "exec": "ts-node src/cli.ts"
   },
@@ -27,6 +30,7 @@
     "gas-webpack-plugin": "1.0.2",
     "html-loader": "0.5.5",
     "jest": "24.8.0",
+    "jest-junit": "7.0.0",
     "prettier": "1.18.2",
     "rimraf": "3.0.0",
     "ts-jest": "24.0.2",
@@ -39,6 +43,10 @@
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
-    }
+    },
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   }
 }
