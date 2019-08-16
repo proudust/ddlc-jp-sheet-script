@@ -60,8 +60,9 @@ global.fixSpreadsheet = () => {
 };
 
 global.genelateTranslationFileNew = () => {
+  const properties = new ScriptProperties();
   const timer = new Timer();
-  const outputFolder = new OutputFolder('DDLC_JP', new Date());
+  const outputFolder = new OutputFolder(properties.folderName, new Date());
   SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
