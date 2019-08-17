@@ -12,6 +12,12 @@ export default interface Translate {
   translate: string;
 
   /**
+   * 引数の Translate インスタンスから翻訳をコピーした新しい Translate インスタンスを作成する。
+   * @param theirs もう一つのマージ対象
+   */
+  marge(theirs: Translate): Translate;
+
+  /**
    * Translate インスタンスをスクリプトまたはファイルに変換する。
    * @param before 一つ前に変換した Translate インスタンス、無い場合は null
    * @returns string ならスクリプト、object ならファイルを表す。

@@ -41,6 +41,20 @@ export default class DialogsTranslate implements Translate {
   }
 
   /**
+   * 引数の Translate インスタンスから翻訳をコピーした新しい Translate インスタンスを作成する。
+   * @param theirs もう一つのマージ対象
+   */
+  public marge(theirs: Translate): DialogsTranslate {
+    return new DialogsTranslate(
+      this.id,
+      this.character,
+      this.original,
+      theirs.translate,
+      this.nointeract,
+    );
+  }
+
+  /**
    * Translate インスタンスをスクリプトに変換する。
    * @returns 変換後のスクリプト
    */
