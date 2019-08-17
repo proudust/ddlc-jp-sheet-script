@@ -1,5 +1,5 @@
 import DialogsTranslate from '../../transrate/dialogsTranslate';
-import TestResource from '../testResource';
+import { characterSay, monologueSay, nointeractSay, longSay } from '../testResource';
 
 describe(`class DialogsTranslate`, () => {
   describe(`DialogsTranslate#inflate`, () => {
@@ -10,38 +10,33 @@ describe(`class DialogsTranslate`, () => {
         'Heeeeeeeyyy!!',
         '「おーはーよーーー！」',
       );
-      expect(t.inflate()).toBe(TestResource.dialog.script);
+      expect(t.inflate()).toBe(characterSay.translateScript);
     });
 
     it('monologue', () => {
       const t = new DialogsTranslate(
         'ch0_main_bcc5bb00',
         '',
-        TestResource.mcDialog.orifinal,
-        TestResource.mcDialog.translate,
+        monologueSay.orifinal,
+        monologueSay.translate,
       );
-      expect(t.inflate()).toBe(TestResource.mcDialog.script);
+      expect(t.inflate()).toBe(monologueSay.translateScript);
     });
 
     it('nointeract', () => {
       const t = new DialogsTranslate(
         'ch3_end_sayori_dd9616f1',
         'm',
-        TestResource.nointeractDialog.orifinal,
-        TestResource.nointeractDialog.translate,
+        nointeractSay.orifinal,
+        nointeractSay.translate,
         true,
       );
-      expect(t.inflate()).toBe(TestResource.nointeractDialog.script);
+      expect(t.inflate()).toBe(nointeractSay.translateScript);
     });
 
     it('split dialog', () => {
-      const t = new DialogsTranslate(
-        'ch0_main_cb634d94',
-        '',
-        TestResource.longDialog.orifinal,
-        TestResource.longDialog.translate,
-      );
-      expect(t.inflate()).toBe(TestResource.longDialog.script);
+      const t = new DialogsTranslate('ch0_main_cb634d94', '', longSay.orifinal, longSay.translate);
+      expect(t.inflate()).toBe(longSay.translateScript);
     });
   });
 });

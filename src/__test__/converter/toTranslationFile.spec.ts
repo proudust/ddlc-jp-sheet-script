@@ -2,7 +2,7 @@ import ToTranslationFile from '../../converter/toTranslationFile';
 import DialogsTranslate from '../../transrate/dialogsTranslate';
 import FileTranslate from '../../transrate/fileTranslate';
 import StringsTranslate from '../../transrate/stringsTranslate';
-import TestResource from '../testResource';
+import { file } from '../testResource';
 
 describe(`class ToTranslationFile`, () => {
   describe(`ToTranslationFile#convert`, () => {
@@ -11,11 +11,7 @@ describe(`class ToTranslationFile`, () => {
         new StringsTranslate('Sayori', 'サヨリ'),
         new DialogsTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
         new DialogsTranslate('ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
-        new FileTranslate(
-          'CAN YOU HEAR ME.txt',
-          TestResource.fileContent.orifinal,
-          TestResource.fileContent.translate,
-        ),
+        new FileTranslate('CAN YOU HEAR ME.txt', file.orifinal, file.translate),
       ];
       expect(ToTranslationFile.convert('test', sheet)).toStrictEqual([
         {
@@ -33,23 +29,17 @@ translate Japanese strings:
         },
         {
           fileName: 'CAN YOU HEAR ME.txt',
-          content: TestResource.fileContent.translate,
+          content: file.translate,
         },
       ]);
     });
 
     it('FileTranslate only', () => {
-      const sheet = [
-        new FileTranslate(
-          'CAN YOU HEAR ME.txt',
-          TestResource.fileContent.orifinal,
-          TestResource.fileContent.translate,
-        ),
-      ];
+      const sheet = [new FileTranslate('CAN YOU HEAR ME.txt', file.orifinal, file.translate)];
       expect(ToTranslationFile.convert('test', sheet)).toStrictEqual([
         {
           fileName: 'CAN YOU HEAR ME.txt',
-          content: TestResource.fileContent.translate,
+          content: file.translate,
         },
       ]);
     });

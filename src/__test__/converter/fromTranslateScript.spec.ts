@@ -1,5 +1,5 @@
 import FromTranslateScript from '../../converter/fromTranslateScript';
-import TestResource from '../testResource';
+import { longSay } from '../testResource';
 
 describe(`class FromTranslateScript`, () => {
   describe(`FromTranslateScript#convert`, () => {
@@ -35,7 +35,7 @@ translate Japanese strings:
           id: 'ch0_main_cb634d94',
           attribute: '',
           original: '',
-          translate: TestResource.longDialog.translate,
+          translate: longSay.translate,
         },
         { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
       ]);

@@ -1,5 +1,5 @@
 import FromSpreadsheet from '../../converter/fromSpreadsheet';
-import TestResource from '../testResource';
+import { nointeractSay, longSay, file } from '../testResource';
 
 describe(`class FromSpreadsheet`, () => {
   describe(`FromSpreadsheet#convert`, () => {
@@ -11,21 +11,11 @@ describe(`class FromSpreadsheet`, () => {
         [
           'ch3_end_sayori_dd9616f1',
           'm nointeract',
-          TestResource.nointeractDialog.orifinal,
-          TestResource.nointeractDialog.translate,
+          nointeractSay.orifinal,
+          nointeractSay.translate,
         ],
-        [
-          'ch0_main_cb634d94',
-          '',
-          TestResource.longDialog.orifinal,
-          TestResource.longDialog.translate,
-        ],
-        [
-          'CAN YOU HEAR ME.txt',
-          'file',
-          TestResource.fileContent.orifinal,
-          TestResource.fileContent.translate,
-        ],
+        ['ch0_main_cb634d94', '', longSay.orifinal, longSay.translate],
+        ['CAN YOU HEAR ME.txt', 'file', file.orifinal, file.translate],
       ];
       expect(FromSpreadsheet.convert(sheet)).toMatchObject([
         { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
@@ -44,20 +34,20 @@ describe(`class FromSpreadsheet`, () => {
         {
           id: 'ch3_end_sayori_dd9616f1',
           attribute: 'm nointeract',
-          original: TestResource.nointeractDialog.orifinal,
-          translate: TestResource.nointeractDialog.translate,
+          original: nointeractSay.orifinal,
+          translate: nointeractSay.translate,
         },
         {
           id: 'ch0_main_cb634d94',
           attribute: '',
-          original: TestResource.longDialog.orifinal,
-          translate: TestResource.longDialog.translate,
+          original: longSay.orifinal,
+          translate: longSay.translate,
         },
         {
           id: 'CAN YOU HEAR ME.txt',
           attribute: 'file',
-          original: TestResource.fileContent.orifinal,
-          translate: TestResource.fileContent.translate,
+          original: file.orifinal,
+          translate: file.translate,
         },
       ]);
     });

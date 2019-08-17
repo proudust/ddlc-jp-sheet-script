@@ -1,38 +1,56 @@
 /* eslint-disable no-irregular-whitespace */
 
-export default {
-  dialog: {
-    script: `translate Japanese ch0_main_41e273ca:
+/**
+ * キャラの台詞のサンプル (DDLC 本編から引用)
+ */
+export const characterSay = {
+  translateScript: `translate Japanese ch0_main_41e273ca:
     s "「おーはーよーーー！」"
 `,
-  },
-  mcDialog: {
-    orifinal: `I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.`,
-    translate:
-      '遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。',
-    script: `translate Japanese ch0_main_bcc5bb00:
+};
+
+/**
+ * モノローグ台詞のサンプル (DDLC 本編から引用)
+ */
+export const monologueSay = {
+  orifinal: `I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.`,
+  translate:
+    '遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。',
+  translateScript: `translate Japanese ch0_main_bcc5bb00:
     "遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。"
 `,
-  },
-  nointeractDialog: {
-    orifinal: `Just think of the club, okay?`,
-    translate: '「とにかくこの部のことを考えましょう、ね？」',
-    script: `translate Japanese ch3_end_sayori_dd9616f1:
+};
+
+/**
+ * 選択肢と同時に表示される台詞のサンプル (DDLC 本編から引用)
+ */
+export const nointeractSay = {
+  orifinal: `Just think of the club, okay?`,
+  translate: '「とにかくこの部のことを考えましょう、ね？」',
+  translateScript: `translate Japanese ch3_end_sayori_dd9616f1:
     m "「とにかくこの部のことを考えましょう、ね？」" nointeract
 `,
-  },
-  longDialog: {
-    orifinal:
-      'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
-    translate: `"やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
+};
+
+/**
+ * 分割が必要な長台詞のサンプル (DDLC 本編から引用)
+ */
+export const longSay = {
+  orifinal:
+    'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
+  translate: `"やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
 "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"`,
-    script: `translate Japanese ch0_main_cb634d94:
+  translateScript: `translate Japanese ch0_main_cb634d94:
     "やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
     "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"
 `,
-  },
-  fileContent: {
-    orifinal: `"There's a little devil inside all of us."
+};
+
+/**
+ * ファイルのサンプル (DDLC 本編から引用)
+ */
+export const file = {
+  orifinal: `"There's a little devil inside all of us."
 
 Beneath their manufactured perception - their artificial reality - is a
 writhing, twisted mess of dread. Loathing. Judgment. Elitism. Self-doubt.
@@ -45,7 +63,7 @@ Such a deplorable, tangled mass is already present in every single one of them.
 That's why I choose not to blame myself for their actions.
 
 All I did was untie the knot.`,
-    translate: `"私たちの中には小さな悪魔がいる"
+  translate: `"私たちの中には小さな悪魔がいる"
 
 創られた知覚の下で - 人工現実 - は
 恐怖の混乱に捩じれてのたうち回る。嫌悪。審判。選民主義。自信喪失。
@@ -58,16 +76,14 @@ All I did was untie the knot.`,
 だから私は自分のしたことについて自分を責めないことに決めた。
 
 私は結び目を解いただけ。`,
-  },
-  poemTitle: {
-    orifinal: 'Ghost Under the Light',
-    translate: '燈の下の幽霊',
-    script: `    old "Ghost Under the Light"
-    new "燈の下の幽霊"
-`,
-  },
-  poemContent: {
-    orifinal: `An old tale tells of a lady who wanders Earth.
+};
+
+/**
+ * 詞のサンプル (DDLC 本編から引用)
+ */
+export const poem = {
+  orifinalTitle: 'Ghost Under the Light',
+  orifinalContent: `An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,
 All meaning,
@@ -108,7 +124,8 @@ I am not your legend.
 Your legend does not exist."
 
 And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
-    translate: `地上のどこかを渡り歩く女性の、古い言い伝え。
+  translateTitle: '燈の下の幽霊',
+  translateContent: `地上のどこかを渡り歩く女性の、古い言い伝え。
 全てを知る女性。
 全ての真理を突き止めた美しい女性。
 全ての意味を、
@@ -150,7 +167,10 @@ And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
 あなたの伝説は在り得ません。」
 
 そして彼女が息を吹きかけると再び宙を舞い、一陣の風が私を連れ去る。`,
-    script: String.raw`    old """\
+  translateTitleScript: `    old "Ghost Under the Light"
+    new "燈の下の幽霊"
+`,
+  translateContentScript: String.raw`    old """\
 An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,
@@ -236,5 +256,4 @@ And with a breath, she blows me back afloat, and I pick up a gust of wind."""
 
 そして彼女が息を吹きかけると再び宙を舞い、一陣の風が私を連れ去る。"""
 `,
-  },
 };
