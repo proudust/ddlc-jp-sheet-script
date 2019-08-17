@@ -2,6 +2,7 @@ import OutputFolder from './appscript/outputFolder';
 import FromOldSpreadsheet from './converter/fromOldSpreadsheet';
 import FromSpreadsheet from './converter/fromSpreadsheet';
 import FromRenpyScript from './converter/fromRenpyScript';
+import MargeTranslate from './converter/margeTranslate';
 import ToTranslationFile from './converter/toTranslationFile';
 import SheetModifier from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
@@ -30,18 +31,24 @@ global.showUploder = () => {
   SpreadsheetApp.getUi().showModalDialog(html, 'スクリプトからシートを作成');
 };
 
-global.genelateSheet = (script: string) => {
+global.genelateSheet = (fileName: string, script: string) => {
+  const spreadsheet = SpreadsheetApp.getActive();
   const properties = new ScriptProperties();
   const modifier = new SheetModifier(properties);
 
-  const values = FromRenpyScript.convert(script).map(t => [
+  const fromScript = FromRenpyScript.convert(script);
+  const fromSheet = (() => {
+    const sheet = spreadsheet.getSheetByName(fileName);
+    return sheet && FromSpreadsheet.convert(sheet.getDataRange().getValues());
+  })();
+  const values = MargeTranslate.marge(fromSheet, fromScript).map(t => [
     t.id,
     t.attribute,
     t.original,
     t.translate,
   ]);
 
-  const sheet = SpreadsheetApp.getActive().insertSheet();
+  const sheet = spreadsheet.insertSheet();
   const rowsCountDiff = values.length - sheet.getMaxRows() - 2;
   if (0 < rowsCountDiff) sheet.insertRows(3, rowsCountDiff);
   else if (rowsCountDiff < 0) sheet.deleteRows(3, -rowsCountDiff);

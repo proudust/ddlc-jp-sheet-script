@@ -22,6 +22,14 @@ export default class FileTranslate implements Translate {
   }
 
   /**
+   * 引数の Translate インスタンスから翻訳をコピーした新しい Translate インスタンスを作成する。
+   * @param theirs もう一つのマージ対象
+   */
+  public marge(theirs: Translate): FileTranslate {
+    return new FileTranslate(this.id, this.original, theirs.translate);
+  }
+
+  /**
    * Translate インスタンスをファイルに変換する。
    * @returns 変換後のファイル名と内容
    */

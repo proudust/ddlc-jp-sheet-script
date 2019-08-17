@@ -20,6 +20,14 @@ export default class StringsTranslate implements Translate {
   }
 
   /**
+   * 引数の Translate インスタンスから翻訳をコピーした新しい Translate インスタンスを作成する。
+   * @param theirs もう一つのマージ対象
+   */
+  public marge(theirs: Translate): StringsTranslate {
+    return new StringsTranslate(this.original, theirs.translate);
+  }
+
+  /**
    * Translate インスタンスをスクリプトに変換する。
    * @param before 一つ前に変換した Translate インスタンス、無い場合は null
    * @returns 変換後のスクリプト
