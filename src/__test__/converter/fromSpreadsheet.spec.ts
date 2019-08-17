@@ -11,11 +11,11 @@ describe(`class FromSpreadsheet`, () => {
         [
           'ch3_end_sayori_dd9616f1',
           'm nointeract',
-          nointeractSay.orifinal,
+          nointeractSay.original,
           nointeractSay.translate,
         ],
-        ['ch0_main_cb634d94', '', longSay.orifinal, longSay.translate],
-        ['CAN YOU HEAR ME.txt', 'file', file.orifinal, file.translate],
+        ['ch0_main_cb634d94', '', longSay.original, longSay.translate],
+        ['CAN YOU HEAR ME.txt', 'file', file.original, file.translate],
       ];
       expect(FromSpreadsheet.convert(sheet)).toMatchObject([
         { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
@@ -34,19 +34,19 @@ describe(`class FromSpreadsheet`, () => {
         {
           id: 'ch3_end_sayori_dd9616f1',
           attribute: 'm nointeract',
-          original: nointeractSay.orifinal,
+          original: nointeractSay.original,
           translate: nointeractSay.translate,
         },
         {
           id: 'ch0_main_cb634d94',
           attribute: '',
-          original: longSay.orifinal,
+          original: longSay.original,
           translate: longSay.translate,
         },
         {
           id: 'CAN YOU HEAR ME.txt',
           attribute: 'file',
-          original: file.orifinal,
+          original: file.original,
           translate: file.translate,
         },
       ]);

@@ -17,7 +17,7 @@ describe(`class DialogsTranslate`, () => {
       const t = new DialogsTranslate(
         'ch0_main_bcc5bb00',
         '',
-        monologueSay.orifinal,
+        monologueSay.original,
         monologueSay.translate,
       );
       expect(t.inflate()).toBe(monologueSay.translateScript);
@@ -27,7 +27,7 @@ describe(`class DialogsTranslate`, () => {
       const t = new DialogsTranslate(
         'ch3_end_sayori_dd9616f1',
         'm',
-        nointeractSay.orifinal,
+        nointeractSay.original,
         nointeractSay.translate,
         true,
       );
@@ -35,7 +35,7 @@ describe(`class DialogsTranslate`, () => {
     });
 
     it('split dialog', () => {
-      const t = new DialogsTranslate('ch0_main_cb634d94', '', longSay.orifinal, longSay.translate);
+      const t = new DialogsTranslate('ch0_main_cb634d94', '', longSay.original, longSay.translate);
       expect(t.inflate()).toBe(longSay.translateScript);
     });
   });
