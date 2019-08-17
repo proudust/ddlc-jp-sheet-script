@@ -18,3 +18,6 @@ dist/
 .history/
 .vscode/
 !.vscode/extensions.json
+
+# Lint and Test Report
+*.xml
