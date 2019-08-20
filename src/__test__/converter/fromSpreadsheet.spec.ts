@@ -1,10 +1,12 @@
 import FromSpreadsheet from '../../converter/fromSpreadsheet';
 import { nointeractSay, longSay, file } from '../testResource';
 
+type SpreedSheetRow = [string, string, string, string, ...string[]];
+
 describe(`class FromSpreadsheet`, () => {
   describe(`FromSpreadsheet#convert`, () => {
     it('do', () => {
-      const sheet = [
+      const sheet: SpreedSheetRow[] = [
         ['', 'strings', 'Sayori', 'サヨリ'],
         ['ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],
         ['ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],

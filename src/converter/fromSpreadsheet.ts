@@ -3,26 +3,30 @@ import DialogsTranslate from '../transrate/dialogsTranslate';
 import FileTranslate from '../transrate/fileTranslate';
 import StringsTranslate from '../transrate/stringsTranslate';
 
+type SpreedSheetRow = [string, string, string, string, ...string[]];
+
+const tryParseStrings = (row: SpreedSheetRow): StringsTranslate | null =>
+  (row[1] === 'strings' && new StringsTranslate(row[2], row[3])) || null;
+
+const tryParseDialogs = (row: SpreedSheetRow): DialogsTranslate | null => {
+  if (!/[\S]+_[\da-f]{8}/.test(row[0])) return null;
+  const attrs = row[1].split(' ');
+  const character = attrs.filter(s => s != 'nointeract').join(' ');
+  const nointeract = attrs.some(s => s === 'nointeract');
+  return new DialogsTranslate(row[0], character, row[2], row[3], nointeract);
+};
+
+const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>
+  (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[2], row[3])) || null;
+
 export default {
   /**
    * スプレッドシートから Translate 配列に変換する
    * @param スプレッドシートのデータ (x: 4, y: n)
    */
-  convert: (s: string[][]): Translate[] => {
-    return s.reduce<Translate[]>((array, curr) => {
-      // strings
-      if (curr[1] === 'strings') array.push(new StringsTranslate(curr[2], curr[3]));
-      // dialogs
-      else if (/[\S]+_[\da-f]{8}/.test(curr[0])) {
-        const attrs = curr[1].split(' ');
-        const character = attrs.filter(s => s != 'nointeract').join(' ');
-        const nointeract = attrs.some(s => s === 'nointeract');
-        array.push(new DialogsTranslate(curr[0], character, curr[2], curr[3], nointeract));
-      }
-      // file
-      else if (/.txt$/.test(curr[0])) array.push(new FileTranslate(curr[0], curr[2], curr[3]));
-
-      return array;
-    }, []);
+  convert: (s: SpreedSheetRow[]): Translate[] => {
+    return s
+      .map(row => tryParseStrings(row) || tryParseDialogs(row) || tryParseFiles(row))
+      .filter(<T>(x: T | null): x is T => !!x);
   },
 };

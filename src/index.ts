@@ -9,6 +9,9 @@ import ScriptProperties from './appscript/scriptProperties';
 import Timer from './util/timer';
 import UploderHtml from './uploder.html';
 
+type SpreadsheetRow = [string, string, string, string];
+type OldSpreadsheetRow = [string, string, string];
+
 declare let global: { [key: string]: Function };
 
 global.onOpen = () => {
@@ -36,7 +39,8 @@ global.genelateSheet = (fileName: string, script: string) => {
   const fromScript = FromRenpyScript.convert(script);
   const fromSheet = (() => {
     const sheet = spreadsheet.getSheetByName(fileName);
-    return sheet && FromSpreadsheet.convert(sheet.getDataRange().getValues());
+    const values = sheet && (sheet.getDataRange().getValues() as SpreadsheetRow[]);
+    return sheet && FromSpreadsheet.convert(values);
   })();
   const values = MargeTranslate.marge(fromSheet, fromScript).map(t => [
     t.id,
@@ -72,7 +76,8 @@ global.genelateTranslationFileNew = () => {
     .slice(1)
     .reduce<OutputFolder>((folder, curr) => {
       const name = curr.getName();
-      const translates = FromSpreadsheet.convert(curr.getRange('A3:D').getValues());
+      const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
+      const translates = FromSpreadsheet.convert(values);
       const files = ToTranslationFile.convert(name, translates);
       folder.files.push(...files);
       return folder;
@@ -93,7 +98,8 @@ global.genelateTranslationFileOld = () => {
     .slice(1)
     .reduce<OutputFolder>((folder, curr) => {
       const name = curr.getName();
-      const translates = FromOldSpreadsheet.convert(curr.getRange('A3:C').getValues());
+      const values = curr.getRange('A3:C').getValues() as OldSpreadsheetRow[];
+      const translates = FromOldSpreadsheet.convert(values);
       const files = ToTranslationFile.convert(name, translates);
       folder.files.push(...files);
       return folder;

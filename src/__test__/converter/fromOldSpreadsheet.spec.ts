@@ -1,10 +1,12 @@
 import FromOldSpreadsheet from '../../converter/fromOldSpreadsheet';
 import { nointeractSay, longSay, file } from '../testResource';
 
+type OldSpreedSheetRow = [string, string, string, ...string[]];
+
 describe(`class FromOldSpreadsheet`, () => {
   describe(`FromOldSpreadsheet#convert`, () => {
     it('do', () => {
-      const sheet = [
+      const sheet: OldSpreedSheetRow[] = [
         ['strings', 'Sayori', 'サヨリ'],
         ['ch0_main_41e273ca', 's "Heeeeeeeyyy!!"', 's "「おーはーよーーー！」"'],
         ['ch0_main_41e273ca_1', 's "Heeeeeeeyyy!!"', 's "「おーはーよーーー！」"'],
