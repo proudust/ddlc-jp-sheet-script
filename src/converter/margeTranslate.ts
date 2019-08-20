@@ -1,10 +1,5 @@
 import Translate from '../transrate/translate';
 
-type TranslatePair = {
-  before: Translate;
-  after: Translate;
-};
-
 function firstAtIndex<T>(array: T[], callbackfn: (item: T) => boolean): number | null {
   for (let i = 0; i < array.length; i++) if (callbackfn(array[i])) return i;
   return null;
