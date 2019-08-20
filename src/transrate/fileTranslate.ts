@@ -9,16 +9,28 @@ export default class FileTranslate implements Translate {
   public readonly original: string;
   /** 翻訳 */
   public readonly translate: string;
+  /** 翻訳所で付けられたタグ */
+  public readonly tag: string;
+  /** 翻訳所で付けられたコメント */
+  public readonly comments: string;
 
   /**
    * @param fileName 出力ファイル名
    * @param original 原文
    * @param translate 翻訳
    */
-  public constructor(fileName: string, original: string, translate: string) {
+  public constructor(
+    fileName: string,
+    original: string,
+    translate: string,
+    tag?: string,
+    comments?: string,
+  ) {
     this.id = fileName;
     this.original = original;
     this.translate = translate;
+    this.tag = tag || '';
+    this.comments = comments || '';
   }
 
   /**
@@ -26,7 +38,7 @@ export default class FileTranslate implements Translate {
    * @param theirs もう一つのマージ対象
    */
   public marge(theirs: Translate): FileTranslate {
-    return new FileTranslate(this.id, this.original, theirs.translate);
+    return new FileTranslate(this.id, this.original, theirs.translate, theirs.tag, theirs.comments);
   }
 
   /**

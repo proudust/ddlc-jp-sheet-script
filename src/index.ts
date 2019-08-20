@@ -47,13 +47,16 @@ global.genelateSheet = (fileName: string, script: string) => {
     t.attribute,
     t.original,
     t.translate,
+    '',
+    t.tag,
+    t.comments,
   ]);
 
   const sheet = spreadsheet.insertSheet();
   const rowsCountDiff = values.length - sheet.getMaxRows() - 2;
   if (0 < rowsCountDiff) sheet.insertRows(3, rowsCountDiff);
   else if (rowsCountDiff < 0) sheet.deleteRows(3, -rowsCountDiff);
-  sheet.getRange(3, 1, values.length, 4).setValues(values);
+  sheet.getRange(3, 1, values.length, 7).setValues(values);
   modifier.apply(sheet);
 };
 

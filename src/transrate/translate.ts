@@ -10,6 +10,10 @@ export default interface Translate {
   original: string;
   /** 翻訳 */
   translate: string;
+  /** 翻訳所で付けられたタグ */
+  tag: string;
+  /** 翻訳所で付けられたコメント */
+  comments: string;
 
   /**
    * 引数の Translate インスタンスから翻訳をコピーした新しい Translate インスタンスを作成する。

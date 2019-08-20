@@ -13,6 +13,10 @@ export default class DialogsTranslate implements Translate {
   public readonly original: string;
   /** 翻訳 */
   public readonly translate: string;
+  /** 翻訳所で付けられたタグ */
+  public readonly tag: string;
+  /** 翻訳所で付けられたコメント */
+  public readonly comments: string;
 
   /** キャラクタ 立ち絵 */
   private readonly character: string;
@@ -32,12 +36,16 @@ export default class DialogsTranslate implements Translate {
     original: string,
     translate: string,
     nointeract?: boolean,
+    tag?: string,
+    comments?: string,
   ) {
     this.id = id;
     this.character = character;
     this.original = original;
     this.translate = translate;
     this.nointeract = nointeract || false;
+    this.tag = tag || '';
+    this.comments = comments || '';
   }
 
   /**
@@ -51,6 +59,8 @@ export default class DialogsTranslate implements Translate {
       this.original,
       theirs.translate,
       this.nointeract,
+      theirs.tag,
+      theirs.comments,
     );
   }
 

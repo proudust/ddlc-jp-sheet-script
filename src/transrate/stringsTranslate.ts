@@ -9,14 +9,20 @@ export default class StringsTranslate implements Translate {
   public readonly original: string;
   /** 翻訳 */
   public readonly translate: string;
+  /** 翻訳所で付けられたタグ */
+  public readonly tag: string;
+  /** 翻訳所で付けられたコメント */
+  public readonly comments: string;
 
   /**
    * @param original 原文
    * @param translate 翻訳
    */
-  public constructor(original: string, translate: string) {
+  public constructor(original: string, translate: string, tag?: string, comments?: string) {
     this.original = original;
     this.translate = translate;
+    this.tag = tag || '';
+    this.comments = comments || '';
   }
 
   /**
@@ -24,7 +30,7 @@ export default class StringsTranslate implements Translate {
    * @param theirs もう一つのマージ対象
    */
   public marge(theirs: Translate): StringsTranslate {
-    return new StringsTranslate(this.original, theirs.translate);
+    return new StringsTranslate(this.original, theirs.translate, theirs.tag, theirs.comments);
   }
 
   /**

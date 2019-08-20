@@ -6,7 +6,7 @@ import StringsTranslate from '../transrate/stringsTranslate';
 type OldSpreedSheetRow = [string, string, string, ...string[]];
 
 const tryParseStrings = (row: OldSpreedSheetRow): StringsTranslate | null =>
-  (row[0] === 'strings' && new StringsTranslate(row[1], row[2])) || null;
+  (row[0] === 'strings' && new StringsTranslate(row[1], row[2], undefined, row[4])) || null;
 
 const tryParseDialogs = (row: OldSpreedSheetRow): DialogsTranslate | null => {
   if (!/[\S]+_[\da-f]{8}/.test(row[0])) return null;
@@ -16,11 +16,19 @@ const tryParseDialogs = (row: OldSpreedSheetRow): DialogsTranslate | null => {
     row[2].match(/^(?:(?:[\w]+ )+")?("[\s\S]+"|[\s\S]+?)"?(?: nointeract)?$/) || [];
   if (!original || !translate)
     throw new Error(`dialog not found. orig: ${row[1]}, tran: ${row[2]}`);
-  return new DialogsTranslate(row[0], attributes, original, translate, !!nointeract);
+  return new DialogsTranslate(
+    row[0],
+    attributes,
+    original,
+    translate,
+    !!nointeract,
+    undefined,
+    row[4],
+  );
 };
 
 const tryParseFiles = (row: OldSpreedSheetRow): FileTranslate | null =>
-  (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[1], row[2])) || null;
+  (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[1], row[2], undefined, row[4])) || null;
 
 export default {
   /**
