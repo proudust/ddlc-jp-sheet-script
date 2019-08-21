@@ -1,9 +1,13 @@
 import Translate from '../transrate/translate';
 import DialogsTranslate from '../transrate/dialogsTranslate';
 import FileTranslate from '../transrate/fileTranslate';
+import IgnoreTranslate from '../transrate/ignoreTranslate';
 import StringsTranslate from '../transrate/stringsTranslate';
 
 type SpreedSheetRow = [string, string, string, string, ...string[]];
+
+const tryParseIgnore = (row: SpreedSheetRow): IgnoreTranslate | null =>
+  (row[0] === '' && row[1] === '' && new IgnoreTranslate(row[2], row[3], row[5], row[6])) || null;
 
 const tryParseStrings = (row: SpreedSheetRow): StringsTranslate | null =>
   (row[1] === 'strings' && new StringsTranslate(row[2], row[3], row[5], row[6])) || null;
@@ -26,7 +30,10 @@ export default {
    */
   convert: (s: SpreedSheetRow[]): Translate[] => {
     return s
-      .map(row => tryParseStrings(row) || tryParseDialogs(row) || tryParseFiles(row))
+      .map(
+        row =>
+          tryParseIgnore(row) || tryParseStrings(row) || tryParseDialogs(row) || tryParseFiles(row),
+      )
       .filter(<T>(x: T | null): x is T => !!x);
   },
 };
