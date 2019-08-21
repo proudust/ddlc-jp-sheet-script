@@ -3,6 +3,7 @@ import FromOldSpreadsheet from './converter/fromOldSpreadsheet';
 import FromSpreadsheet from './converter/fromSpreadsheet';
 import FromRenpyScript from './converter/fromRenpyScript';
 import MargeTranslate from './converter/margeTranslate';
+import ToSpreadsheet from './converter/toSpreadsheet';
 import ToTranslationFile from './converter/toTranslationFile';
 import SheetModifier from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
@@ -42,15 +43,10 @@ global.genelateSheet = (fileName: string, script: string) => {
     const values = sheet && (sheet.getDataRange().getValues() as SpreadsheetRow[]);
     return sheet && FromSpreadsheet.convert(values);
   })();
-  const values = MargeTranslate.marge(fromSheet, fromScript).map(t => [
-    t.id,
-    t.attribute,
-    t.original,
-    t.translate,
-    '',
-    t.tag,
-    t.comments,
-  ]);
+  const values = (() => {
+    const marge = MargeTranslate.marge(fromSheet, fromScript);
+    return ToSpreadsheet.convert(marge);
+  })();
 
   const sheet = spreadsheet.insertSheet();
   const rowsCountDiff = values.length - sheet.getMaxRows() - 2;
