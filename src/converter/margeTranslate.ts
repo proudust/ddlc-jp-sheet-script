@@ -11,6 +11,7 @@ function firstAtIndex<T>(array: T[], callbackfn: (item: T) => boolean): number |
  * @param before 変換元となる任意の Translate インスタンス
  */
 function convertIgnoreTranslate(before: Translate): IgnoreTranslate {
+  if (before instanceof IgnoreTranslate) return before;
   const { original, translate, comments } = before;
   return new IgnoreTranslate(original, translate, '削除', comments);
 }
