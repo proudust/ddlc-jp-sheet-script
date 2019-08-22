@@ -1,5 +1,6 @@
 const path = require('path');
 const GasPlugin = require('gas-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: 'development',
@@ -31,5 +32,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts'],
   },
-  plugins: [new GasPlugin()],
+  plugins: [
+    new HtmlWebpackPlugin({ template: './src/uploder.html', filename: 'uploder.html' }),
+    new GasPlugin(),
+  ],
 };
