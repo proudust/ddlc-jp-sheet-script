@@ -9,7 +9,7 @@
     "test:ci": "jest --ci --reporters=jest-junit",
     "build": "npm run lint && npm run test && rimraf dist && webpack && cpx src/appsscript.json dist",
     "build:ci": "npm run lint:ci && npm run test:ci && rimraf dist && webpack && cpx src/appsscript.json dist",
-    "deploy": "npm run build && clasp push"
+    "deploy": "npm run build && rimraf dist/client.js && clasp push"
   },
   "author": "proudust",
   "license": "MIT",

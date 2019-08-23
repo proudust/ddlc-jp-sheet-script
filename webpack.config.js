@@ -1,13 +1,17 @@
 const path = require('path');
 const GasPlugin = require('gas-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.ts',
+  entry: {
+    client: './src/client/uploder.ts',
+    server: './src/index.ts',
+  },
   devtool: false,
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: path.join(__dirname, 'dist'),
   },
   module: {
@@ -33,7 +37,13 @@ module.exports = {
     extensions: ['.ts'],
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './src/html/uploder.html', filename: 'uploder.html' }),
+    new HtmlWebpackPlugin({
+      template: './src/client/uploder.html',
+      filename: 'uploder.html',
+      inlineSource: '.(js)$',
+      chunks: ['client'],
+    }),
+    new HtmlWebpackInlineSourcePlugin(),
     new GasPlugin(),
   ],
 };
