@@ -33,7 +33,7 @@ module.exports = {
     extensions: ['.ts'],
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: './src/uploder.html', filename: 'uploder.html' }),
+    new HtmlWebpackPlugin({ template: './src/html/uploder.html', filename: 'uploder.html' }),
     new GasPlugin(),
   ],
 };
