@@ -1,5 +1,4 @@
 import OutputFolder from './appscript/outputFolder';
-import FromOldSpreadsheet from './converter/fromOldSpreadsheet';
 import FromSpreadsheet from './converter/fromSpreadsheet';
 import FromRenpyScript from './converter/fromRenpyScript';
 import MargeTranslate from './converter/margeTranslate';
@@ -18,8 +17,7 @@ global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
     { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
     { name: 'スプレッドシートの書式再設定', functionName: 'fixSpreadsheet' },
-    { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFileNew' },
-    { name: '翻訳ファイルの出力(旧)', functionName: 'genelateTranslationFileOld' },
+    { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFile' },
   ]);
 };
 
@@ -65,7 +63,7 @@ global.fixSpreadsheet = () => {
     .forEach(s => modifier.apply(s));
 };
 
-global.genelateTranslationFileNew = () => {
+global.genelateTranslationFile = () => {
   const properties = new ScriptProperties();
   const timer = new Timer();
   const outputFolder = new OutputFolder(properties.folderName, new Date());
@@ -76,28 +74,6 @@ global.genelateTranslationFileNew = () => {
       const name = curr.getName();
       const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
       const translates = FromSpreadsheet.convert(values);
-      const files = ToTranslationFile.convert(name, translates);
-      folder.files.push(...files);
-      return folder;
-    }, outputFolder)
-    .save();
-  const time = timer.toString();
-  const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。処理時間: ${time}秒`;
-  Browser.msgBox(msg);
-  // eslint-disable-next-line no-undef
-  console.log(`処理時間: ${time}秒`);
-};
-
-global.genelateTranslationFileOld = () => {
-  const timer = new Timer();
-  const outputFolder = new OutputFolder('DDLC_JP', new Date());
-  SpreadsheetApp.getActive()
-    .getSheets()
-    .slice(1)
-    .reduce<OutputFolder>((folder, curr) => {
-      const name = curr.getName();
-      const values = curr.getRange('A3:C').getValues() as OldSpreadsheetRow[];
-      const translates = FromOldSpreadsheet.convert(values);
       const files = ToTranslationFile.convert(name, translates);
       folder.files.push(...files);
       return folder;
