@@ -1,5 +1,4 @@
 import OutputFolder from './appscript/outputFolder';
-import FromOldSpreadsheet from './converter/fromOldSpreadsheet';
 import FromSpreadsheet from './converter/fromSpreadsheet';
 import FromRenpyScript from './converter/fromRenpyScript';
 import MargeTranslate from './converter/margeTranslate';
@@ -19,7 +18,6 @@ global.onOpen = () => {
     { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
     { name: 'スプレッドシートの書式再設定', functionName: 'fixSpreadsheet' },
     { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFile' },
-    { name: '現在のシートを変換', functionName: 'convertSpreadsheet' },
   ]);
 };
 
@@ -86,32 +84,4 @@ global.genelateTranslationFile = () => {
   Browser.msgBox(msg);
   // eslint-disable-next-line no-undef
   console.log(`処理時間: ${time}秒`);
-};
-
-global.convertSpreadsheet = () => {
-  const spreadsheet = SpreadsheetApp.getActive();
-  const properties = new ScriptProperties();
-  const modifier = new SheetModifier(properties);
-
-  const oldSheet = spreadsheet.getActiveSheet();
-  const sheetName = oldSheet.getName().split('_')[0];
-  const values = (() => {
-    const oldValues = FromOldSpreadsheet.convert(oldSheet
-      .getRange('A3:E')
-      .getValues() as OldSpreadsheetRow[]);
-    return ToSpreadsheet.convert(oldValues);
-  })();
-
-  const newSheet = spreadsheet.insertSheet();
-  oldSheet.setName(`${sheetName}_old`);
-  const doubleSheet = spreadsheet.getSheetByName(sheetName);
-  if (doubleSheet) spreadsheet.deleteSheet(doubleSheet);
-  newSheet.setName(sheetName);
-
-  const rowsCountDiff = values.length - newSheet.getMaxRows() - 2;
-  if (0 < rowsCountDiff) newSheet.insertRows(3, rowsCountDiff);
-  else if (rowsCountDiff < 0) newSheet.deleteRows(3, -rowsCountDiff);
-  newSheet.getRange(3, 1, values.length, 7).setValues(values);
-
-  modifier.apply(newSheet);
 };
