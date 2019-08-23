@@ -18,6 +18,13 @@ describe(`class ScriptProperties`, () => {
       setupPropertiesService(dummy({}));
       new ScriptProperties();
     });
+
+    it('script properties is not defined', () => {
+      setupPropertiesService({});
+      expect(() => new ScriptProperties()).toThrowError(
+        /^\w+ is not defined in the script property.$/,
+      );
+    });
   });
 
   describe(`ScriptProperties#folderName`, () => {
