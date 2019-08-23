@@ -16,9 +16,18 @@ interface RawScriptProperties {
 export default class ScriptProperties {
   private readonly raw = PropertiesService.getScriptProperties().getProperties() as RawScriptProperties;
 
-  public readonly folderName = this.raw.FOLDER_NAME;
-  public readonly tags = this.raw.TAG_NAMES.split(',').map((name, index) => ({
-    name,
-    color: this.raw.TAG_COLORS.split(',')[index],
-  }));
+  public readonly folderName = this.getValue('FOLDER_NAME');
+  public readonly tags = this.getValue('TAG_NAMES')
+    .split(',')
+    .map((name, index) => ({
+      name,
+      color: this.getValue('TAG_COLORS').split(',')[index],
+    }));
+
+  private getValue(key: keyof RawScriptProperties): RawScriptProperties[typeof key] {
+    const value = this.raw[key];
+    if (value === null || typeof value === 'undefined')
+      throw Error(`${key} is not defined in the script property.`);
+    return value;
+  }
 }
