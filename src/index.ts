@@ -8,7 +8,6 @@ import ToTranslationFile from './converter/toTranslationFile';
 import SheetModifier from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
 import Timer from './util/timer';
-import UploderHtml from './uploder.html';
 
 type SpreadsheetRow = [string, string, string, string];
 type OldSpreadsheetRow = [string, string, string];
@@ -25,7 +24,7 @@ global.onOpen = () => {
 };
 
 global.showUploder = () => {
-  const html = HtmlService.createHtmlOutput(UploderHtml)
+  const html = HtmlService.createHtmlOutputFromFile('uploder.html')
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
     .setWidth(400)
     .setHeight(200);

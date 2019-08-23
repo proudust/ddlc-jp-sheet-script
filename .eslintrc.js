@@ -7,9 +7,12 @@ module.exports = {
   ],
   plugins: ['@typescript-eslint', 'googleappsscript', 'jest', 'prettier'],
   env: {
+    browser: true,
+    es6: true,
     'googleappsscript/googleappsscript': true,
     'jest/globals': true,
   },
+  globals: { "google": 'readonly' },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
