@@ -3,7 +3,7 @@ import DialogsTranslate from '../transrate/dialogsTranslate';
 import FileTranslate from '../transrate/fileTranslate';
 import StringsTranslate from '../transrate/stringsTranslate';
 
-type OldSpreedSheetRow = [string, string, string, ...string[]];
+type OldSpreedSheetRow = [string, string, string, string, string];
 
 const tryParseStrings = (row: OldSpreedSheetRow): StringsTranslate | null =>
   (row[0] === 'strings' && new StringsTranslate(row[1], row[2], undefined, row[4])) || null;
@@ -28,7 +28,9 @@ const tryParseDialogs = (row: OldSpreedSheetRow): DialogsTranslate | null => {
 };
 
 const tryParseFiles = (row: OldSpreedSheetRow): FileTranslate | null =>
-  (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[1], row[2], undefined, row[4])) || null;
+  ((/.txt$/.test(row[0]) || /^=HYPERLINK\(/.test(row[0])) &&
+    new FileTranslate(row[0], row[1], row[2], undefined, row[4])) ||
+  null;
 
 export default {
   /**
