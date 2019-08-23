@@ -3,7 +3,7 @@ import DialogsTranslate from '../transrate/dialogsTranslate';
 import FileTranslate from '../transrate/fileTranslate';
 import StringsTranslate from '../transrate/stringsTranslate';
 
-type OldSpreedSheetRow = [string, string, string, string, string];
+type OldSpreedSheetRow = [string, string, string, ...string[]];
 
 const tryParseStrings = (row: OldSpreedSheetRow): StringsTranslate | null =>
   (row[0] === 'strings' && new StringsTranslate(row[1], row[2], undefined, row[4])) || null;
