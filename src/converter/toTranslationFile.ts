@@ -27,7 +27,7 @@ export default {
         const output = curr.inflate(before);
         if (typeof output === 'string') {
           defalutFile.content += (before ? '\n' : '') + output;
-        } else {
+        } else if (output) {
           array.push(output);
         }
         return array;
