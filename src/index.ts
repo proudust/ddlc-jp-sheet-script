@@ -4,7 +4,7 @@ import FromRenpyScript from './converter/fromRenpyScript';
 import MargeTranslate from './converter/margeTranslate';
 import ToSpreadsheet from './converter/toSpreadsheet';
 import ToTranslationFile from './converter/toTranslationFile';
-import { initTranslateSheetModifier } from './appscript/sheetModifier';
+import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
 import Timer from './util/timer';
 
@@ -55,12 +55,15 @@ global.genelateSheet = (fileName: string, script: string) => {
 
 global.fixSpreadsheet = () => {
   const properties = new ScriptProperties();
-  const modifier = initTranslateSheetModifier(properties);
+  const statisticsModifier = initStatisticsSheetModifier();
+  const translateModifier = initTranslateSheetModifier(properties);
+
+  statisticsModifier(SpreadsheetApp.getActive().getSheets()[0]);
 
   SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
-    .forEach(s => modifier(s));
+    .forEach(s => translateModifier(s));
 };
 
 global.genelateTranslationFile = () => {

@@ -7,6 +7,143 @@ type SheetModifier = (sheet: Sheet) => void;
 type SheetModifierFactory = (properties: ScriptProperties) => SheetModifier;
 
 /**
+ * "statistics" と名前のついた名前付き範囲を取得する。
+ * @param sheet 対象のシート （統計シート）
+ * @returns 対象の名前付き範囲があった場合その Range オブジェクト、ない場合は null 。
+ */
+function getStatisticsRange(sheet: Sheet): GoogleAppsScript.Spreadsheet.Range | null {
+  const [namedRange = null] = sheet.getNamedRanges().filter(r => r.getName() === 'statistics');
+  return namedRange && namedRange.getRange();
+}
+
+/**
+ * 翻訳シートが追加されている場合、統計情報のシート名を修正する。
+ */
+const updateStatistics: SheetModifier = (sheet: Sheet): void => {
+  const statisticsRange = getStatisticsRange(sheet);
+  if (!statisticsRange) {
+    console.warn('statistics NamedRange is not found');
+    return;
+  }
+
+  const sheetNames = SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .map(s => s.getName());
+  const nowRangeNumRows = statisticsRange.getNumRows() - 2;
+  if (sheetNames.length != nowRangeNumRows) {
+    const rowPosition = statisticsRange.getRowIndex() + 1;
+    if (sheetNames.length > nowRangeNumRows) {
+      sheet.insertRowsAfter(rowPosition, sheetNames.length - nowRangeNumRows);
+    } else if (sheetNames.length < nowRangeNumRows) {
+      sheet.deleteRows(rowPosition, nowRangeNumRows - sheetNames.length);
+    }
+
+    const sheetDescriptions = statisticsRange
+      .getValues()
+      .reduce<{ [key: string]: string }>((d, v) => (d[v[0]] = v[1]), {});
+    const newValues = sheetNames.map(n => [n, sheetDescriptions[n]]);
+    sheet
+      .getRange(rowPosition, statisticsRange.getColumn(), sheetNames.length, 2)
+      .setValues(newValues);
+  }
+};
+
+/**
+ * "statistics" と名前のついた名前付き範囲に、統計用の数式を再設定します。
+ */
+const setStatisticsFormulas: SheetModifier = (sheet: Sheet): void => {
+  const statisticsRange = getStatisticsRange(sheet);
+  if (!statisticsRange) {
+    console.warn('statistics NamedRange is not found');
+    return;
+  }
+
+  const sheets: [string, string][] = statisticsRange
+    .getValues()
+    .map<[string, string]>(a => [a[0], a[1]])
+    .filter(f => f)
+    .slice(1, -1);
+  const headerIndex = statisticsRange.getRowIndex();
+  const footerIndex = headerIndex + sheets.length + 1;
+  const header = [
+    '',
+    '使用場面',
+    '翻訳済み',
+    '翻訳箇所',
+    '翻訳率',
+    '要変更',
+    'バグ',
+    '提案',
+    '重複',
+  ];
+  const formulas = sheets.map((sheet, index) => {
+    const [sheetName = '', sheetDescription = ''] = sheet;
+    const sheetId = (() => {
+      const sheet = SpreadsheetApp.getActive().getSheetByName(sheetName);
+      return (sheet && sheet.getSheetId()) || null;
+    })();
+    const thisRowIndex = headerIndex + 1 + index;
+    return [
+      (sheetId && `=HYPERLINK("#gid=${sheetId}","${sheetName}")`) || sheetName,
+      sheetDescription,
+      `=COUNTA('${sheetName}'!$D$2:$D)`,
+      `=COUNTA('${sheetName}'!$C$2:$C)`,
+      `=IF($E${thisRowIndex}<>0,$D${thisRowIndex}/$E${thisRowIndex},0)`,
+      `=COUNTIF('${sheetName}'!$F$2:$F, G$${headerIndex})`,
+      `=COUNTIF('${sheetName}'!$F$2:$F, H$${headerIndex})`,
+      `=COUNTIF('${sheetName}'!$F$2:$F, I$${headerIndex})`,
+      `=COUNTIF('${sheetName}'!$F$2:$F, J$${headerIndex})`,
+    ];
+  });
+  const footer = [
+    '合計',
+    '',
+    `=SUM(D$${headerIndex + 1}:D$${footerIndex - 1})`,
+    `=SUM(E$${headerIndex + 1}:E$${footerIndex - 1})`,
+    `=IF($E${footerIndex}<>0,$D${footerIndex}/$E${footerIndex},0)`,
+    `=SUM(G$${headerIndex + 1}:G$${footerIndex - 1})`,
+    `=SUM(H$${headerIndex + 1}:H$${footerIndex - 1})`,
+    `=SUM(I$${headerIndex + 1}:I$${footerIndex - 1})`,
+    `=SUM(J$${headerIndex + 1}:J$${footerIndex - 1})`,
+  ];
+
+  statisticsRange.setValues([header, ...formulas, footer]);
+};
+
+/**
+ * "statistics" と名前のついた名前付き範囲に、統計用の書式を再設定します。
+ */
+const fixStatisticsFormat = (sheet: Sheet): void => {
+  const statisticsRange = getStatisticsRange(sheet);
+  if (!statisticsRange) {
+    console.warn('statistics NamedRange is not found');
+    return;
+  }
+
+  statisticsRange.setBackground('#CCCCCC');
+
+  const statisticsRowIndex = statisticsRange.getRowIndex() + 1;
+  const numStatisticsRows = statisticsRange.getNumRows() - 1;
+  const statisticsColumnIndex = statisticsRange.getColumn() + 2;
+  sheet
+    .getRange(statisticsRowIndex, statisticsColumnIndex, numStatisticsRows, 3)
+    .setBackground('#CFE2F3');
+  sheet
+    .getRange(statisticsRowIndex, statisticsColumnIndex + 3, numStatisticsRows, 1)
+    .setBackground('#FFF2CC');
+  sheet
+    .getRange(statisticsRowIndex, statisticsColumnIndex + 4, numStatisticsRows, 1)
+    .setBackground('#FCE5CD');
+  sheet
+    .getRange(statisticsRowIndex, statisticsColumnIndex + 5, numStatisticsRows, 1)
+    .setBackground('#D9EAD3');
+  sheet
+    .getRange(statisticsRowIndex, statisticsColumnIndex + 6, numStatisticsRows, 1)
+    .setBackground('#EFEFEF');
+};
+
+/**
  * シートから余計な列を削除します。
  */
 const deleteColumns = (sheet: Sheet): void => {
@@ -131,6 +268,13 @@ const addEmptyFormatRules: SheetModifier = ((): SheetModifier => {
 function modifierCompose(...modifiers: SheetModifier[]): SheetModifier {
   return (sheet: Sheet) => modifiers.forEach(m => m(sheet));
 }
+
+/**
+ * 翻訳シートの再設定用の関数を生成します。
+ * @param properties スクリプトのプロパティを渡します。
+ */
+export const initStatisticsSheetModifier = (): SheetModifier =>
+  modifierCompose(updateStatistics, setStatisticsFormulas, fixStatisticsFormat);
 
 /**
  * 翻訳シートの再設定用の関数を生成します。
