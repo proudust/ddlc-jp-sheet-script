@@ -31,7 +31,7 @@ export default class OutputFolder {
     for (let i = 0; i < this.files.length; i++) {
       const { fileName, content } = this.files[i];
       const blob = Utilities.newBlob('', 'text/plain', fileName).setDataFromString(
-        content,
+        content.replace(/\n|\r\n|\r/g, '\n'),
         'utf-8',
       );
       folder.createFile(blob);
