@@ -1,6 +1,6 @@
-import Translate from './translate';
+import { Translate } from './translate';
 
-export default class FileTranslate implements Translate {
+export class FileTranslate implements Translate {
   /** ファイル名 */
   public readonly id: string;
   /** 属性 */

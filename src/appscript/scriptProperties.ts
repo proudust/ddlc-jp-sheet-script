@@ -13,7 +13,7 @@ interface RawScriptProperties {
 /**
  * スクリプトのプロパティをパースします。
  */
-export default class ScriptProperties {
+export class ScriptProperties {
   private readonly raw = PropertiesService.getScriptProperties().getProperties() as RawScriptProperties;
 
   public readonly folderName = this.getValue('FOLDER_NAME');

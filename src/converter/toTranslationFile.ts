@@ -1,11 +1,11 @@
-import Translate from '../transrate/translate';
+import { Translate } from '../transrate/translate';
 
 interface File {
   fileName: string;
   content: string;
 }
 
-export default {
+export const ToTranslationFile = {
   /**
    * Translate 配列から翻訳スクリプトを出力する
    */

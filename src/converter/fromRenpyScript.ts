@@ -1,6 +1,6 @@
-import Md5 from '../util/md5';
-import DialogsTranslate from '../transrate/dialogsTranslate';
-import StringsTranslate from '../transrate/stringsTranslate';
+import { MD5 } from '../util/md5';
+import { DialogsTranslate } from '../transrate/dialogsTranslate';
+import { StringsTranslate } from '../transrate/stringsTranslate';
 
 const ids: string[] = [];
 /**
@@ -9,7 +9,7 @@ const ids: string[] = [];
  * @param code コード
  */
 function getId(label: string, code: string, isNointeract: boolean): string {
-  const hash = Md5(code + (isNointeract ? ' nointeract' : '') + '\r\n');
+  const hash = MD5(code + (isNointeract ? ' nointeract' : '') + '\r\n');
   const baseId = label + '_' + hash;
   let id = baseId;
   let i = 1;
@@ -22,7 +22,7 @@ function getId(label: string, code: string, isNointeract: boolean): string {
 
 type RenPyTranslates = (DialogsTranslate | StringsTranslate)[];
 
-export default {
+export const FromRenpyScript = {
   convert: (script: string): RenPyTranslates => {
     let label = '';
     const menus: number[] = [];

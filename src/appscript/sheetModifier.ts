@@ -1,4 +1,4 @@
-import ScriptProperties from './scriptProperties';
+import { ScriptProperties } from './scriptProperties';
 
 type Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 /** シートの設定関数 */

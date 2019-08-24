@@ -1,4 +1,4 @@
-export default interface Translate {
+export interface Translate {
   /** クラス名 */
   constructor: { name: string };
 

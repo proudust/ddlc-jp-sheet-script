@@ -1,4 +1,4 @@
-export default class OutputFolder {
+export class OutputFolder {
   public name: string;
   public files: {
     fileName: string;

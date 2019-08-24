@@ -1,6 +1,6 @@
-import ScriptProperties from '../../appscript/scriptProperties';
+import { ScriptProperties } from '../../appscript/scriptProperties';
 
-import setupPropertiesService from '../mock/setupPropertiesService';
+import { setupPropertiesService } from '../mock/setupPropertiesService';
 
 const dummy = (dummy: Partial<ScriptProperties['raw']>): ScriptProperties['raw'] =>
   Object.assign(

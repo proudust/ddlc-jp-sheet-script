@@ -1,7 +1,7 @@
-import ToTranslationFile from '../../converter/toTranslationFile';
-import DialogsTranslate from '../../transrate/dialogsTranslate';
-import FileTranslate from '../../transrate/fileTranslate';
-import StringsTranslate from '../../transrate/stringsTranslate';
+import { ToTranslationFile } from '../../converter/toTranslationFile';
+import { DialogsTranslate } from '../../transrate/dialogsTranslate';
+import { FileTranslate } from '../../transrate/fileTranslate';
+import { StringsTranslate } from '../../transrate/stringsTranslate';
 import { file } from '../testResource';
 
 describe(`class ToTranslationFile`, () => {

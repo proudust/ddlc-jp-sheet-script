@@ -1,7 +1,7 @@
-import DialogsTranslate from '../transrate/dialogsTranslate';
-import FileTranslate from '../transrate/fileTranslate';
-import IgnoreTranslate from '../transrate/ignoreTranslate';
-import StringsTranslate from '../transrate/stringsTranslate';
+import { DialogsTranslate } from '../transrate/dialogsTranslate';
+import { FileTranslate } from '../transrate/fileTranslate';
+import { IgnoreTranslate } from '../transrate/ignoreTranslate';
+import { StringsTranslate } from '../transrate/stringsTranslate';
 
 type SpreedSheetRow = [string, string, string, string, ...string[]];
 type SpreadSheetTranslates = (
@@ -27,7 +27,7 @@ const tryParseDialogs = (row: SpreedSheetRow): DialogsTranslate | null => {
 const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>
   (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[2], row[3], row[5], row[6])) || null;
 
-export default {
+export const FromSpreadsheet = {
   /**
    * スプレッドシートから Translate 配列に変換する
    * @param スプレッドシートのデータ (x: 4, y: n)

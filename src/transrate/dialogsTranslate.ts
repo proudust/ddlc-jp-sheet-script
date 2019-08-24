@@ -1,6 +1,6 @@
-import Translate from './translate';
+import { Translate } from './translate';
 
-export default class DialogsTranslate implements Translate {
+export class DialogsTranslate implements Translate {
   /** 識別子 (ラベル_ハッシュ) */
   public readonly id: string;
   /** 属性 (キャラクタ 立ち絵 nointeract) */

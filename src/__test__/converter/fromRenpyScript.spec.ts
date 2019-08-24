@@ -1,5 +1,5 @@
-import setupUtilities from '../mock/setupUtilities';
-import FromRenpyScript from '../../converter/fromRenpyScript';
+import { setupUtilities } from '../mock/setupUtilities';
+import { FromRenpyScript } from '../../converter/fromRenpyScript';
 
 setupUtilities();
 

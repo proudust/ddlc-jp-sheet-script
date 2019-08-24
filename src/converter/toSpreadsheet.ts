@@ -1,10 +1,10 @@
-import Translate from '../transrate/translate';
+import { Translate } from '../transrate/translate';
 
 type SpreadsheetRow = [string, string, string, string, '', string, string];
 
 const getLabel = (id: string): string | undefined => (id.match(/([\S]+)_[\da-f]{8}/) || [])[1];
 
-export default {
+export const ToSpreadsheet = {
   /**
    * Translate 配列から翻訳スクリプトを出力する
    */

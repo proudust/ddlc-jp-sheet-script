@@ -1,9 +1,9 @@
-import Translate from './translate';
+import { Translate } from './translate';
 
 /**
  * スプレッドシート上の、翻訳に反映しない行
  */
-export default class IgnoreTranslate implements Translate {
+export class IgnoreTranslate implements Translate {
   /** 識別子 */
   public readonly id = '';
   /** 属性 */

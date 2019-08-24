@@ -1,12 +1,12 @@
-import OutputFolder from './appscript/outputFolder';
-import FromSpreadsheet from './converter/fromSpreadsheet';
-import FromRenpyScript from './converter/fromRenpyScript';
-import MargeTranslate from './converter/margeTranslate';
-import ToSpreadsheet from './converter/toSpreadsheet';
-import ToTranslationFile from './converter/toTranslationFile';
+import { OutputFolder } from './appscript/outputFolder';
+import { FromSpreadsheet } from './converter/fromSpreadsheet';
+import { FromRenpyScript } from './converter/fromRenpyScript';
+import { MargeTranslate } from './converter/margeTranslate';
+import { ToSpreadsheet } from './converter/toSpreadsheet';
+import { ToTranslationFile } from './converter/toTranslationFile';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
-import ScriptProperties from './appscript/scriptProperties';
-import Timer from './util/timer';
+import { ScriptProperties } from './appscript/scriptProperties';
+import { Timer } from './util/timer';
 
 type SpreadsheetRow = [string, string, string, string];
 type OldSpreadsheetRow = [string, string, string, string, string];

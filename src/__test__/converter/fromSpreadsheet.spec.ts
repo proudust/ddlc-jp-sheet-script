@@ -1,4 +1,4 @@
-import FromSpreadsheet from '../../converter/fromSpreadsheet';
+import { FromSpreadsheet } from '../../converter/fromSpreadsheet';
 import { nointeractSay, longSay, file } from '../testResource';
 
 type SpreedSheetRow = [string, string, string, string, ...string[]];

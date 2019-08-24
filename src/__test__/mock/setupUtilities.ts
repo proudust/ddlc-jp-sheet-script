@@ -2,7 +2,7 @@ import Crypto from 'crypto';
 
 declare let global: { Utilities: Partial<GoogleAppsScript.Utilities.Utilities> };
 
-export default (): void => {
+export function setupUtilities(): void {
   global.Utilities = {
     computeDigest: (
       algorithm: GoogleAppsScript.Utilities.DigestAlgorithm,
@@ -19,4 +19,4 @@ export default (): void => {
     Charset: { US_ASCII: 0, UTF_8: 0 },
     DigestAlgorithm: { MD2: 0, MD5: 0, SHA_1: 0, SHA_256: 0, SHA_384: 0, SHA_512: 0 },
   };
-};
+}

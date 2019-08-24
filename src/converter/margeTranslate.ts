@@ -1,5 +1,5 @@
-import Translate from '../transrate/translate';
-import IgnoreTranslate from '../transrate/ignoreTranslate';
+import { Translate } from '../transrate/translate';
+import { IgnoreTranslate } from '../transrate/ignoreTranslate';
 
 function firstAtIndex<T>(array: T[], callbackfn: (item: T) => boolean): number | null {
   for (let i = 0; i < array.length; i++) if (callbackfn(array[i])) return i;
@@ -16,7 +16,7 @@ function convertIgnoreTranslate(before: Translate): IgnoreTranslate {
   return new IgnoreTranslate(original, translate, '削除', comments);
 }
 
-export default {
+export const MargeTranslate = {
   marge: (sheets: Translate[], scripts: Translate[]): Translate[] => {
     const befores = [...sheets];
     return scripts.reduce<Translate[]>((array, after) => {
