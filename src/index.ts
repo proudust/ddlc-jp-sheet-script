@@ -4,7 +4,7 @@ import FromRenpyScript from './converter/fromRenpyScript';
 import MargeTranslate from './converter/margeTranslate';
 import ToSpreadsheet from './converter/toSpreadsheet';
 import ToTranslationFile from './converter/toTranslationFile';
-import SheetModifier from './appscript/sheetModifier';
+import { initTranslateSheetModifier } from './appscript/sheetModifier';
 import ScriptProperties from './appscript/scriptProperties';
 import Timer from './util/timer';
 
@@ -32,7 +32,7 @@ global.showUploder = () => {
 global.genelateSheet = (fileName: string, script: string) => {
   const spreadsheet = SpreadsheetApp.getActive();
   const properties = new ScriptProperties();
-  const modifier = new SheetModifier(properties);
+  const modifier = initTranslateSheetModifier(properties);
 
   const fromScript = FromRenpyScript.convert(script);
   const fromSheet = (() => {
@@ -50,17 +50,17 @@ global.genelateSheet = (fileName: string, script: string) => {
   if (0 < rowsCountDiff) sheet.insertRows(3, rowsCountDiff);
   else if (rowsCountDiff < 0) sheet.deleteRows(3, -rowsCountDiff);
   sheet.getRange(3, 1, values.length, 7).setValues(values);
-  modifier.apply(sheet);
+  modifier(sheet);
 };
 
 global.fixSpreadsheet = () => {
   const properties = new ScriptProperties();
-  const modifier = new SheetModifier(properties);
+  const modifier = initTranslateSheetModifier(properties);
 
   SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
-    .forEach(s => modifier.apply(s));
+    .forEach(s => modifier(s));
 };
 
 global.genelateTranslationFile = () => {

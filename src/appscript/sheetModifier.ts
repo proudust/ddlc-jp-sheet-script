@@ -2,9 +2,9 @@ import ScriptProperties from './scriptProperties';
 
 type Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 /** シートの設定関数 */
-type Modifier = (sheet: Sheet) => void;
+type SheetModifier = (sheet: Sheet) => void;
 /** スクリプトのプロパティに依存する設定関数 */
-type ModifierFactory = (properties: ScriptProperties) => Modifier;
+type SheetModifierFactory = (properties: ScriptProperties) => SheetModifier;
 
 /**
  * シートから余計な列を削除します。
@@ -50,7 +50,7 @@ const fixFormat = (sheet: Sheet): void => {
  * シートの保護を再設定します。
  * @param sheet 翻訳シート
  */
-const fixProtect: Modifier = (() => {
+const fixProtect: SheetModifier = (() => {
   const owner = SpreadsheetApp.getActive().getOwner();
   return (sheet: Sheet): void => {
     const protect = sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0] || sheet.protect();
@@ -65,7 +65,7 @@ const fixProtect: Modifier = (() => {
  * シートにタグによる条件付き書式を設定します。
  * @param properties プロパティ
  */
-const addDataValidation: ModifierFactory = (properties: ScriptProperties): Modifier => {
+const addDataValidation: SheetModifierFactory = (properties: ScriptProperties): SheetModifier => {
   const dataValidation = SpreadsheetApp.newDataValidation()
     .requireValueInList(properties.tags.map(t => t.name), true)
     .build();
@@ -80,13 +80,13 @@ const addDataValidation: ModifierFactory = (properties: ScriptProperties): Modif
  * シートの条件付き書式を削除します。
  * @param sheet 翻訳シート
  */
-const clearFormatRules: Modifier = (sheet: Sheet): void => sheet.clearConditionalFormatRules();
+const clearFormatRules: SheetModifier = (sheet: Sheet): void => sheet.clearConditionalFormatRules();
 
 /**
  * シートにタグによる条件付き書式を設定します。
  * @param properties プロパティ
  */
-const addTagsFormatRules: ModifierFactory = (properties: ScriptProperties): Modifier => {
+const addTagsFormatRules: SheetModifierFactory = (properties: ScriptProperties): SheetModifier => {
   const builders = properties.tags
     .filter(t => t.color)
     .map(t => {
@@ -110,7 +110,7 @@ const addTagsFormatRules: ModifierFactory = (properties: ScriptProperties): Modi
  * シートに翻訳欄が空の場合の条件付き書式を設定します。
  * @param properties プロパティ
  */
-const addEmptyFormatRules: Modifier = ((): Modifier => {
+const addEmptyFormatRules: SheetModifier = ((): SheetModifier => {
   const builder = SpreadsheetApp.newConditionalFormatRule()
     .whenFormulaSatisfied(`=AND(OR(ISTEXT($A2),ISTEXT($B2)),ISTEXT($C2),$D2="")`)
     .setBackground('#ffff00');
@@ -125,32 +125,24 @@ const addEmptyFormatRules: Modifier = ((): Modifier => {
 })();
 
 /**
- * シートに関数を一括適用します。
+ * シートを操作する関数を合成して 1 つの関数にします。
+ * @param modifiers 合成対象の関数
  */
-export default class SheetModifier {
-  private readonly modifiers: Modifier[];
-
-  /**
-   * シートの設定関数を初期化します。
-   * @param properties スクリプトの設定
-   */
-  public constructor(properties: ScriptProperties) {
-    this.modifiers = [
-      deleteColumns,
-      fixFormat,
-      fixProtect,
-      addDataValidation(properties),
-      clearFormatRules,
-      addTagsFormatRules(properties),
-      addEmptyFormatRules,
-    ];
-  }
-
-  /**
-   * 引数のシートに設定を反映させます。
-   * @param sheet
-   */
-  public apply(sheet: Sheet): void {
-    this.modifiers.forEach(m => m(sheet));
-  }
+function modifierCompose(...modifiers: SheetModifier[]): SheetModifier {
+  return (sheet: Sheet) => modifiers.forEach(m => m(sheet));
 }
+
+/**
+ * 翻訳シートの再設定用の関数を生成します。
+ * @param properties スクリプトのプロパティを渡します。
+ */
+export const initTranslateSheetModifier = (properties: ScriptProperties): SheetModifier =>
+  modifierCompose(
+    deleteColumns,
+    fixFormat,
+    fixProtect,
+    addDataValidation(properties),
+    clearFormatRules,
+    addTagsFormatRules(properties),
+    addEmptyFormatRules,
+  );
