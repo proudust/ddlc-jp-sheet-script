@@ -1,10 +1,14 @@
-import Translate from '../transrate/translate';
 import DialogsTranslate from '../transrate/dialogsTranslate';
 import FileTranslate from '../transrate/fileTranslate';
 import IgnoreTranslate from '../transrate/ignoreTranslate';
 import StringsTranslate from '../transrate/stringsTranslate';
 
 type SpreedSheetRow = [string, string, string, string, ...string[]];
+type SpreadSheetTranslates = (
+  | DialogsTranslate
+  | FileTranslate
+  | IgnoreTranslate
+  | StringsTranslate)[];
 
 const tryParseIgnore = (row: SpreedSheetRow): IgnoreTranslate | null =>
   (row[0] === '' && row[1] === '' && new IgnoreTranslate(row[2], row[3], row[5], row[6])) || null;
@@ -28,7 +32,7 @@ export default {
    * スプレッドシートから Translate 配列に変換する
    * @param スプレッドシートのデータ (x: 4, y: n)
    */
-  convert: (s: SpreedSheetRow[]): Translate[] => {
+  convert: (s: SpreedSheetRow[]): SpreadSheetTranslates => {
     return s
       .map(
         row =>

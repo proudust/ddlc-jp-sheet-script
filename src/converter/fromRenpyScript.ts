@@ -1,6 +1,5 @@
-import DialogsTranslate from '../transrate/dialogsTranslate';
-import Translate from '../transrate/translate';
 import Md5 from '../util/md5';
+import DialogsTranslate from '../transrate/dialogsTranslate';
 import StringsTranslate from '../transrate/stringsTranslate';
 
 const ids: string[] = [];
@@ -21,8 +20,10 @@ function getId(label: string, code: string, isNointeract: boolean): string {
   return id;
 }
 
+type RenPyTranslates = (DialogsTranslate | StringsTranslate)[];
+
 export default {
-  convert: (script: string): Translate[] => {
+  convert: (script: string): RenPyTranslates => {
     let label = '';
     const menus: number[] = [];
     return script
@@ -34,7 +35,7 @@ export default {
           code: s.trim(),
         };
       })
-      .reduce<Translate[]>((array, curr) => {
+      .reduce<RenPyTranslates>((array, curr) => {
         const { blockLevel, code } = curr;
         const menuBlockLebel = menus ? menus[menus.length - 1] : null;
 
