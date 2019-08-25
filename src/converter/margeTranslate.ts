@@ -1,5 +1,5 @@
-import { Translate } from '../transrate/translate';
 import { IgnoreTranslate } from '../transrate/ignoreTranslate';
+import { Translate } from '../transrate/translate';
 
 function firstAtIndex<T>(array: T[], callbackfn: (item: T) => boolean): number | null {
   for (let i = 0; i < array.length; i++) if (callbackfn(array[i])) return i;

@@ -1,4 +1,5 @@
 import { DialogsTranslate } from '../../transrate/dialogsTranslate';
+
 import { characterSay, monologueSay, nointeractSay, longSay } from '../testResource';
 
 describe(`class DialogsTranslate`, () => {

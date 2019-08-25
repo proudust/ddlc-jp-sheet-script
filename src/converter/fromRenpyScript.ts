@@ -1,6 +1,6 @@
-import { MD5 } from '../util/md5';
 import { DialogsTranslate } from '../transrate/dialogsTranslate';
 import { StringsTranslate } from '../transrate/stringsTranslate';
+import { MD5 } from '../util/md5';
 
 const ids: string[] = [];
 /**

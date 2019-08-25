@@ -1,6 +1,7 @@
 import { DialogsTranslate } from '../../transrate/dialogsTranslate';
 import { FileTranslate } from '../../transrate/fileTranslate';
 import { StringsTranslate } from '../../transrate/stringsTranslate';
+
 import { poem } from '../testResource';
 
 describe(`class StringsTranslate`, () => {

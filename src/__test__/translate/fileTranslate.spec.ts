@@ -1,4 +1,5 @@
 import { FileTranslate } from '../../transrate/fileTranslate';
+
 import { file } from '../testResource';
 
 describe(`class FileTranslate`, () => {

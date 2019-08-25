@@ -1,11 +1,11 @@
 import { OutputFolder } from './appscript/outputFolder';
+import { ScriptProperties } from './appscript/scriptProperties';
+import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { fromSpreadsheet } from './converter/fromSpreadsheet';
 import { fromRenpyScript } from './converter/fromRenpyScript';
 import { margeTranslate } from './converter/margeTranslate';
 import { toSpreadsheet } from './converter/toSpreadsheet';
 import { toTranslationFile } from './converter/toTranslationFile';
-import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
-import { ScriptProperties } from './appscript/scriptProperties';
 import { Timer } from './util/timer';
 
 type SpreadsheetRow = [string, string, string, string];
