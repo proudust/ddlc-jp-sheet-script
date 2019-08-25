@@ -22,6 +22,10 @@ function getId(label: string, code: string, isNointeract: boolean): string {
 
 type RenPyTranslates = (DialogsTranslate | StringsTranslate)[];
 
+/**
+ * Ren'Py スクリプトから Translate 配列を生成します。
+ * @param script Ren'Py スクリプトの内容
+ */
 export function fromRenpyScript(script: string): RenPyTranslates {
   let label = '';
   const menus: number[] = [];

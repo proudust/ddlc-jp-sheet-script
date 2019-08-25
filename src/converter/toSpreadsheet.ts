@@ -6,6 +6,7 @@ const getLabel = (id: string): string | undefined => (id.match(/([\S]+)_[\da-f]{
 
 /**
  * Translate 配列から翻訳スクリプトを出力する
+ * @param translates Translate 配列
  */
 export function toSpreadsheet(translates: Translate[]): SpreadsheetRow[] {
   let before = '';

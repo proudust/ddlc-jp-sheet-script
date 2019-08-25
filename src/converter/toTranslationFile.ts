@@ -7,6 +7,8 @@ interface File {
 
 /**
  * Translate 配列から翻訳スクリプトを出力する
+ * @param name スクリプトのファイル名
+ * @param translates Translate 配列
  */
 export function toTranslationFile(name: string, translates: Translate[]): File[] {
   const defalutFile = { fileName: `${name}.rpy`, content: '' };

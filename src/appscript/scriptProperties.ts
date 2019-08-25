@@ -11,12 +11,16 @@ interface RawScriptProperties {
 }
 
 /**
- * スクリプトのプロパティをパースします。
+ * スクリプトのプロパティをパースしたオブジェクトを返します。
  */
 export class ScriptProperties {
+  /** 未加工のスクリプトのプロパティ */
   private readonly raw = PropertiesService.getScriptProperties().getProperties() as RawScriptProperties;
 
+  /** 出力フォルダ名 */
   public readonly folderName = this.getValue('FOLDER_NAME');
+
+  /** タグの配列 */
   public readonly tags = this.getValue('TAG_NAMES')
     .split(',')
     .map((name, index) => ({
@@ -24,8 +28,12 @@ export class ScriptProperties {
       color: this.getValue('TAG_COLORS').split(',')[index],
     }));
 
+  /**
+   * 未加工のスクリプトのプロパティから値を取得します。
+   * @throws 指定のプロパティが未定義の場合、エラーをスローします。
+   */
   private getValue(key: keyof RawScriptProperties): RawScriptProperties[typeof key] {
-    const value = this.raw[key];
+    const value: RawScriptProperties[typeof key] | null | undefined = this.raw[key];
     if (value === null || typeof value === 'undefined')
       throw Error(`${key} is not defined in the script property.`);
     return value;

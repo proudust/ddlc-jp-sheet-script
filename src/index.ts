@@ -11,6 +11,10 @@ type SpreadsheetRow = [string, string, string, string];
 
 declare let global: { [key: string]: Function };
 
+/**
+ * スプレッドシートを開いたときに実行される関数です。
+ * スプレッドシートにメニューバーを追加します。
+ */
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
     { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
@@ -19,6 +23,9 @@ global.onOpen = () => {
   ]);
 };
 
+/**
+ * スクリプトのアップローダーを表示します。
+ */
 global.showUploder = () => {
   const html = HtmlService.createHtmlOutputFromFile('uploder.html')
     .setSandboxMode(HtmlService.SandboxMode.IFRAME)
@@ -27,6 +34,11 @@ global.showUploder = () => {
   SpreadsheetApp.getUi().showModalDialog(html, 'スクリプトからシートを作成');
 };
 
+/**
+ * スクリプトのファイル名と内容からシートを生成します。
+ * @param fileName スクリプトのファイル名。 (拡張子なし)
+ * @param script スクリプトの内容。
+ */
 global.genelateSheet = (fileName: string, script: string) => {
   const spreadsheet = SpreadsheetApp.getActive();
   const properties = new ScriptProperties();
@@ -51,6 +63,9 @@ global.genelateSheet = (fileName: string, script: string) => {
   modifier(sheet);
 };
 
+/**
+ * スプレッドシートのフォーマットを修正します。
+ */
 global.fixSpreadsheet = () => {
   const properties = new ScriptProperties();
   const statisticsModifier = initStatisticsSheetModifier();
@@ -64,6 +79,9 @@ global.fixSpreadsheet = () => {
     .forEach(s => translateModifier(s));
 };
 
+/**
+ * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、ユーザーのドライブに保存します。
+ */
 global.genelateTranslationFile = () => {
   const properties = new ScriptProperties();
   const outputFolder = new OutputFolder(properties.folderName, new Date());

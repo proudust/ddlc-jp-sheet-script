@@ -28,7 +28,7 @@ const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>
   (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[2], row[3], row[5], row[6])) || null;
 
 /**
- * スプレッドシートから Translate 配列に変換する
+ * スプレッドシートから Translate 配列を生成します。
  * @param スプレッドシートのデータ (x: 4, y: n)
  */
 export function fromSpreadsheet(s: SpreedSheetRow[]): SpreadSheetTranslates {

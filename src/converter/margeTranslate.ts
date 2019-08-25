@@ -16,6 +16,11 @@ function convertIgnoreTranslate(before: Translate): IgnoreTranslate {
   return new IgnoreTranslate(original, translate, '削除', comments);
 }
 
+/**
+ * 2 つの Translate 配列を合成して 1つの Translate 配列にします。
+ * @param sheets 翻訳を残す側の Translate 配列
+ * @param scripts 翻訳以外を残す側の Translate 配列
+ */
 export function margeTranslate(sheets: Translate[], scripts: Translate[]): Translate[] {
   const befores = [...sheets];
   return scripts.reduce<Translate[]>((array, after) => {
