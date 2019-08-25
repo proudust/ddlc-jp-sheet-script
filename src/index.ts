@@ -6,10 +6,8 @@ import { fromRenpyScript } from './converter/fromRenpyScript';
 import { margeTranslate } from './converter/margeTranslate';
 import { toSpreadsheet } from './converter/toSpreadsheet';
 import { toTranslationFile } from './converter/toTranslationFile';
-import { Timer } from './util/timer';
 
 type SpreadsheetRow = [string, string, string, string];
-type OldSpreadsheetRow = [string, string, string, string, string];
 
 declare let global: { [key: string]: Function };
 
@@ -68,7 +66,6 @@ global.fixSpreadsheet = () => {
 
 global.genelateTranslationFile = () => {
   const properties = new ScriptProperties();
-  const timer = new Timer();
   const outputFolder = new OutputFolder(properties.folderName, new Date());
   SpreadsheetApp.getActive()
     .getSheets()
@@ -82,9 +79,6 @@ global.genelateTranslationFile = () => {
       return folder;
     }, outputFolder)
     .save();
-  const time = timer.toString();
-  const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。処理時間: ${time}秒`;
+  const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
-  // eslint-disable-next-line no-undef
-  console.log(`処理時間: ${time}秒`);
 };
