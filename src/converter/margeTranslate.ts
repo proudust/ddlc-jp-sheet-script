@@ -16,18 +16,16 @@ function convertIgnoreTranslate(before: Translate): IgnoreTranslate {
   return new IgnoreTranslate(original, translate, '削除', comments);
 }
 
-export const MargeTranslate = {
-  marge: (sheets: Translate[], scripts: Translate[]): Translate[] => {
-    const befores = [...sheets];
-    return scripts.reduce<Translate[]>((array, after) => {
-      const matchIndex = firstAtIndex(befores, before => before.original == after.original);
-      const match = matchIndex != null && befores.splice(0, matchIndex + 1);
-      if (match) {
-        const marge = after.marge(match.splice(-1, 1)[0]);
-        const ignores = match.map(convertIgnoreTranslate);
-        array.push(...ignores, marge);
-      } else array.push(after);
-      return array;
-    }, []);
-  },
-};
+export function margeTranslate(sheets: Translate[], scripts: Translate[]): Translate[] {
+  const befores = [...sheets];
+  return scripts.reduce<Translate[]>((array, after) => {
+    const matchIndex = firstAtIndex(befores, before => before.original == after.original);
+    const match = matchIndex != null && befores.splice(0, matchIndex + 1);
+    if (match) {
+      const marge = after.marge(match.splice(-1, 1)[0]);
+      const ignores = match.map(convertIgnoreTranslate);
+      array.push(...ignores, marge);
+    } else array.push(after);
+    return array;
+  }, []);
+}

@@ -1,9 +1,9 @@
 import { OutputFolder } from './appscript/outputFolder';
-import { FromSpreadsheet } from './converter/fromSpreadsheet';
-import { FromRenpyScript } from './converter/fromRenpyScript';
-import { MargeTranslate } from './converter/margeTranslate';
-import { ToSpreadsheet } from './converter/toSpreadsheet';
-import { ToTranslationFile } from './converter/toTranslationFile';
+import { fromSpreadsheet } from './converter/fromSpreadsheet';
+import { fromRenpyScript } from './converter/fromRenpyScript';
+import { margeTranslate } from './converter/margeTranslate';
+import { toSpreadsheet } from './converter/toSpreadsheet';
+import { toTranslationFile } from './converter/toTranslationFile';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { ScriptProperties } from './appscript/scriptProperties';
 import { Timer } from './util/timer';
@@ -34,15 +34,15 @@ global.genelateSheet = (fileName: string, script: string) => {
   const properties = new ScriptProperties();
   const modifier = initTranslateSheetModifier(properties);
 
-  const fromScript = FromRenpyScript.convert(script);
+  const fromScript = fromRenpyScript(script);
   const fromSheet = (() => {
     const sheet = spreadsheet.getSheetByName(fileName);
     const values = sheet && (sheet.getDataRange().getValues() as SpreadsheetRow[]);
-    return sheet && FromSpreadsheet.convert(values);
+    return sheet && fromSpreadsheet(values);
   })();
   const values = (() => {
-    const marge = MargeTranslate.marge(fromSheet, fromScript);
-    return ToSpreadsheet.convert(marge);
+    const marge = margeTranslate(fromSheet, fromScript);
+    return toSpreadsheet(marge);
   })();
 
   const sheet = spreadsheet.insertSheet();
@@ -76,8 +76,8 @@ global.genelateTranslationFile = () => {
     .reduce<OutputFolder>((folder, curr) => {
       const name = curr.getName();
       const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
-      const translates = FromSpreadsheet.convert(values);
-      const files = ToTranslationFile.convert(name, translates);
+      const translates = fromSpreadsheet(values);
+      const files = toTranslationFile(name, translates);
       folder.files.push(...files);
       return folder;
     }, outputFolder)

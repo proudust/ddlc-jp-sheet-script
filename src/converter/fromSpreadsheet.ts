@@ -27,17 +27,15 @@ const tryParseDialogs = (row: SpreedSheetRow): DialogsTranslate | null => {
 const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>
   (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[2], row[3], row[5], row[6])) || null;
 
-export const FromSpreadsheet = {
-  /**
-   * スプレッドシートから Translate 配列に変換する
-   * @param スプレッドシートのデータ (x: 4, y: n)
-   */
-  convert: (s: SpreedSheetRow[]): SpreadSheetTranslates => {
-    return s
-      .map(
-        row =>
-          tryParseIgnore(row) || tryParseStrings(row) || tryParseDialogs(row) || tryParseFiles(row),
-      )
-      .filter(<T>(x: T | null): x is T => !!x);
-  },
-};
+/**
+ * スプレッドシートから Translate 配列に変換する
+ * @param スプレッドシートのデータ (x: 4, y: n)
+ */
+export function fromSpreadsheet(s: SpreedSheetRow[]): SpreadSheetTranslates {
+  return s
+    .map(
+      row =>
+        tryParseIgnore(row) || tryParseStrings(row) || tryParseDialogs(row) || tryParseFiles(row),
+    )
+    .filter(<T>(x: T | null): x is T => !!x);
+}
