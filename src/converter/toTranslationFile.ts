@@ -27,7 +27,7 @@ export function toTranslationFile(name: string, translates: Translate[]): File[]
       const before = index > 0 ? source[index - 1] : null;
       const output = curr.inflate(before);
       if (typeof output === 'string') {
-        defalutFile.content += (before ? '\n' : '') + output;
+        defalutFile.content += (defalutFile.content ? '\n' : '') + output;
       } else if (output) {
         array.push(output);
       }

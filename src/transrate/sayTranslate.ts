@@ -1,6 +1,6 @@
 import { Translate } from './translate';
 
-export class DialogsTranslate implements Translate {
+export class SayTranslate implements Translate {
   /** 識別子 (ラベル_ハッシュ) */
   public readonly id: string;
   /** 属性 (キャラクタ 立ち絵 nointeract) */
@@ -52,8 +52,8 @@ export class DialogsTranslate implements Translate {
    * 引数の Translate インスタンスから翻訳をコピーした新しい Translate インスタンスを作成する。
    * @param theirs もう一つのマージ対象
    */
-  public marge(theirs: Translate): DialogsTranslate {
-    return new DialogsTranslate(
+  public marge(theirs: Translate): SayTranslate {
+    return new SayTranslate(
       this.id,
       this.character,
       this.original,

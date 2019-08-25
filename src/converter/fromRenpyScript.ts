@@ -1,4 +1,4 @@
-import { DialogsTranslate } from '../transrate/dialogsTranslate';
+import { SayTranslate } from '../transrate/sayTranslate';
 import { StringsTranslate } from '../transrate/stringsTranslate';
 import { MD5 } from '../util/md5';
 
@@ -20,7 +20,7 @@ function getId(label: string, code: string, isNointeract: boolean): string {
   return id;
 }
 
-type RenPyTranslates = (DialogsTranslate | StringsTranslate)[];
+type RenPyTranslates = (SayTranslate | StringsTranslate)[];
 
 /**
  * Ren'Py スクリプトから Translate 配列を生成します。
@@ -65,7 +65,7 @@ export function fromRenpyScript(script: string): RenPyTranslates {
       if (dialogMatch) {
         const isNointeract = menuBlockLebel != null && menuBlockLebel + 1 === blockLevel;
         const id = getId(label, code, isNointeract);
-        array.push(new DialogsTranslate(id, dialogMatch[1], dialogMatch[2], '', isNointeract));
+        array.push(new SayTranslate(id, dialogMatch[1], dialogMatch[2], '', isNointeract));
         return array;
       }
 

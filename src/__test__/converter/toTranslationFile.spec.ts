@@ -1,5 +1,5 @@
 import { toTranslationFile } from '../../converter/toTranslationFile';
-import { DialogsTranslate } from '../../transrate/dialogsTranslate';
+import { SayTranslate } from '../../transrate/sayTranslate';
 import { FileTranslate } from '../../transrate/fileTranslate';
 import { StringsTranslate } from '../../transrate/stringsTranslate';
 
@@ -9,8 +9,8 @@ describe(`function toTranslationFile`, () => {
   it('do', () => {
     const sheet = [
       new StringsTranslate('Sayori', 'サヨリ'),
-      new DialogsTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
-      new DialogsTranslate('ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
+      new SayTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
+      new SayTranslate('ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
       new FileTranslate('CAN YOU HEAR ME.txt', file.original, file.translate),
     ];
     expect(toTranslationFile('test', sheet)).toStrictEqual([

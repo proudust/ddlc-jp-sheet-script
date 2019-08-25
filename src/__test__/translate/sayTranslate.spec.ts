@@ -1,11 +1,11 @@
-import { DialogsTranslate } from '../../transrate/dialogsTranslate';
+import { SayTranslate } from '../../transrate/sayTranslate';
 
 import { characterSay, monologueSay, nointeractSay, longSay } from '../testResource';
 
 describe(`class DialogsTranslate`, () => {
   describe(`DialogsTranslate#inflate`, () => {
     it('character dialog', () => {
-      const t = new DialogsTranslate(
+      const t = new SayTranslate(
         'ch0_main_41e273ca',
         's',
         'Heeeeeeeyyy!!',
@@ -15,7 +15,7 @@ describe(`class DialogsTranslate`, () => {
     });
 
     it('monologue', () => {
-      const t = new DialogsTranslate(
+      const t = new SayTranslate(
         'ch0_main_bcc5bb00',
         '',
         monologueSay.original,
@@ -25,7 +25,7 @@ describe(`class DialogsTranslate`, () => {
     });
 
     it('nointeract', () => {
-      const t = new DialogsTranslate(
+      const t = new SayTranslate(
         'ch3_end_sayori_dd9616f1',
         'm',
         nointeractSay.original,
@@ -36,7 +36,7 @@ describe(`class DialogsTranslate`, () => {
     });
 
     it('split dialog', () => {
-      const t = new DialogsTranslate('ch0_main_cb634d94', '', longSay.original, longSay.translate);
+      const t = new SayTranslate('ch0_main_cb634d94', '', longSay.original, longSay.translate);
       expect(t.inflate()).toBe(longSay.translateScript);
     });
   });

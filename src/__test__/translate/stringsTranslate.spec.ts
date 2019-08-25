@@ -1,4 +1,4 @@
-import { DialogsTranslate } from '../../transrate/dialogsTranslate';
+import { SayTranslate } from '../../transrate/sayTranslate';
 import { FileTranslate } from '../../transrate/fileTranslate';
 import { StringsTranslate } from '../../transrate/stringsTranslate';
 
@@ -24,7 +24,7 @@ describe(`class StringsTranslate`, () => {
 
     it('before is Other Translate', () => {
       const t = new StringsTranslate(poem.originalTitle, poem.translateTitle);
-      const d1 = new DialogsTranslate('dummy_00000000', '', 'dummy', 'ダミー');
+      const d1 = new SayTranslate('dummy_00000000', '', 'dummy', 'ダミー');
       const d2 = new FileTranslate('dummy.txt', 'dummy', 'ダミー');
       const result = `translate Japanese strings:\n${poem.translateTitleScript}`;
       expect(t.inflate(d1)).toBe(result);
