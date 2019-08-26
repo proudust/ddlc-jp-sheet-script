@@ -50,6 +50,7 @@ export const longSay = {
  * ファイルのサンプル (DDLC 本編から引用)
  */
 export const file = {
+  id: 'CAN YOU HEAR ME.txt',
   original: `"There's a little devil inside all of us."
 
 Beneath their manufactured perception - their artificial reality - is a

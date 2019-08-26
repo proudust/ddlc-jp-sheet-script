@@ -11,7 +11,7 @@ describe(`function toTranslationFile`, () => {
       new StringsTranslate('Sayori', 'サヨリ'),
       new SayTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
       new SayTranslate('ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
-      new FileTranslate('CAN YOU HEAR ME.txt', file.original, file.translate),
+      new FileTranslate(file),
     ];
     expect(toTranslationFile('test', sheet)).toStrictEqual([
       {
@@ -35,7 +35,7 @@ translate Japanese strings:
   });
 
   it('FileTranslate only', () => {
-    const sheet = [new FileTranslate('CAN YOU HEAR ME.txt', file.original, file.translate)];
+    const sheet = [new FileTranslate(file)];
     expect(toTranslationFile('test', sheet)).toStrictEqual([
       {
         fileName: 'CAN YOU HEAR ME.txt',

@@ -21,7 +21,15 @@ const tryParseDialogs = (row: SpreedSheetRow): SayTranslate | null => {
 };
 
 const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>
-  (/.txt$/.test(row[0]) && new FileTranslate(row[0], row[2], row[3], row[5], row[6])) || null;
+  (/.txt$/.test(row[0]) &&
+    new FileTranslate({
+      id: row[0],
+      original: row[2],
+      translate: row[3],
+      tag: row[5],
+      comments: row[6],
+    })) ||
+  null;
 
 /**
  * スプレッドシートから Translate 配列を生成します。

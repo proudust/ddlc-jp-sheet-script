@@ -1,5 +1,13 @@
 import { Translate } from './translate';
 
+interface FileTranslateConstructor {
+  id: string;
+  original: string;
+  translate: string;
+  tag?: string;
+  comments?: string;
+}
+
 export class FileTranslate implements Translate {
   /** ファイル名 */
   public readonly id: string;
@@ -19,14 +27,8 @@ export class FileTranslate implements Translate {
    * @param original 原文
    * @param translate 翻訳
    */
-  public constructor(
-    fileName: string,
-    original: string,
-    translate: string,
-    tag?: string,
-    comments?: string,
-  ) {
-    this.id = fileName;
+  public constructor({ id, original, translate, tag, comments }: FileTranslateConstructor) {
+    this.id = id;
     this.original = original;
     this.translate = translate;
     this.tag = tag || '';
@@ -38,7 +40,9 @@ export class FileTranslate implements Translate {
    * @param theirs もう一つのマージ対象
    */
   public marge(theirs: Translate): FileTranslate {
-    return new FileTranslate(this.id, this.original, theirs.translate, theirs.tag, theirs.comments);
+    const { id, original } = this;
+    const { translate, tag, comments } = theirs;
+    return new FileTranslate({ id, original, translate, tag, comments });
   }
 
   /**
