@@ -13,7 +13,7 @@ function firstAtIndex<T>(array: T[], callbackfn: (item: T) => boolean): number |
 function convertIgnoreTranslate(before: Translate): IgnoreTranslate {
   if (before instanceof IgnoreTranslate) return before;
   const { original, translate, comments } = before;
-  return new IgnoreTranslate(original, translate, '削除', comments);
+  return new IgnoreTranslate({ original, translate, tag: '削除', comments });
 }
 
 /**

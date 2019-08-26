@@ -6,8 +6,15 @@ import { StringsTranslate } from '../transrate/stringsTranslate';
 type SpreedSheetRow = [string, string, string, string, ...string[]];
 type SpreadSheetTranslates = (SayTranslate | FileTranslate | IgnoreTranslate | StringsTranslate)[];
 
-const tryParseIgnore = (row: SpreedSheetRow): IgnoreTranslate | null =>
-  (row[0] === '' && row[1] === '' && new IgnoreTranslate(row[2], row[3], row[5], row[6])) || null;
+const tryParseIgnore = (row: SpreedSheetRow): IgnoreTranslate | null => {
+  if (row[0] != '' || row[1] != '') return null;
+  return new IgnoreTranslate({
+    original: row[2],
+    translate: row[3],
+    tag: row[5],
+    comments: row[6],
+  });
+};
 
 const tryParseStrings = (row: SpreedSheetRow): StringsTranslate | null =>
   (row[1] === 'strings' && new StringsTranslate(row[2], row[3], row[5], row[6])) || null;
