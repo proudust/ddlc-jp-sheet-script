@@ -48,11 +48,11 @@ global.genelateSheet = (fileName: string, script: string) => {
   const fromSheet = (() => {
     const sheet = spreadsheet.getSheetByName(fileName);
     const values = sheet && (sheet.getDataRange().getValues() as SpreadsheetRow[]);
-    return sheet && fromSpreadsheet(values);
+    return values && fromSpreadsheet(values);
   })();
   const values = (() => {
-    const marge = margeTranslate(fromSheet, fromScript);
-    return toSpreadsheet(marge);
+    const marge = fromSheet && margeTranslate(fromSheet, fromScript);
+    return toSpreadsheet(marge || fromScript);
   })();
 
   const sheet = spreadsheet.insertSheet();
