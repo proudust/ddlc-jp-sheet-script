@@ -24,7 +24,15 @@ const tryParseDialogs = (row: SpreedSheetRow): SayTranslate | null => {
   const attrs = row[1].split(' ');
   const character = attrs.filter(s => s != 'nointeract').join(' ');
   const nointeract = attrs.some(s => s === 'nointeract');
-  return new SayTranslate(row[0], character, row[2], row[3], nointeract, row[5], row[6]);
+  return new SayTranslate({
+    id: row[0],
+    character,
+    original: row[2],
+    translate: row[3],
+    nointeract,
+    tag: row[5],
+    comments: row[6],
+  });
 };
 
 const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>

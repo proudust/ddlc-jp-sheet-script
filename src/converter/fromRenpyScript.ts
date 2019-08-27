@@ -63,9 +63,10 @@ export function fromRenpyScript(script: string): RenPyTranslates {
 
       const dialogMatch = label && code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/);
       if (dialogMatch) {
-        const isNointeract = menuBlockLebel != null && menuBlockLebel + 1 === blockLevel;
-        const id = getId(label, code, isNointeract);
-        array.push(new SayTranslate(id, dialogMatch[1], dialogMatch[2], '', isNointeract));
+        const nointeract = menuBlockLebel != null && menuBlockLebel + 1 === blockLevel;
+        const id = getId(label, code, nointeract);
+        const [, character, original] = dialogMatch;
+        array.push(new SayTranslate({ id, character, original, nointeract }));
         return array;
       }
 

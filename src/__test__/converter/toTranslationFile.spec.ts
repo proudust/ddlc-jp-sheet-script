@@ -3,14 +3,14 @@ import { SayTranslate } from '../../transrate/sayTranslate';
 import { FileTranslate } from '../../transrate/fileTranslate';
 import { StringsTranslate } from '../../transrate/stringsTranslate';
 
-import { file } from '../testResource';
+import { characterSay, file } from '../testResource';
 
 describe(`function toTranslationFile`, () => {
   it('do', () => {
     const sheet = [
       new StringsTranslate('Sayori', 'サヨリ'),
-      new SayTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
-      new SayTranslate('ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
+      new SayTranslate(characterSay),
+      new SayTranslate({ ...characterSay, id: 'ch0_main_41e273ca_1' }),
       new FileTranslate(file),
     ];
     expect(toTranslationFile('test', sheet)).toStrictEqual([
