@@ -52,17 +52,13 @@ export class StringsTranslate implements Translate {
    * @param before 一つ前に変換した Translate インスタンス、無い場合は null
    * @returns 変換後のスクリプト
    */
-  public inflate(before: Translate | null): string {
-    const prefix =
-      !before || before.constructor.name != 'StringsTranslate'
-        ? 'translate Japanese strings:\n'
-        : '';
+  public inflate(): string {
     if (!this.original.match(/\n/g)) {
-      return `${prefix}    old "${this.original}"
+      return `    old "${this.original}"
     new "${this.translate}"
 `;
     } else {
-      return `${prefix}    old """\\
+      return `    old """\\
 ${this.original.replace(/"/g, '\\"')}"""
     new """\\
 ${this.translate}"""

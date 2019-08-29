@@ -1,8 +1,17 @@
+import { SayTranslate } from '../transrate/sayTranslate';
+import { FileTranslate } from '../transrate/fileTranslate';
+import { StringsTranslate } from '../transrate/stringsTranslate';
 import { Translate } from '../transrate/translate';
 
 interface File {
   fileName: string;
   content: string;
+}
+
+interface TranslateGroup {
+  say: SayTranslate[];
+  file: FileTranslate[];
+  strings: StringsTranslate[];
 }
 
 /**
@@ -11,28 +20,24 @@ interface File {
  * @param translates Translate 配列
  */
 export function toTranslationFile(name: string, translates: Translate[]): File[] {
-  const defalutFile = { fileName: `${name}.rpy`, content: '' };
-  const files = translates
+  const { say, file, strings } = translates
     .filter(t => t.translate)
-    .sort((a, b) => {
-      if (a.constructor.name < b.constructor.name) {
-        return -1;
-      }
-      if (a.constructor.name > b.constructor.name) {
-        return 1;
-      }
-      return 0;
-    })
-    .reduce<File[]>((array, curr, index, source) => {
-      const before = index > 0 ? source[index - 1] : null;
-      const output = curr.inflate(before);
-      if (typeof output === 'string') {
-        defalutFile.content += (defalutFile.content ? '\n' : '') + output;
-      } else if (output) {
-        array.push(output);
-      }
-      return array;
-    }, []);
-  if (defalutFile.content) files.unshift(defalutFile);
-  return files;
+    .reduce<TranslateGroup>(
+      (group, curr) => {
+        if (curr instanceof SayTranslate) group.say.push(curr);
+        else if (curr instanceof StringsTranslate) group.strings.push(curr);
+        else if (curr instanceof FileTranslate) group.file.push(curr);
+        return group;
+      },
+      { say: [], file: [], strings: [] },
+    );
+  const script = [
+    ...say.map(t => t.inflate()),
+    ...(strings.length > 0 ? ['translate Japanese strings:'] : []),
+    ...strings.map(t => t.inflate()),
+  ].join('\n');
+  return [
+    ...(script ? [{ fileName: `${name}.rpy`, content: script }] : []),
+    ...file.map(t => t.inflate()),
+  ];
 }
