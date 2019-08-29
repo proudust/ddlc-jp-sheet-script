@@ -63,16 +63,17 @@ export function fromRenpyScript(script: string): RenPyTranslates {
 
       const dialogMatch = label && code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/);
       if (dialogMatch) {
-        const isNointeract = menuBlockLebel != null && menuBlockLebel + 1 === blockLevel;
-        const id = getId(label, code, isNointeract);
-        array.push(new SayTranslate(id, dialogMatch[1], dialogMatch[2], '', isNointeract));
+        const nointeract = menuBlockLebel != null && menuBlockLebel + 1 === blockLevel;
+        const id = getId(label, code, nointeract);
+        const [, character, original] = dialogMatch;
+        array.push(new SayTranslate({ id, character, original, nointeract }));
         return array;
       }
 
       const stringsMatch =
         code.match(/^"([\s\S]+?)"(?: if .*)?:$/) || code.match(/_\("([\s\S]+?)"\)/);
       if (stringsMatch) {
-        array.push(new StringsTranslate(stringsMatch[1], ''));
+        array.push(new StringsTranslate({ original: stringsMatch[1] }));
         return array;
       }
 

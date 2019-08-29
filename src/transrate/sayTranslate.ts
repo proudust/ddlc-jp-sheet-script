@@ -1,5 +1,15 @@
 import { Translate } from './translate';
 
+interface SayTranslateConstructor {
+  id: string;
+  character?: string;
+  original: string;
+  translate?: string;
+  nointeract?: boolean;
+  tag?: string;
+  comments?: string;
+}
+
 export class SayTranslate implements Translate {
   /** 識別子 (ラベル_ハッシュ) */
   public readonly id: string;
@@ -30,22 +40,22 @@ export class SayTranslate implements Translate {
    * @param translate 翻訳
    * @param nointeract nointeract を末尾に付ける場合は true
    */
-  public constructor(
-    id: string,
-    character: string,
-    original: string,
-    translate: string,
-    nointeract?: boolean,
-    tag?: string,
-    comments?: string,
-  ) {
+  public constructor({
+    id,
+    character = '',
+    original,
+    translate = '',
+    nointeract = false,
+    tag = '',
+    comments = '',
+  }: SayTranslateConstructor) {
     this.id = id;
     this.character = character;
     this.original = original;
     this.translate = translate;
-    this.nointeract = nointeract || false;
-    this.tag = tag || '';
-    this.comments = comments || '';
+    this.nointeract = nointeract;
+    this.tag = tag;
+    this.comments = comments;
   }
 
   /**
@@ -53,15 +63,9 @@ export class SayTranslate implements Translate {
    * @param theirs もう一つのマージ対象
    */
   public marge(theirs: Translate): SayTranslate {
-    return new SayTranslate(
-      this.id,
-      this.character,
-      this.original,
-      theirs.translate,
-      this.nointeract,
-      theirs.tag,
-      theirs.comments,
-    );
+    const { id, character, original, nointeract } = this;
+    const { translate, tag, comments } = theirs;
+    return new SayTranslate({ id, character, original, translate, nointeract, tag, comments });
   }
 
   /**

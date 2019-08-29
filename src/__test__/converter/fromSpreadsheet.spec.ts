@@ -12,7 +12,7 @@ describe(`function fromSpreadsheet`, () => {
       ['ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],
       ['ch3_end_sayori_dd9616f1', 'm nointeract', nointeractSay.original, nointeractSay.translate],
       ['ch0_main_cb634d94', '', longSay.original, longSay.translate],
-      ['CAN YOU HEAR ME.txt', 'file', file.original, file.translate],
+      [file.id, 'file', file.original, file.translate],
     ];
     expect(fromSpreadsheet(sheet)).toMatchObject([
       { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
@@ -41,7 +41,7 @@ describe(`function fromSpreadsheet`, () => {
         translate: longSay.translate,
       },
       {
-        id: 'CAN YOU HEAR ME.txt',
+        id: file.id,
         attribute: 'file',
         original: file.original,
         translate: file.translate,

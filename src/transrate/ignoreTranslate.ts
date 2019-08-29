@@ -1,5 +1,12 @@
 import { Translate } from './translate';
 
+interface IgnoreTranslateConstructor {
+  original: string;
+  translate: string;
+  tag?: string;
+  comments?: string;
+}
+
 /**
  * スプレッドシート上の、翻訳に反映しない行
  */
@@ -21,7 +28,7 @@ export class IgnoreTranslate implements Translate {
    * @param original 原文
    * @param translate 翻訳
    */
-  public constructor(original: string, translate: string, tag?: string, comments?: string) {
+  public constructor({ original, translate, tag, comments }: IgnoreTranslateConstructor) {
     this.original = original;
     this.translate = translate;
     this.tag = tag || '';
@@ -33,7 +40,9 @@ export class IgnoreTranslate implements Translate {
    * @param theirs もう一つのマージ対象
    */
   public marge(theirs: Translate): IgnoreTranslate {
-    return new IgnoreTranslate(this.original, theirs.translate, theirs.tag, theirs.comments);
+    const { original } = this;
+    const { translate, tag, comments } = theirs;
+    return new IgnoreTranslate({ original, translate, tag, comments });
   }
 
   /**

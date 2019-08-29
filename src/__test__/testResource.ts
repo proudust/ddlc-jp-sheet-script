@@ -4,6 +4,10 @@
  * キャラの台詞のサンプル (DDLC 本編から引用)
  */
 export const characterSay = {
+  id: 'ch0_main_41e273ca',
+  character: 's',
+  original: 'Heeeeeeeyyy!!',
+  translate: '「おーはーよーーー！」',
   translateScript: `translate Japanese ch0_main_41e273ca:
     s "「おーはーよーーー！」"
 `,
@@ -13,6 +17,7 @@ export const characterSay = {
  * モノローグ台詞のサンプル (DDLC 本編から引用)
  */
 export const monologueSay = {
+  id: 'ch0_main_bcc5bb00',
   original: `I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.`,
   translate:
     '遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。',
@@ -25,6 +30,9 @@ export const monologueSay = {
  * 選択肢と同時に表示される台詞のサンプル (DDLC 本編から引用)
  */
 export const nointeractSay = {
+  id: 'ch3_end_sayori_dd9616f1',
+  character: 'm',
+  nointeract: true,
   original: `Just think of the club, okay?`,
   translate: '「とにかくこの部のことを考えましょう、ね？」',
   translateScript: `translate Japanese ch3_end_sayori_dd9616f1:
@@ -36,6 +44,7 @@ export const nointeractSay = {
  * 分割が必要な長台詞のサンプル (DDLC 本編から引用)
  */
 export const longSay = {
+  id: 'ch0_main_cb634d94',
   original:
     'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
   translate: `"やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
@@ -50,6 +59,7 @@ export const longSay = {
  * ファイルのサンプル (DDLC 本編から引用)
  */
 export const file = {
+  id: 'CAN YOU HEAR ME.txt',
   original: `"There's a little devil inside all of us."
 
 Beneath their manufactured perception - their artificial reality - is a
@@ -81,9 +91,19 @@ All I did was untie the knot.`,
 /**
  * 詞のサンプル (DDLC 本編から引用)
  */
-export const poem = {
-  originalTitle: 'Ghost Under the Light',
-  originalContent: `An old tale tells of a lady who wanders Earth.
+export const poemTitle = {
+  original: 'Ghost Under the Light',
+  translate: '燈の下の幽霊',
+  translateScript: `    old "Ghost Under the Light"
+    new "燈の下の幽霊"
+`,
+};
+
+/**
+ * 詞のサンプル (DDLC 本編から引用)
+ */
+export const poemContent = {
+  original: `An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,
 All meaning,
@@ -124,8 +144,7 @@ I am not your legend.
 Your legend does not exist."
 
 And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
-  translateTitle: '燈の下の幽霊',
-  translateContent: `地上のどこかを渡り歩く女性の、古い言い伝え。
+  translate: `地上のどこかを渡り歩く女性の、古い言い伝え。
 全てを知る女性。
 全ての真理を突き止めた美しい女性。
 全ての意味を、
@@ -167,10 +186,7 @@ And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
 あなたの伝説は在り得ません。」
 
 そして彼女が息を吹きかけると再び宙を舞い、一陣の風が私を連れ去る。`,
-  translateTitleScript: `    old "Ghost Under the Light"
-    new "燈の下の幽霊"
-`,
-  translateContentScript: String.raw`    old """\
+  translateScript: String.raw`    old """\
 An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,
