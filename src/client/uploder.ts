@@ -7,11 +7,13 @@ function submit(files: ArrayLike<File>): void {
     file =>
       new Promise<void>((resolve, reject) => {
         const reader = new FileReader();
+        const [fileName = ''] = file.name.match(/^.+?(?=.rpy)/) || [];
+        if (!fileName) reject();
         reader.onload = () =>
           google.script.run
             .withSuccessHandler(() => resolve())
             .withFailureHandler(() => reject())
-            .genelateSheet(file.name.match(/^.+?(?=.rpy)/), reader.result);
+            .genelateSheet(fileName, reader.result);
         reader.onerror = reject;
         reader.readAsText(file);
       }),
