@@ -73,7 +73,7 @@ export function fromRenpyScript(script: string): RenPyTranslates {
       const stringsMatch =
         code.match(/^"([\s\S]+?)"(?: if .*)?:$/) || code.match(/_\("([\s\S]+?)"\)/);
       if (stringsMatch) {
-        array.push(new StringsTranslate(stringsMatch[1], ''));
+        array.push(new StringsTranslate({ original: stringsMatch[1] }));
         return array;
       }
 

@@ -91,9 +91,19 @@ All I did was untie the knot.`,
 /**
  * 詞のサンプル (DDLC 本編から引用)
  */
-export const poem = {
-  originalTitle: 'Ghost Under the Light',
-  originalContent: `An old tale tells of a lady who wanders Earth.
+export const poemTitle = {
+  original: 'Ghost Under the Light',
+  translate: '燈の下の幽霊',
+  translateScript: `    old "Ghost Under the Light"
+    new "燈の下の幽霊"
+`,
+};
+
+/**
+ * 詞のサンプル (DDLC 本編から引用)
+ */
+export const poemContent = {
+  original: `An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,
 All meaning,
@@ -134,8 +144,7 @@ I am not your legend.
 Your legend does not exist."
 
 And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
-  translateTitle: '燈の下の幽霊',
-  translateContent: `地上のどこかを渡り歩く女性の、古い言い伝え。
+  translate: `地上のどこかを渡り歩く女性の、古い言い伝え。
 全てを知る女性。
 全ての真理を突き止めた美しい女性。
 全ての意味を、
@@ -177,10 +186,7 @@ And with a breath, she blows me back afloat, and I pick up a gust of wind.`,
 あなたの伝説は在り得ません。」
 
 そして彼女が息を吹きかけると再び宙を舞い、一陣の風が私を連れ去る。`,
-  translateTitleScript: `    old "Ghost Under the Light"
-    new "燈の下の幽霊"
-`,
-  translateContentScript: String.raw`    old """\
+  translateScript: String.raw`    old """\
 An old tale tells of a lady who wanders Earth.
 The Lady who Knows Everything.
 A beautiful lady who has found every answer,

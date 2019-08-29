@@ -1,5 +1,12 @@
 import { Translate } from './translate';
 
+interface StringsTranslateConstructor {
+  original: string;
+  translate?: string;
+  tag?: string;
+  comments?: string;
+}
+
 export class StringsTranslate implements Translate {
   /** 識別子 */
   public readonly id = '';
@@ -18,11 +25,16 @@ export class StringsTranslate implements Translate {
    * @param original 原文
    * @param translate 翻訳
    */
-  public constructor(original: string, translate: string, tag?: string, comments?: string) {
+  public constructor({
+    original,
+    translate = '',
+    tag = '',
+    comments = '',
+  }: StringsTranslateConstructor) {
     this.original = original;
     this.translate = translate;
-    this.tag = tag || '';
-    this.comments = comments || '';
+    this.tag = tag;
+    this.comments = comments;
   }
 
   /**
@@ -30,7 +42,9 @@ export class StringsTranslate implements Translate {
    * @param theirs もう一つのマージ対象
    */
   public marge(theirs: Translate): StringsTranslate {
-    return new StringsTranslate(this.original, theirs.translate, theirs.tag, theirs.comments);
+    const { original } = this;
+    const { translate, tag, comments } = theirs;
+    return new StringsTranslate({ original, translate, tag, comments });
   }
 
   /**

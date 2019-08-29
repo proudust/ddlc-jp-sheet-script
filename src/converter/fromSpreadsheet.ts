@@ -17,7 +17,9 @@ const tryParseIgnore = (row: SpreedSheetRow): IgnoreTranslate | null => {
 };
 
 const tryParseStrings = (row: SpreedSheetRow): StringsTranslate | null =>
-  (row[1] === 'strings' && new StringsTranslate(row[2], row[3], row[5], row[6])) || null;
+  (row[1] === 'strings' &&
+    new StringsTranslate({ original: row[2], translate: row[3], tag: row[5], comments: row[6] })) ||
+  null;
 
 const tryParseDialogs = (row: SpreedSheetRow): SayTranslate | null => {
   if (!/[\S]+_[\da-f]{8}/.test(row[0])) return null;
