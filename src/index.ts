@@ -5,7 +5,7 @@ import { fromSpreadsheet } from './converter/fromSpreadsheet';
 import { fromRenpyScript } from './converter/fromRenpyScript';
 import { margeTranslate } from './converter/margeTranslate';
 import { toSpreadsheet } from './converter/toSpreadsheet';
-import { toTranslationFile } from './converter/toTranslationFile';
+import { TranslationFileConverter } from './converter/toTranslationFile';
 
 type SpreadsheetRow = [string, string, string, string];
 
@@ -85,6 +85,7 @@ global.fixSpreadsheet = () => {
  */
 global.genelateTranslationFile = () => {
   const properties = new ScriptProperties();
+  const converter = new TranslationFileConverter();
   const outputFolder = new OutputFolder(properties.folderName, new Date());
   SpreadsheetApp.getActive()
     .getSheets()
@@ -93,7 +94,7 @@ global.genelateTranslationFile = () => {
       const name = curr.getName();
       const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
       const translates = fromSpreadsheet(values);
-      const files = toTranslationFile(name, translates);
+      const files = converter.toTranslationFile(name, translates);
       folder.files.push(...files);
       return folder;
     }, outputFolder)
