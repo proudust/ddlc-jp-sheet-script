@@ -44,7 +44,7 @@ export function fromRenpyScript(script: string): RenPyTranslates {
 
       if (code.slice(0, 6) === 'return') return array;
 
-      const labelMatch = code.match(/^label ([\w]+?):$/) || code.match(/^call .+? from (.+?)$/);
+      const labelMatch = code.match(/^label ([\w]+?):$/) || code.match(/^call .+? from (\w+?)$/);
       if (labelMatch) {
         label = labelMatch[1];
         return array;
