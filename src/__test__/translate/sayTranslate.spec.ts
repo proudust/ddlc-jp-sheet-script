@@ -1,6 +1,6 @@
 import { SayTranslate } from '../../transrate/sayTranslate';
 
-import { characterSay, monologueSay, nointeractSay, longSay } from '../testResource';
+import { characterSay, monologueSay, nointeractSay, longSay, escapeSay } from '../testResource';
 
 describe(`class DialogsTranslate`, () => {
   describe(`DialogsTranslate#inflate`, () => {
@@ -22,6 +22,11 @@ describe(`class DialogsTranslate`, () => {
     it('split dialog', () => {
       const t = new SayTranslate(longSay);
       expect(t.inflate()).toBe(longSay.translateScript);
+    });
+
+    it('included escape char', () => {
+      const t = new SayTranslate(escapeSay);
+      expect(t.inflate()).toBe(escapeSay.translateScript);
     });
   });
 });

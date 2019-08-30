@@ -56,6 +56,20 @@ export const longSay = {
 };
 
 /**
+ * エスケープされた文字を含む台詞のサンプル (DDLC Monika After Story から引用)
+ */
+export const escapeSay = {
+  id: 'monika_japanese_1e92078b',
+  character: 'm 1ekbfa',
+  original:
+    "Ahaha! It's okay [player]. It just means that I can say 'I love you' in more ways than one!",
+  translate: `あはは！大丈夫だよ[player]君。私は\\"I love you\\"をもっとたくさんの言い方で表現してみたいの。`,
+  translateScript: `translate Japanese monika_japanese_1e92078b:
+    m 1ekbfa "あはは！大丈夫だよ[player]君。私は\\"I love you\\"をもっとたくさんの言い方で表現してみたいの。"
+`,
+};
+
+/**
  * ファイルのサンプル (DDLC 本編から引用)
  */
 export const file = {

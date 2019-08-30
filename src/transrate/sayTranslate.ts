@@ -74,7 +74,7 @@ export class SayTranslate implements Translate {
    */
   public inflate(): string {
     const attribute = this.character ? `${this.character} ` : '';
-    const dialogs = this.translate.match(/"(.*?)"/g);
+    const dialogs = this.translate.match(/"(.+?[^\\])"/g);
     // 台詞分割無し
     if (!dialogs) {
       return `translate Japanese ${this.id}:
