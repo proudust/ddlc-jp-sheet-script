@@ -102,3 +102,26 @@ global.genelateTranslationFile = () => {
   const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
 };
+
+global.doGet = () => {
+  const zip = (() => {
+    const properties = new ScriptProperties();
+    const converter = new TranslationFileConverter();
+    const outputFolder = new OutputFolder(properties.folderName, new Date());
+    return SpreadsheetApp.getActive()
+      .getSheets()
+      .slice(1)
+      .reduce<OutputFolder>((folder, curr) => {
+        const name = curr.getName();
+        const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
+        const translates = fromSpreadsheet(values);
+        const files = converter.toTranslationFile(name, translates);
+        folder.files.push(...files);
+        return folder;
+      }, outputFolder)
+      .zip();
+  })();
+  return ContentService.createTextOutput()
+    .setContent(Utilities.base64Encode(zip.getBytes()))
+    .setMimeType(ContentService.MimeType.TEXT);
+};

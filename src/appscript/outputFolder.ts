@@ -28,13 +28,22 @@ export class OutputFolder {
    */
   public save(): void {
     const folder = DriveApp.getRootFolder().createFolder(this.name);
-    for (let i = 0; i < this.files.length; i++) {
-      const { fileName, content } = this.files[i];
-      const blob = Utilities.newBlob('', 'text/plain', fileName).setDataFromString(
+    this.genelateBlob().forEach(blob => folder.createFile(blob));
+  }
+
+  public zip(): GoogleAppsScript.Base.Blob {
+    return Utilities.zip(this.genelateBlob(), this.name);
+  }
+
+  /**
+   * files から Blob を生成します。
+   */
+  private genelateBlob(): GoogleAppsScript.Base.BlobSource[] {
+    return this.files.map(({ fileName, content }) =>
+      Utilities.newBlob('', 'text/plain', fileName).setDataFromString(
         content.replace(/\n|\r\n|\r/g, '\n'),
         'utf-8',
-      );
-      folder.createFile(blob);
-    }
+      ),
+    );
   }
 }
