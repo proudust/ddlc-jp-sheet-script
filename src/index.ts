@@ -84,12 +84,13 @@ global.fixSpreadsheet = () => {
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、ユーザーのドライブに保存します。
  */
 global.genelateTranslationFile = () => {
-  const properties = new ScriptProperties();
+  const prop = new ScriptProperties();
   const converter = new TranslationFileConverter();
-  const outputFolder = new OutputFolder(properties.folderName, new Date());
+  const outputFolder = new OutputFolder(prop.folderName, new Date());
   SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
+    .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
     .reduce<OutputFolder>((folder, curr) => {
       const name = curr.getName();
       const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
@@ -105,12 +106,13 @@ global.genelateTranslationFile = () => {
 
 global.doGet = () => {
   const zip = (() => {
-    const properties = new ScriptProperties();
+    const prop = new ScriptProperties();
     const converter = new TranslationFileConverter();
-    const outputFolder = new OutputFolder(properties.folderName, new Date());
+    const outputFolder = new OutputFolder(prop.folderName, new Date());
     return SpreadsheetApp.getActive()
       .getSheets()
       .slice(1)
+      .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
       .reduce<OutputFolder>((folder, curr) => {
         const name = curr.getName();
         const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];

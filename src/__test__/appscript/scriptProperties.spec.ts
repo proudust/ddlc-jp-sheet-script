@@ -8,6 +8,7 @@ const dummy = (dummy: Partial<ScriptProperties['raw']>): ScriptProperties['raw']
       FOLDER_NAME: '',
       TAG_NAMES: '',
       TAG_COLORS: '',
+      NOT_CONVERT_COLORS: '',
     },
     dummy,
   );
@@ -68,6 +69,18 @@ describe(`class ScriptProperties`, () => {
           color: '#CCCCCC',
         },
       ]);
+    });
+  });
+
+  describe(`ScriptProperties#notConvertColor`, () => {
+    it('definition', () => {
+      setupPropertiesService(dummy({ NOT_CONVERT_COLORS: '#FFFFFF' }));
+      expect(new ScriptProperties().notConvertColor).toEqual('#ffffff');
+    });
+
+    it('no definition', () => {
+      setupPropertiesService(dummy({}));
+      expect(new ScriptProperties().notConvertColor).toBeUndefined();
     });
   });
 });

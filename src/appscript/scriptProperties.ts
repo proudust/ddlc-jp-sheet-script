@@ -8,6 +8,8 @@ interface RawScriptProperties {
   TAG_NAMES: string;
   /** タグの色 (カラーコード表記、カンマ区切り) */
   TAG_COLORS: string;
+  /** スクリプト出力から除外するシートの色 */
+  NOT_CONVERT_COLORS: string;
 }
 
 /**
@@ -27,6 +29,10 @@ export class ScriptProperties {
       name,
       color: this.getValue('TAG_COLORS').split(',')[index],
     }));
+
+  public readonly notConvertColor = this.raw.NOT_CONVERT_COLORS
+    ? this.raw.NOT_CONVERT_COLORS.toLowerCase()
+    : undefined;
 
   /**
    * 未加工のスクリプトのプロパティから値を取得します。
