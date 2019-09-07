@@ -168,7 +168,7 @@ const fixFormat = (sheet: Sheet): void => {
   const lastRow = sheet.getMaxRows();
   const valueRows = lastRow - 3;
   sheet.getRange(3, 1, valueRows, 3).setBackground('#CCCCCC');
-  sheet.getRange(3, 4, valueRows, 4).setBackground(null as any);
+  sheet.getRange(3, 4, valueRows, 4).setBackground(null);
   sheet.getRange(3, 1, valueRows, 2).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
   sheet.getRange(3, 3, valueRows, 5).setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
 
@@ -189,6 +189,7 @@ const fixFormat = (sheet: Sheet): void => {
  */
 const fixProtect: SheetModifier = (() => {
   const owner = SpreadsheetApp.getActive().getOwner();
+  if (!owner) throw Error('owner is null.');
   return (sheet: Sheet): void => {
     const protect = sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0] || sheet.protect();
     protect
