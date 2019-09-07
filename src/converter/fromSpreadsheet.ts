@@ -3,60 +3,35 @@ import { FileTranslate } from '../transrate/fileTranslate';
 import { IgnoreTranslate } from '../transrate/ignoreTranslate';
 import { StringsTranslate } from '../transrate/stringsTranslate';
 
-type SpreedSheetRow = [string, string, string, string, ...string[]];
 type SpreadSheetTranslates = (SayTranslate | FileTranslate | IgnoreTranslate | StringsTranslate)[];
 
-const tryParseIgnore = (row: SpreedSheetRow): IgnoreTranslate | null => {
-  if (row[0] != '' || row[1] != '') return null;
-  return new IgnoreTranslate({
-    original: row[2],
-    translate: row[3],
-    tag: row[5],
-    comments: row[6],
-  });
-};
+interface TranslateSheetRow {
+  id: string;
+  attribute: string;
+  original: string;
+  translate: string;
+  tag?: string;
+  comments?: string;
+}
 
-const tryParseStrings = (row: SpreedSheetRow): StringsTranslate | null =>
-  (row[1] === 'strings' &&
-    new StringsTranslate({ original: row[2], translate: row[3], tag: row[5], comments: row[6] })) ||
-  null;
+const tryParseIgnore = (row: TranslateSheetRow): IgnoreTranslate | null =>
+  !(row.id != '' || row.attribute != '') ? new IgnoreTranslate(row) : null;
 
-const tryParseDialogs = (row: SpreedSheetRow): SayTranslate | null => {
-  if (!/[\S]+_[\da-f]{8}/.test(row[0])) return null;
-  const attrs = row[1].split(' ');
-  const character = attrs.filter(s => s != 'nointeract').join(' ');
-  const nointeract = attrs.some(s => s === 'nointeract');
-  return new SayTranslate({
-    id: row[0],
-    character,
-    original: row[2],
-    translate: row[3],
-    nointeract,
-    tag: row[5],
-    comments: row[6],
-  });
-};
+const tryParseStrings = (row: TranslateSheetRow): StringsTranslate | null =>
+  row.attribute === 'strings' ? new StringsTranslate(row) : null;
 
-const tryParseFiles = (row: SpreedSheetRow): FileTranslate | null =>
-  (/.txt$/.test(row[0]) &&
-    new FileTranslate({
-      id: row[0],
-      original: row[2],
-      translate: row[3],
-      tag: row[5],
-      comments: row[6],
-    })) ||
-  null;
+const tryParseDialogs = (row: TranslateSheetRow): SayTranslate | null =>
+  /[\S]+_[\da-f]{8}/.test(row.id) ? new SayTranslate(row) : null;
+
+const tryParseFiles = (row: TranslateSheetRow): FileTranslate | null =>
+  /.txt$/.test(row.id) ? new FileTranslate(row) : null;
 
 /**
  * スプレッドシートから Translate 配列を生成します。
  * @param スプレッドシートのデータ (x: 4, y: n)
  */
-export function fromSpreadsheet(s: SpreedSheetRow[]): SpreadSheetTranslates {
+export function fromSpreadsheet(s: TranslateSheetRow[]): SpreadSheetTranslates {
   return s
-    .map(
-      row =>
-        tryParseIgnore(row) || tryParseStrings(row) || tryParseDialogs(row) || tryParseFiles(row),
-    )
+    .map(r => tryParseIgnore(r) || tryParseStrings(r) || tryParseDialogs(r) || tryParseFiles(r))
     .filter(<T>(x: T | null): x is T => !!x);
 }

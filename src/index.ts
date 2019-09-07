@@ -1,13 +1,12 @@
 import { OutputFolder } from './appscript/outputFolder';
 import { ScriptProperties } from './appscript/scriptProperties';
+import { TranslateSheet } from './appscript/translateSheet';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { fromSpreadsheet } from './converter/fromSpreadsheet';
 import { fromRenpyScript } from './converter/fromRenpyScript';
 import { margeTranslate } from './converter/margeTranslate';
 import { toSpreadsheet } from './converter/toSpreadsheet';
 import { TranslationFileConverter } from './converter/toTranslationFile';
-
-type SpreadsheetRow = [string, string, string, string];
 
 declare let global: { [key: string]: Function };
 
@@ -48,8 +47,8 @@ global.genelateSheet = (fileName: string, script: string) => {
   if (!fromScript) throw Error(`translatable string not found in "${fileName}.rpy".`);
   const fromSheet = (() => {
     const sheet = spreadsheet.getSheetByName(fileName);
-    const values = sheet && (sheet.getDataRange().getValues() as SpreadsheetRow[]);
-    return values && fromSpreadsheet(values);
+    const rows = sheet && new TranslateSheet(sheet).getTranslateRows();
+    return rows && fromSpreadsheet(rows);
   })();
   const values = (() => {
     const marge = fromSheet && margeTranslate(fromSheet, fromScript);
@@ -90,10 +89,11 @@ global.genelateTranslationFile = () => {
   SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
+    .map(s => new TranslateSheet(s))
     .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
     .reduce<OutputFolder>((folder, curr) => {
       const name = curr.getName();
-      const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
+      const values = curr.getTranslateRows();
       const translates = fromSpreadsheet(values);
       const files = converter.toTranslationFile(name, translates);
       folder.files.push(...files);
@@ -112,10 +112,11 @@ global.doGet = () => {
     return SpreadsheetApp.getActive()
       .getSheets()
       .slice(1)
+      .map(s => new TranslateSheet(s))
       .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
       .reduce<OutputFolder>((folder, curr) => {
         const name = curr.getName();
-        const values = curr.getRange('A3:D').getValues() as SpreadsheetRow[];
+        const values = curr.getTranslateRows();
         const translates = fromSpreadsheet(values);
         const files = converter.toTranslationFile(name, translates);
         folder.files.push(...files);

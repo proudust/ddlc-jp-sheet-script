@@ -2,6 +2,7 @@ import { Translate } from './translate';
 
 interface SayTranslateConstructor {
   id: string;
+  attribute?: string;
   character?: string;
   original: string;
   translate?: string;
@@ -42,15 +43,21 @@ export class SayTranslate implements Translate {
    */
   public constructor({
     id,
-    character = '',
+    attribute = '',
+    character,
     original,
     translate = '',
     nointeract = false,
     tag = '',
     comments = '',
   }: SayTranslateConstructor) {
+    if (!character && attribute) {
+      const attrs = attribute.split(' ');
+      character = attrs.filter(s => s != 'nointeract').join(' ');
+      nointeract = attrs.some(s => s === 'nointeract');
+    }
     this.id = id;
-    this.character = character;
+    this.character = character || '';
     this.original = original;
     this.translate = translate;
     this.nointeract = nointeract;

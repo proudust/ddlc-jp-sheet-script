@@ -1,21 +1,24 @@
 import { fromSpreadsheet } from '../../converter/fromSpreadsheet';
 
-import { nointeractSay, longSay, file } from '../testResource';
-
-type SpreedSheetRow = [string, string, string, string, ...string[]];
+import { characterSay, nointeractSay, longSay, poemTitle, file } from '../testResource';
 
 describe(`function fromSpreadsheet`, () => {
   it('do', () => {
-    const sheet: SpreedSheetRow[] = [
-      ['', 'strings', 'Sayori', 'サヨリ'],
-      ['ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],
-      ['ch0_main_41e273ca_1', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'],
-      ['ch3_end_sayori_dd9616f1', 'm nointeract', nointeractSay.original, nointeractSay.translate],
-      ['ch0_main_cb634d94', '', longSay.original, longSay.translate],
-      [file.id, 'file', file.original, file.translate],
+    const sheet = [
+      poemTitle,
+      characterSay,
+      { ...characterSay, id: 'ch0_main_41e273ca_1' },
+      nointeractSay,
+      longSay,
+      file,
     ];
     expect(fromSpreadsheet(sheet)).toMatchObject([
-      { id: '', attribute: 'strings', original: 'Sayori', translate: 'サヨリ' },
+      {
+        id: '',
+        attribute: 'strings',
+        original: 'Ghost Under the Light',
+        translate: '燈の下の幽霊',
+      },
       {
         id: 'ch0_main_41e273ca',
         attribute: 's',
