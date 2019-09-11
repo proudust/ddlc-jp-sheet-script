@@ -7,6 +7,7 @@ import { fromRenpyScript } from './converter/fromRenpyScript';
 import { margeTranslate } from './converter/margeTranslate';
 import { toSpreadsheet } from './converter/toSpreadsheet';
 import { TranslationFileConverter } from './converter/toTranslationFile';
+import { checkDuplicateTranslate } from './check/checkDuplicateTranslate';
 
 declare let global: { [key: string]: Function };
 
@@ -16,10 +17,31 @@ declare let global: { [key: string]: Function };
  */
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
+    { name: '重複した台詞を検索', functionName: 'searchDuplicate' },
+    null,
     { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
     { name: 'スプレッドシートの書式再設定', functionName: 'fixSpreadsheet' },
     { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFile' },
   ]);
+};
+
+global.searchDuplicate = () => {
+  const prop = new ScriptProperties();
+  const translates = SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .map(s => new TranslateSheet(s))
+    .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
+    .map(s => fromSpreadsheet(s.getTranslateRows()))
+    .reduce((array, curr) => array.concat(curr), []);
+  const msg = checkDuplicateTranslate(translates)
+    .map(
+      p =>
+        `${p.message}\n原文：${p.source[0].attribute} ${p.source[0].original}\\n` +
+        p.source.map((s, i) => `翻訳${i}：${s.translate} ${s.tag}\\n`).join(''),
+    )
+    .join('\\n');
+  Browser.msgBox(msg);
 };
 
 /**
