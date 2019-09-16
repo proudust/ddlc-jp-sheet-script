@@ -23,7 +23,7 @@ label introduction:
 
     m 1eub "Nothing's ever going to get in the way of our love again."
 `;
-    expect(fromRenpyScript(script)).toMatchObject([
+    expect(fromRenpyScript('script-introduction', script)).toMatchObject([
       {
         id: 'introduction_4dad65eb',
         attribute: 'm 1hub',

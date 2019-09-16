@@ -2,6 +2,69 @@ import { SayTranslate } from '../transrate/sayTranslate';
 import { StringsTranslate } from '../transrate/stringsTranslate';
 import { MD5 } from '../util/md5';
 
+/** Ren'Py ステートメント */
+type Statement =
+  | {
+      type: 'return';
+      block: number;
+    }
+  | {
+      type: 'menu';
+      block: number;
+    }
+  | {
+      type: 'label';
+      block: number;
+      name: string;
+    }
+  | {
+      type: 'say';
+      block: number;
+      code: string;
+      attribute: string;
+      original: string;
+      lineNumber: number;
+    }
+  | {
+      type: 'strings';
+      block: number;
+      original: string;
+      lineNumber: number;
+    };
+
+/**
+ * Ren'Py スクリプトから Ren'Py ステートメント配列を生成します。
+ * @param script Ren'Py スクリプトのファイル名
+ * @param script Ren'Py スクリプトの内容
+ * @returns Ren'Py ステートメント配列
+ */
+export function parseRenpyScript(fileName: string, script: string): Statement[] {
+  return script
+    .split('\n')
+    .map((s, lineNumber) => ({
+      block: (s.match(/^ */) || [''])[0].length / 4,
+      code: s.trim(),
+      lineNumber,
+    }))
+    .map<Statement | undefined>(({ code, block, lineNumber }) => {
+      if (code.slice(0, 6) === 'return') return { type: 'return', block };
+      if (code === 'menu:') return { type: 'menu', block };
+      if (code.slice(0, 5) === 'label')
+        return { type: 'label', block, name: code.slice(6).slice(0, -1) };
+      if (code.slice(0, 4) === 'call') {
+        const [, call, , from] = code.split(' ');
+        return { type: 'label', block, name: from || `_call_${call}` };
+      }
+      const [, attribute, say] = code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/) || [];
+      if (say) return { type: 'say', block, code, attribute, original: say, lineNumber };
+
+      const [, strings] =
+        code.match(/^"([\s\S]+?)"(?: if .+)?:$/) || code.match(/_\("([\s\S]+?)"\)/) || [];
+      if (strings) return { type: 'strings', block, original: strings, lineNumber };
+    })
+    .filter(<T>(x: T | undefined): x is T => !!x);
+}
+
 const ids: string[] = [];
 /**
  * ラベル名とコードから ID を計算し返します。
@@ -23,60 +86,57 @@ function getId(label: string, code: string, isNointeract: boolean): string {
 type RenPyTranslates = (SayTranslate | StringsTranslate)[];
 
 /**
- * Ren'Py スクリプトから Translate 配列を生成します。
- * @param script Ren'Py スクリプトの内容
+ * Ren'Py ステートメント配列から Translate 配列を生成します。
+ * @param statements Ren'Py ステートメントの配列
+ * @returns Translate 配列
  */
-export function fromRenpyScript(script: string): RenPyTranslates {
+export function extractTranslate(statements: Statement[]): RenPyTranslates {
   let label = '';
   const menus: number[] = [];
-  return script
-    .split('\n')
-    .filter(s => s.length !== 0)
-    .map(s => {
-      return {
-        blockLevel: (s.match(/^ */) || [''])[0].length / 4,
-        code: s.trim(),
-      };
-    })
-    .reduce<RenPyTranslates>((array, curr) => {
-      const { blockLevel, code } = curr;
-      const menuBlockLebel = menus ? menus[menus.length - 1] : null;
+  return statements.reduce<RenPyTranslates>((array, curr) => {
+    const menuBlockLebel = menus ? menus[menus.length - 1] : null;
 
-      if (code.slice(0, 6) === 'return') return array;
+    if (curr.type === 'return') return array;
 
-      const labelMatch = code.match(/^label ([\w]+?):$/) || code.match(/^call .+? from (\w+?)$/);
-      if (labelMatch) {
-        label = labelMatch[1];
-        return array;
-      }
-      if (!labelMatch && blockLevel === 0) {
-        label = '';
-      }
-
-      if (code === 'menu:') {
-        menus.push(blockLevel);
-        return array;
-      }
-      if (menuBlockLebel && menuBlockLebel <= blockLevel) {
-        menus.pop();
-      }
-
-      const dialogMatch = label && code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/);
-      if (dialogMatch) {
-        const nointeract = menuBlockLebel != null && menuBlockLebel + 1 === blockLevel;
-        const id = getId(label, code, nointeract);
-        const [, character, original] = dialogMatch;
-        array.push(new SayTranslate({ id, character, original, nointeract }));
-        return array;
-      }
-
-      const stringsMatch =
-        code.match(/^"([\s\S]+?)"(?: if .*)?:$/) || code.match(/_\("([\s\S]+?)"\)/);
-      if (stringsMatch) {
-        array.push(new StringsTranslate({ original: stringsMatch[1] }));
-        return array;
-      }
-
+    if (curr.type === 'label') {
+      label = curr.name;
       return array;
-    }, []);
+    }
+    if (curr.block === 0) {
+      label = '';
+    }
+
+    if (curr.type === 'menu') {
+      menus.push(curr.block);
+      return array;
+    }
+    if (menuBlockLebel && menuBlockLebel <= curr.block) {
+      menus.pop();
+    }
+
+    if (curr.type === 'say') {
+      const nointeract = menuBlockLebel != null && menuBlockLebel + 1 === curr.block;
+      const id = getId(label, curr.code, nointeract);
+      const { attribute, original } = curr;
+      array.push(new SayTranslate({ id, character: attribute, original, nointeract }));
+      return array;
+    }
+
+    if (curr.type === 'strings') {
+      array.push(new StringsTranslate({ original: curr.original }));
+      return array;
+    }
+
+    return array;
+  }, []);
+}
+
+/**
+ * Ren'Py スクリプトから Translate 配列を生成します。
+ * @param script Ren'Py スクリプトの内容
+ * @returns Translate 配列
+ */
+export function fromRenpyScript(fileName: string, script: string): RenPyTranslates {
+  const statements = parseRenpyScript(fileName, script);
+  return extractTranslate(statements);
 }

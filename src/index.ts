@@ -65,7 +65,7 @@ global.genelateSheet = (fileName: string, script: string) => {
   const properties = new ScriptProperties();
   const modifier = initTranslateSheetModifier(properties);
 
-  const fromScript = fromRenpyScript(script);
+  const fromScript = fromRenpyScript(fileName, script);
   if (!fromScript) throw Error(`translatable string not found in "${fileName}.rpy".`);
   const fromSheet = (() => {
     const sheet = spreadsheet.getSheetByName(fileName);
