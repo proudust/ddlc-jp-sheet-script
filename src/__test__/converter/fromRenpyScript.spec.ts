@@ -1,8 +1,24 @@
-import { fromRenpyScript } from '../../converter/fromRenpyScript';
+import { parseRenpyScript, fromRenpyScript } from '../../converter/fromRenpyScript';
 
 import { setupUtilities } from '../mock/setupUtilities';
 
 setupUtilities();
+
+describe(`function parseRenpyScript`, () => {
+  it('ignore document comment', () => {
+    const script = `
+label test:
+    python:
+        def test:
+            """
+            this test strings
+            """
+`;
+    expect(parseRenpyScript('tests', script)).toMatchObject([
+      { type: 'label', block: 0, name: 'test' },
+    ]);
+  });
+});
 
 describe(`function fromRenpyScript`, () => {
   it('do', () => {

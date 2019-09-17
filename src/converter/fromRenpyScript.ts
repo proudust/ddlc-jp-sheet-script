@@ -75,7 +75,8 @@ export function parseRenpyScript(
         return { type: 'label', block, name: from || `_call_${call}` };
       }
       const [, attribute, say] = code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/) || [];
-      if (say) return { type: 'say', block, code, attribute, original: say, lineNumber };
+      if (say && say != '"')
+        return { type: 'say', block, code, attribute, original: say, lineNumber };
 
       const [, strings] = match(stringsRegExp, code);
       if (strings) return { type: 'strings', block, original: strings, lineNumber };
