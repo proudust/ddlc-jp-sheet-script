@@ -10,6 +10,8 @@ interface RawScriptProperties {
   TAG_COLORS: string;
   /** スクリプト出力から除外するシートの色 */
   NOT_CONVERT_COLORS: string;
+  /** strings としてマッチングさせる追加の正規表現 */
+  STRINGS_EXPANSION: string;
 }
 
 /**
@@ -30,9 +32,15 @@ export class ScriptProperties {
       color: this.getValue('TAG_COLORS').split(',')[index],
     }));
 
+  /** スクリプト出力から除外するシートの色 */
   public readonly notConvertColor = this.raw.NOT_CONVERT_COLORS
     ? this.raw.NOT_CONVERT_COLORS.toLowerCase()
     : undefined;
+
+  /** strings としてマッチングさせる追加の正規表現 */
+  public readonly stringsExpansion = this.raw.STRINGS_EXPANSION
+    ? [new RegExp(this.raw.STRINGS_EXPANSION)]
+    : [];
 
   /**
    * 未加工のスクリプトのプロパティから値を取得します。

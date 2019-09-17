@@ -9,6 +9,7 @@ const dummy = (dummy: Partial<ScriptProperties['raw']>): ScriptProperties['raw']
       TAG_NAMES: '',
       TAG_COLORS: '',
       NOT_CONVERT_COLORS: '',
+      STRINGS_EXPANSION: '',
     },
     dummy,
   );
@@ -81,6 +82,18 @@ describe(`class ScriptProperties`, () => {
     it('no definition', () => {
       setupPropertiesService(dummy({}));
       expect(new ScriptProperties().notConvertColor).toBeUndefined();
+    });
+  });
+
+  describe(`ScriptProperties#stringsExpansion`, () => {
+    it('definition', () => {
+      setupPropertiesService(dummy({ STRINGS_EXPANSION: 'prompt="([sS]+?)"' }));
+      expect(new ScriptProperties().stringsExpansion).toEqual([/prompt="([sS]+?)"/]);
+    });
+
+    it('no definition', () => {
+      setupPropertiesService(dummy({}));
+      expect(new ScriptProperties().stringsExpansion).toEqual([]);
     });
   });
 });

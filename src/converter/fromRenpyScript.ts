@@ -33,12 +33,31 @@ type Statement =
     };
 
 /**
+ * 正規表現の配列を順番に string#match の引数に渡し、null 以外が返されたらそれを返す。
+ * @param regexps string#match の引数に渡す正規表現の配列
+ * @param args string#match の対象になる文字列
+ */
+function match(regexps: RegExp[], args: string): RegExpMatchArray {
+  for (const regexp of regexps) {
+    const result = args.match(regexp);
+    if (result) return result;
+  }
+  return [];
+}
+
+/**
  * Ren'Py スクリプトから Ren'Py ステートメント配列を生成します。
- * @param script Ren'Py スクリプトのファイル名
+ * @param fileName Ren'Py スクリプトのファイル名
  * @param script Ren'Py スクリプトの内容
+ * @param expansion 翻訳可能文字列としてマークする正規表現 (省略可能)
  * @returns Ren'Py ステートメント配列
  */
-export function parseRenpyScript(fileName: string, script: string): Statement[] {
+export function parseRenpyScript(
+  fileName: string,
+  script: string,
+  expansion: RegExp[] = [],
+): Statement[] {
+  const stringsRegExp = [/^"([\s\S]+?)"(?: if .+)?:$/, /_\("([\s\S]+?)"\)/, ...expansion];
   return script
     .split('\n')
     .map((s, lineNumber) => ({
@@ -58,8 +77,7 @@ export function parseRenpyScript(fileName: string, script: string): Statement[] 
       const [, attribute, say] = code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/) || [];
       if (say) return { type: 'say', block, code, attribute, original: say, lineNumber };
 
-      const [, strings] =
-        code.match(/^"([\s\S]+?)"(?: if .+)?:$/) || code.match(/_\("([\s\S]+?)"\)/) || [];
+      const [, strings] = match(stringsRegExp, code);
       if (strings) return { type: 'strings', block, original: strings, lineNumber };
     })
     .filter(<T>(x: T | undefined): x is T => !!x);
@@ -133,10 +151,16 @@ export function extractTranslate(statements: Statement[]): RenPyTranslates {
 
 /**
  * Ren'Py スクリプトから Translate 配列を生成します。
+ * @param fileName Ren'Py スクリプトのファイル名
  * @param script Ren'Py スクリプトの内容
+ * @param expansion 翻訳可能文字列としてマークする正規表現 (省略可能)
  * @returns Translate 配列
  */
-export function fromRenpyScript(fileName: string, script: string): RenPyTranslates {
-  const statements = parseRenpyScript(fileName, script);
+export function fromRenpyScript(
+  fileName: string,
+  script: string,
+  expansion: RegExp[] = [],
+): RenPyTranslates {
+  const statements = parseRenpyScript(fileName, script, expansion);
   return extractTranslate(statements);
 }
