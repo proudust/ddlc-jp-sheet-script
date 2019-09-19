@@ -19,8 +19,10 @@ global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
     { name: '重複した台詞を検索', functionName: 'searchDuplicate' },
     null,
+    { name: 'シートの書式再設定（全体）', functionName: 'fixSpreadsheet' },
+    { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
+    null,
     { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
-    { name: 'スプレッドシートの書式再設定', functionName: 'fixSpreadsheet' },
     { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFile' },
   ]);
 };
@@ -86,19 +88,34 @@ global.genelateSheet = (fileName: string, script: string) => {
 };
 
 /**
- * スプレッドシートのフォーマットを修正します。
+ * 全てのシートのフォーマットを修正します。
  */
 global.fixSpreadsheet = () => {
-  const properties = new ScriptProperties();
+  const prop = new ScriptProperties();
   const statisticsModifier = initStatisticsSheetModifier();
-  const translateModifier = initTranslateSheetModifier(properties);
+  const translateModifier = initTranslateSheetModifier(prop);
 
-  statisticsModifier(SpreadsheetApp.getActive().getSheets()[0]);
+  const activeSpreadsheet = SpreadsheetApp.getActive();
+  statisticsModifier(activeSpreadsheet.getSheets()[0]);
 
-  SpreadsheetApp.getActive()
+  activeSpreadsheet
     .getSheets()
-    .slice(1)
+    .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
     .forEach(s => translateModifier(s));
+};
+
+/**
+ * アクティブなシートのフォーマットを修正します。
+ */
+global.fixActiveSheet = () => {
+  const prop = new ScriptProperties();
+
+  const activeSheet = SpreadsheetApp.getActive().getActiveSheet();
+  const modifier = (() => {
+    if (activeSheet.getIndex() === 1) return initStatisticsSheetModifier();
+    else return initTranslateSheetModifier(prop);
+  })();
+  modifier(activeSheet);
 };
 
 /**
