@@ -18,6 +18,52 @@ label test:
       { type: 'label', block: 0, name: 'test' },
     ]);
   });
+
+  describe(`call from statement`, () => {
+    it('no args, omitted from', () => {
+      const script = `
+label test:
+    call test # comment
+`;
+      expect(parseRenpyScript('tests', script)).toMatchObject([
+        { type: 'label', block: 0, name: 'test' },
+        { type: 'label', block: 1, name: '_call_test' },
+      ]);
+    });
+
+    it('no args, explicit from', () => {
+      const script = `
+label test:
+    call test from test_after # comment
+`;
+      expect(parseRenpyScript('tests', script)).toMatchObject([
+        { type: 'label', block: 0, name: 'test' },
+        { type: 'label', block: 1, name: 'test_after' },
+      ]);
+    });
+
+    it('with args, omitted from', () => {
+      const script = `
+label test:
+    call test("test") # comment
+`;
+      expect(parseRenpyScript('tests', script)).toMatchObject([
+        { type: 'label', block: 0, name: 'test' },
+        { type: 'label', block: 1, name: '_call_test' },
+      ]);
+    });
+
+    it('with args, omitted from', () => {
+      const script = `
+label test:
+    call test("test") from test_after # comment
+`;
+      expect(parseRenpyScript('tests', script)).toMatchObject([
+        { type: 'label', block: 0, name: 'test' },
+        { type: 'label', block: 1, name: 'test_after' },
+      ]);
+    });
+  });
 });
 
 describe(`function fromRenpyScript`, () => {

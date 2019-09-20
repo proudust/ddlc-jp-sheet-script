@@ -71,7 +71,7 @@ export function parseRenpyScript(
       if (code.slice(0, 5) === 'label')
         return { type: 'label', block, name: code.slice(6).slice(0, -1) };
       if (code.slice(0, 4) === 'call') {
-        const [, call, , from] = code.split(' ');
+        const [, call, from] = code.match(/^call (\w+)(?:\(.+\))?(?: from (\w+))?/) || [];
         return { type: 'label', block, name: from || `_call_${call}` };
       }
       const [, attribute, say] = code.match(/^(?:(\w+(?: [\d\w]+)?) )?"([\s\S]+?)"$/) || [];
