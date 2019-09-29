@@ -14,12 +14,14 @@ interface RawScriptProperties {
   STRINGS_EXPANSION: string;
 }
 
+type NullableRawScriptProperties = Partial<RawScriptProperties>;
+
 /**
  * スクリプトのプロパティをパースしたオブジェクトを返します。
  */
 export class ScriptProperties {
   /** 未加工のスクリプトのプロパティ */
-  private readonly raw = PropertiesService.getScriptProperties().getProperties() as RawScriptProperties;
+  private readonly raw: NullableRawScriptProperties = PropertiesService.getScriptProperties().getProperties();
 
   /** 出力フォルダ名 */
   public readonly folderName = this.getValue('FOLDER_NAME');
@@ -46,8 +48,8 @@ export class ScriptProperties {
    * 未加工のスクリプトのプロパティから値を取得します。
    * @throws 指定のプロパティが未定義の場合、エラーをスローします。
    */
-  private getValue(key: keyof RawScriptProperties): RawScriptProperties[typeof key] {
-    const value: RawScriptProperties[typeof key] | null | undefined = this.raw[key];
+  private getValue<T extends keyof RawScriptProperties>(key: T): RawScriptProperties[T] {
+    const value: RawScriptProperties[T] | null | undefined = this.raw[key];
     if (value === null || typeof value === 'undefined')
       throw Error(`${key} is not defined in the script property.`);
     return value;

@@ -194,7 +194,7 @@ const fixProtect: SheetModifier = (() => {
     const protect = sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0] || sheet.protect();
     protect
       .addEditor(owner)
-      .removeEditors(protect.getEditors() as any)
+      .removeEditors(protect.getEditors())
       .setUnprotectedRanges([sheet.getRange('D2:G')]);
   };
 })();
