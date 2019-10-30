@@ -27,6 +27,9 @@ global.onOpen = () => {
   ]);
 };
 
+/**
+ * 同じ台詞の行の中から、異なる訳が当てられている行を検索します。
+ */
 global.searchDuplicate = () => {
   const prop = new ScriptProperties();
   const translates = SpreadsheetApp.getActive()
@@ -143,6 +146,9 @@ global.genelateTranslationFile = () => {
   Browser.msgBox(msg);
 };
 
+/**
+ * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、Zip 圧縮した Base64 文字列を返す。
+ */
 global.doGet = () => {
   const zip = (() => {
     const prop = new ScriptProperties();
