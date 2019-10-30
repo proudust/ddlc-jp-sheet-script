@@ -5,7 +5,7 @@ const values = [['ID', '属性', '原文', '翻訳', '機械翻訳', 'タグ', '
 describe(`class TranslateSheetRow`, () => {
   describe(`new TranslateSheetRow`, () => {
     it('standard', () => {
-      expect(new TranslateSheetRow(values[0], 'testName', 3)).toMatchObject({
+      expect(new TranslateSheetRow(values[0], 'test-name', 3)).toMatchObject({
         id: 'ID',
         attribute: '属性',
         original: '原文',
@@ -13,14 +13,14 @@ describe(`class TranslateSheetRow`, () => {
         tag: 'タグ',
         comments: 'コメント',
         location: {
-          sheetName: 'testName',
+          sheetName: 'test-name',
           rowNumber: 3,
         },
       });
     });
 
     it('empty', () => {
-      expect(new TranslateSheetRow([], 'testName', 3)).toMatchObject({
+      expect(new TranslateSheetRow([], 'test-name', 3)).toMatchObject({
         id: '',
         attribute: '',
         original: '',
@@ -28,7 +28,7 @@ describe(`class TranslateSheetRow`, () => {
         tag: '',
         comments: '',
         location: {
-          sheetName: 'testName',
+          sheetName: 'test-name',
           rowNumber: 3,
         },
       });
@@ -39,18 +39,23 @@ describe(`class TranslateSheetRow`, () => {
 describe(`class TranslateSheet`, () => {
   describe(`TranslateSheet#getName`, () => {
     it('success', () => {
-      const mock = { getName: () => 'testName' };
-      expect(new TranslateSheet(mock).getName()).toEqual('testName');
+      const mock = { getName: () => 'test-name' };
+      expect(new TranslateSheet(mock).getName()).toEqual('test-name');
+    });
+
+    it('invalid sheet name', () => {
+      const mock = { getName: () => 'シート100' };
+      expect(() => new TranslateSheet(mock)).toThrowError(/ is invalid sheet name.$/);
     });
 
     it('not implementation', () => {
-      expect(() => new TranslateSheet({}).getName()).toThrowError();
+      expect(() => new TranslateSheet({}).getName()).toThrowError('getName is not implementation.');
     });
   });
 
   describe(`TranslateSheet#getTranslateRows`, () => {
     it('success', () => {
-      const mock = { getName: () => 'testName', getRange: () => ({ getValues: () => values }) };
+      const mock = { getName: () => 'test-name', getRange: () => ({ getValues: () => values }) };
       expect(new TranslateSheet(mock).getTranslateRows()).toMatchObject([
         {
           id: 'ID',
@@ -60,7 +65,7 @@ describe(`class TranslateSheet`, () => {
           tag: 'タグ',
           comments: 'コメント',
           location: {
-            sheetName: 'testName',
+            sheetName: 'test-name',
             rowNumber: 3,
           },
         },
@@ -69,12 +74,16 @@ describe(`class TranslateSheet`, () => {
 
     it('getName is not implementation', () => {
       const mock = { getRange: () => ({ getValues: () => values }) };
-      expect(() => new TranslateSheet(mock).getTranslateRows()).toThrowError();
+      expect(() => {
+        new TranslateSheet(mock).getTranslateRows();
+      }).toThrowError('getName is not implementation.');
     });
 
     it('getRange is not implementation', () => {
-      const mock = { getName: () => 'testName' };
-      expect(() => new TranslateSheet(mock).getTranslateRows()).toThrowError();
+      const mock = { getName: () => 'test-name' };
+      expect(() => {
+        new TranslateSheet(mock).getTranslateRows();
+      }).toThrowError('getRange is not implementation.');
     });
   });
 
@@ -85,7 +94,9 @@ describe(`class TranslateSheet`, () => {
     });
 
     it('not implementation', () => {
-      expect(() => new TranslateSheet({}).getTabColor()).toThrowError();
+      expect(() => {
+        new TranslateSheet({}).getTabColor();
+      }).toThrowError('getTabColor is not implementation.');
     });
   });
 });

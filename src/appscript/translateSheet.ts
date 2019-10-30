@@ -46,24 +46,28 @@ interface Sheet {
 
 /** 翻訳シートの @type GoogleAppsScript.Spreadsheet.Sheet インスタンスのラッパークラス */
 export class TranslateSheet {
-  private sheet: Partial<Sheet>;
+  private readonly sheet: Partial<Sheet>;
 
   /**
    * @param sheet @type GoogleAppsScript.Spreadsheet.Sheet のインスタンス
    */
   public constructor(sheet: Partial<Sheet>) {
+    const name = sheet.getName && sheet.getName();
+    if (name && /[^\w-]/.test(name)) throw Error(`${name} is invalid sheet name.`);
+
     this.sheet = sheet;
   }
 
   /** シート名を取得 */
   public getName(): string {
-    if (!this.sheet.getName) throw Error();
+    if (!this.sheet.getName) throw Error('getName is not implementation.');
     return this.sheet.getName();
   }
 
   /** 翻訳シートの内容から @type TranslateSheetRow の配列を生成する。 */
   public getTranslateRows(): TranslateSheetRow[] {
-    if (!this.sheet.getName || !this.sheet.getRange) throw Error();
+    if (!this.sheet.getName) throw Error('getName is not implementation.');
+    if (!this.sheet.getRange) throw Error('getRange is not implementation.');
     const sheetName = this.sheet.getName();
     return this.sheet
       .getRange('A3:G')
@@ -73,7 +77,7 @@ export class TranslateSheet {
 
   /** シート色を取得 */
   public getTabColor(): string | null {
-    if (!this.sheet.getTabColor) throw Error();
+    if (!this.sheet.getTabColor) throw Error('getTabColor is not implementation.');
     return this.sheet.getTabColor();
   }
 }
