@@ -9,11 +9,13 @@ type SheetModifierFactory = (properties: ScriptProperties) => SheetModifier;
 /**
  * "statistics" と名前のついた名前付き範囲を取得する。
  * @param sheet 対象のシート （統計シート）
- * @returns 対象の名前付き範囲があった場合その Range オブジェクト、ない場合は null 。
+ * @throws 対象の名前付き範囲がない場合エラー
+ * @returns 対象の名前付き範囲の Range オブジェクト
  */
-function getStatisticsRange(sheet: Sheet): GoogleAppsScript.Spreadsheet.Range | null {
+function getStatisticsRange(sheet: Sheet): GoogleAppsScript.Spreadsheet.Range {
   const [namedRange = null] = sheet.getNamedRanges().filter(r => r.getName() === 'statistics');
-  return namedRange && namedRange.getRange();
+  if (!namedRange) throw new Error('statistics NamedRange is not found.');
+  return namedRange.getRange();
 }
 
 /**
@@ -21,10 +23,6 @@ function getStatisticsRange(sheet: Sheet): GoogleAppsScript.Spreadsheet.Range | 
  */
 const updateStatistics: SheetModifier = (sheet: Sheet): void => {
   const statisticsRange = getStatisticsRange(sheet);
-  if (!statisticsRange) {
-    console.warn('statistics NamedRange is not found');
-    return;
-  }
 
   const values: (string | undefined)[][] = statisticsRange.getValues();
 
@@ -34,8 +32,8 @@ const updateStatistics: SheetModifier = (sheet: Sheet): void => {
     .map(s => s.getName());
   const beforeSheetNames = values
     .map(([sheetName]) => sheetName)
-    .filter(sheetName => !!sheetName)
-    .slice(1, -1) as string[];
+    .slice(1, -1)
+    .filter(sheetName => !!sheetName) as string[];
 
   const rowPosition = statisticsRange.getRowIndex() + 1;
   const hasChanged = afterSheetNames
@@ -74,10 +72,6 @@ const updateStatistics: SheetModifier = (sheet: Sheet): void => {
  */
 const setStatisticsFormulas: SheetModifier = (sheet: Sheet): void => {
   const statisticsRange = getStatisticsRange(sheet);
-  if (!statisticsRange) {
-    console.warn('statistics NamedRange is not found');
-    return;
-  }
 
   const sheets: [string, string][] = statisticsRange
     .getValues()
@@ -136,10 +130,6 @@ const setStatisticsFormulas: SheetModifier = (sheet: Sheet): void => {
  */
 const fixStatisticsFormat = (sheet: Sheet): void => {
   const statisticsRange = getStatisticsRange(sheet);
-  if (!statisticsRange) {
-    console.warn('statistics NamedRange is not found');
-    return;
-  }
 
   statisticsRange.setBackground('#CCCCCC');
 
