@@ -75,8 +75,7 @@ const setStatisticsFormulas: SheetModifier = (sheet: Sheet): void => {
 
   const sheets: [string, string][] = statisticsRange
     .getValues()
-    .map<[string, string]>(a => [a[0], a[1]])
-    .filter(f => f)
+    .map<[string, string]>(([sheetName = '', sheetDest = '']) => [sheetName, sheetDest])
     .slice(1, -1);
   const headerIndex = statisticsRange.getRowIndex();
   const footerIndex = headerIndex + sheets.length + 1;
@@ -102,7 +101,8 @@ const setStatisticsFormulas: SheetModifier = (sheet: Sheet): void => {
       (sheetId && `=HYPERLINK("#gid=${sheetId}","${sheetName}")`) || sheetName,
       sheetDescription,
       `=COUNTA('${sheetName}'!$D$2:$D)`,
-      `=COUNTA('${sheetName}'!$C$2:$C)`,
+      `=COUNTIFS('${sheetName}'!$B$2:$B, "?*", '${sheetName}'!$C$2:$C, "?*") + ` +
+        `COUNTIFS('${sheetName}'!$A$2:$A, "?*", '${sheetName}'!$B$2:$B, "", '${sheetName}'!$C$2:$C, "?*")`,
       `=IF($E${thisRowIndex}<>0,$D${thisRowIndex}/$E${thisRowIndex},0)`,
       `=COUNTIF('${sheetName}'!$F$2:$F, G$${headerIndex})`,
       `=COUNTIF('${sheetName}'!$F$2:$F, H$${headerIndex})`,
