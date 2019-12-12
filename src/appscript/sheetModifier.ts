@@ -26,25 +26,45 @@ const updateStatistics: SheetModifier = (sheet: Sheet): void => {
     return;
   }
 
-  const sheetNames = SpreadsheetApp.getActive()
+  const values: (string | undefined)[][] = statisticsRange.getValues();
+
+  const afterSheetNames = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
     .map(s => s.getName());
-  const nowRangeNumRows = statisticsRange.getNumRows() - 2;
-  if (sheetNames.length != nowRangeNumRows) {
-    const rowPosition = statisticsRange.getRowIndex() + 1;
-    if (sheetNames.length > nowRangeNumRows) {
-      sheet.insertRowsAfter(rowPosition, sheetNames.length - nowRangeNumRows);
-    } else if (sheetNames.length < nowRangeNumRows) {
-      sheet.deleteRows(rowPosition, nowRangeNumRows - sheetNames.length);
-    }
+  const beforeSheetNames = values
+    .map(([sheetName]) => sheetName)
+    .filter(sheetName => !!sheetName)
+    .slice(1, -1) as string[];
 
-    const sheetDescriptions = statisticsRange
-      .getValues()
-      .reduce<{ [key: string]: string }>((d, v) => (d[v[0]] = v[1]), {});
-    const newValues = sheetNames.map(n => [n, sheetDescriptions[n]]);
+  const rowPosition = statisticsRange.getRowIndex() + 1;
+  const hasChanged = afterSheetNames
+    .concat(beforeSheetNames)
+    .reduce<boolean>((hasChange, sheetName) => {
+      const afterIndex = afterSheetNames.indexOf(sheetName);
+      const beforeIndex = beforeSheetNames.indexOf(sheetName);
+      // シートが追加された場合、新しい行を追加
+      if (afterIndex !== -1 && beforeIndex === -1) {
+        sheet.insertRowAfter(rowPosition);
+        return true;
+      }
+      // シートが削除された場合、その行を削除
+      else if (afterIndex === -1 && beforeIndex !== -1) {
+        sheet.deleteRow(rowPosition + beforeIndex);
+        return true;
+      }
+      return hasChange;
+    }, false);
+
+  // シートの追加・削除が検知された場合、シート名をセットし直す
+  if (hasChanged) {
+    const sheetDescs = values.reduce<{ [key: string]: string | undefined }>(
+      (dic, [name = '', desc = '']) => ((dic[name] = desc), dic),
+      {},
+    );
+    const newValues = afterSheetNames.map(sheetName => [sheetName, sheetDescs[sheetName] ?? '']);
     sheet
-      .getRange(rowPosition, statisticsRange.getColumn(), sheetNames.length, 2)
+      .getRange(rowPosition, statisticsRange.getColumn(), afterSheetNames.length, 2)
       .setValues(newValues);
   }
 };
