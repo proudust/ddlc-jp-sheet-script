@@ -8,6 +8,7 @@ import { margeTranslate } from './converter/margeTranslate';
 import { toSpreadsheet } from './converter/toSpreadsheet';
 import { TranslationFileConverter } from './converter/toTranslationFile';
 import { checkDuplicateTranslate } from './check/checkDuplicateTranslate';
+import { updatePullRequest } from './updatePullRequest';
 
 declare let global: { [key: string]: Function };
 
@@ -23,7 +24,8 @@ global.onOpen = () => {
     { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
     null,
     { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
-    { name: '翻訳ファイルの出力', functionName: 'genelateTranslationFile' },
+    { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'genelateTranslationFile' },
+    { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
   ]);
 };
 
@@ -145,6 +147,12 @@ global.genelateTranslationFile = () => {
   const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
 };
+
+/**
+ * GitHub のリポジトリに対し dispatches イベント (type: update_translate) を発火させます。
+ * それをトリガーに GitHub Actions 側で翻訳スクリプトを生成します。
+ */
+global.updatePullRequest = updatePullRequest;
 
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、Zip 圧縮した Base64 文字列を返す。

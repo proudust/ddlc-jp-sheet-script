@@ -10,6 +10,8 @@ const dummy = (dummy: Partial<ScriptProperties['raw']>): ScriptProperties['raw']
       TAG_COLORS: '',
       NOT_CONVERT_COLORS: '',
       STRINGS_EXPANSION: '',
+      GITHUB_REPOSITORY: '',
+      GITHUB_TOKEN: '',
     },
     dummy,
   );

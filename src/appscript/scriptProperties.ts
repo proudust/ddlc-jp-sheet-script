@@ -12,6 +12,10 @@ interface RawScriptProperties {
   NOT_CONVERT_COLORS: string;
   /** strings としてマッチングさせる追加の正規表現 */
   STRINGS_EXPANSION: string;
+  /** GitHub のリポジトリ名 */
+  GITHUB_REPOSITORY: string;
+  /** GitHub の Personal access token */
+  GITHUB_TOKEN: string;
 }
 
 type NullableRawScriptProperties = Partial<RawScriptProperties>;
@@ -43,6 +47,12 @@ export class ScriptProperties {
   public readonly stringsExpansion = this.raw.STRINGS_EXPANSION
     ? [new RegExp(this.raw.STRINGS_EXPANSION)]
     : [];
+
+  /** GitHub のリポジトリ名 */
+  public readonly githubRepository = this.getValue('GITHUB_REPOSITORY');
+
+  /** GitHub の Personal access token */
+  public readonly githubToken = this.getValue('GITHUB_TOKEN');
 
   /**
    * 未加工のスクリプトのプロパティから値を取得します。
