@@ -4,11 +4,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts --fix .",
-    "lint:ci": "npm run lint -- --format junit --output-file reports/eslint.xml",
-    "test": "jest --reporters=default",
-    "test:ci": "jest --ci --reporters=jest-junit",
-    "build": "npm run lint && npm run test && rimraf dist && webpack && cpy src/appsscript.json dist",
-    "build:ci": "npm run lint:ci && npm run test:ci && rimraf dist && webpack && cpy src/appsscript.json dist",
+    "test": "jest",
+    "build": "rimraf dist && webpack && cpy src/appsscript.json dist",
     "deploy": "npm run build && rimraf dist/client.js && clasp push"
   },
   "author": "proudust",
@@ -44,10 +41,6 @@
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
-    },
-    "reporters": [
-      "default",
-      "jest-junit"
-    ]
+    }
   }
 }
