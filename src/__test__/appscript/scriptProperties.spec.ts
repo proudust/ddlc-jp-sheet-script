@@ -86,16 +86,4 @@ describe(`class ScriptProperties`, () => {
       expect(new ScriptProperties().notConvertColor).toBeUndefined();
     });
   });
-
-  describe(`ScriptProperties#stringsExpansion`, () => {
-    it('definition', () => {
-      setupPropertiesService(dummy({ STRINGS_EXPANSION: 'prompt="([sS]+?)"' }));
-      expect(new ScriptProperties().stringsExpansion).toEqual([/prompt="([sS]+?)"/]);
-    });
-
-    it('no definition', () => {
-      setupPropertiesService(dummy({}));
-      expect(new ScriptProperties().stringsExpansion).toEqual([]);
-    });
-  });
 });

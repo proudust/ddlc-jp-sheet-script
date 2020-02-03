@@ -3,9 +3,6 @@ import { ScriptProperties } from './appscript/scriptProperties';
 import { TranslateSheet } from './appscript/translateSheet';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { fromSpreadsheet } from './converter/fromSpreadsheet';
-import { fromRenpyScript } from './converter/fromRenpyScript';
-import { margeTranslate } from './converter/margeTranslate';
-import { toSpreadsheet } from './converter/toSpreadsheet';
 import { TranslationFileConverter } from './converter/toTranslationFile';
 import { checkDuplicateTranslate } from './check/checkDuplicateTranslate';
 import { updatePullRequest } from './updatePullRequest';
@@ -23,7 +20,6 @@ global.onOpen = () => {
     { name: 'シートの書式再設定（全体）', functionName: 'fixSpreadsheet' },
     { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
     null,
-    { name: 'スクリプトからシートを作成', functionName: 'showUploder' },
     { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'genelateTranslationFile' },
     { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
   ]);
@@ -49,47 +45,6 @@ global.searchDuplicate = () => {
     )
     .join('\\n');
   Browser.msgBox(msg);
-};
-
-/**
- * スクリプトのアップローダーを表示します。
- */
-global.showUploder = () => {
-  const html = HtmlService.createHtmlOutputFromFile('uploder.html')
-    .setSandboxMode(HtmlService.SandboxMode.IFRAME)
-    .setWidth(400)
-    .setHeight(200);
-  SpreadsheetApp.getUi().showModalDialog(html, 'スクリプトからシートを作成');
-};
-
-/**
- * スクリプトのファイル名と内容からシートを生成します。
- * @param fileName スクリプトのファイル名。 (拡張子なし)
- * @param script スクリプトの内容。
- */
-global.genelateSheet = (fileName: string, script: string) => {
-  const spreadsheet = SpreadsheetApp.getActive();
-  const properties = new ScriptProperties();
-  const modifier = initTranslateSheetModifier(properties);
-
-  const fromScript = fromRenpyScript(fileName, script, properties.stringsExpansion);
-  if (!fromScript) throw Error(`translatable string not found in "${fileName}.rpy".`);
-  const fromSheet = (() => {
-    const sheet = spreadsheet.getSheetByName(fileName);
-    const rows = sheet && new TranslateSheet(sheet).getTranslateRows();
-    return rows && fromSpreadsheet(rows);
-  })();
-  const values = (() => {
-    const marge = fromSheet && margeTranslate(fromSheet, fromScript);
-    return toSpreadsheet(marge || fromScript);
-  })();
-
-  const sheet = spreadsheet.insertSheet();
-  const rowsCountDiff = values.length - sheet.getMaxRows() - 2;
-  if (0 < rowsCountDiff) sheet.insertRows(3, rowsCountDiff);
-  else if (rowsCountDiff < 0) sheet.deleteRows(3, -rowsCountDiff);
-  sheet.getRange(3, 1, values.length, 7).setValues(values);
-  modifier(sheet);
 };
 
 /**
