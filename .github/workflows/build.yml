@@ -22,34 +22,21 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build
-        run: npm run build
-
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Install Dependencies
-        run: npm ci
-
       - name: Lint
         run: npm run lint
 
       - name: Test
         run: npm run test -- --ci --coverage
 
+      - name: Build
+        run: npm run build
+
       - uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: github.ref == 'refs/heads/master'
+        name: Deploy
+        run: echo $CLASPRC > ~/.clasprc.json && npm run deploy
+        env:
+          CLASPRC: ${{ secrets.CLASPRC }}

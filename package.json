@@ -6,7 +6,7 @@
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts --fix .",
     "test": "jest",
     "build": "rimraf dist && webpack && cpy src/appsscript.json dist",
-    "deploy": "npm run build && rimraf dist/client.js && clasp push"
+    "deploy": "ts-node -O '{\"module\":\"commonjs\"}' deploy.ts"
   },
   "author": "proudust",
   "license": "MIT",
