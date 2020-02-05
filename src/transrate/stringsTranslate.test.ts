@@ -1,4 +1,4 @@
-import { StringsTranslate } from '../../transrate/stringsTranslate';
+import { StringsTranslate } from './stringsTranslate';
 
 import { poemTitle, poemContent } from '../testResource';
 

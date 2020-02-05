@@ -1,4 +1,4 @@
-import { SayTranslate } from '../../transrate/sayTranslate';
+import { SayTranslate } from './sayTranslate';
 
 import { characterSay, monologueSay, nointeractSay, longSay, escapeSay } from '../testResource';
 

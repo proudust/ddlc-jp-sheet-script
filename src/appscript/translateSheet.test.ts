@@ -1,4 +1,4 @@
-import { TranslateSheetRow, TranslateSheet } from '../../appscript/translateSheet';
+import { TranslateSheetRow, TranslateSheet } from './translateSheet';
 
 const values = [['ID', '属性', '原文', '翻訳', '機械翻訳', 'タグ', 'コメント']];
 

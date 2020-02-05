@@ -1,4 +1,4 @@
-import { fromSpreadsheet } from '../../converter/fromSpreadsheet';
+import { fromSpreadsheet } from './fromSpreadsheet';
 
 import { characterSay, nointeractSay, longSay, poemTitle, file } from '../testResource';
 

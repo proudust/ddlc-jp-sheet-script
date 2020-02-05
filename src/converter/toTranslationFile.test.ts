@@ -1,7 +1,7 @@
-import { TranslationFileConverter } from '../../converter/toTranslationFile';
-import { SayTranslate } from '../../transrate/sayTranslate';
-import { FileTranslate } from '../../transrate/fileTranslate';
-import { StringsTranslate } from '../../transrate/stringsTranslate';
+import { TranslationFileConverter } from './toTranslationFile';
+import { SayTranslate } from '../transrate/sayTranslate';
+import { FileTranslate } from '../transrate/fileTranslate';
+import { StringsTranslate } from '../transrate/stringsTranslate';
 
 import { characterSay, poemTitle, file } from '../testResource';
 

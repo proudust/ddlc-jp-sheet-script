@@ -1,4 +1,4 @@
-import { FileTranslate } from '../../transrate/fileTranslate';
+import { FileTranslate } from './fileTranslate';
 
 import { file } from '../testResource';
 
