@@ -107,7 +107,7 @@ global.genelateTranslationFile = () => {
  * GitHub のリポジトリに対し dispatches イベント (type: update_translate) を発火させます。
  * それをトリガーに GitHub Actions 側で翻訳スクリプトを生成します。
  */
-global.updatePullRequest = updatePullRequest;
+global.updatePullRequest = () => updatePullRequest(getScriptProperties());
 
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、Zip 圧縮した Base64 文字列を返す。
