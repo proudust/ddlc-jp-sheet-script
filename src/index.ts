@@ -1,5 +1,5 @@
 import { OutputFolder } from './appscript/outputFolder';
-import { ScriptProperties } from './appscript/scriptProperties';
+import { getScriptProperties } from './appscript/scriptProperties';
 import { TranslateSheet } from './appscript/translateSheet';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { fromSpreadsheet } from './converter/fromSpreadsheet';
@@ -29,12 +29,12 @@ global.onOpen = () => {
  * 同じ台詞の行の中から、異なる訳が当てられている行を検索します。
  */
 global.searchDuplicate = () => {
-  const prop = new ScriptProperties();
+  const { notConvertColor } = getScriptProperties();
   const translates = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
     .map(s => new TranslateSheet(s))
-    .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true))
     .map(s => fromSpreadsheet(s.getTranslateRows()))
     .reduce((array, curr) => array.concat(curr), []);
   const msg = checkDuplicateTranslate(translates)
@@ -51,7 +51,7 @@ global.searchDuplicate = () => {
  * 全てのシートのフォーマットを修正します。
  */
 global.fixSpreadsheet = () => {
-  const prop = new ScriptProperties();
+  const prop = getScriptProperties();
   const statisticsModifier = initStatisticsSheetModifier();
   const translateModifier = initTranslateSheetModifier(prop);
 
@@ -68,7 +68,7 @@ global.fixSpreadsheet = () => {
  * アクティブなシートのフォーマットを修正します。
  */
 global.fixActiveSheet = () => {
-  const prop = new ScriptProperties();
+  const prop = getScriptProperties();
 
   const activeSheet = SpreadsheetApp.getActive().getActiveSheet();
   const modifier = (() => {
@@ -82,14 +82,14 @@ global.fixActiveSheet = () => {
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、ユーザーのドライブに保存します。
  */
 global.genelateTranslationFile = () => {
-  const prop = new ScriptProperties();
+  const { folderName, notConvertColor } = getScriptProperties();
   const converter = new TranslationFileConverter();
-  const outputFolder = new OutputFolder(prop.folderName, new Date());
+  const outputFolder = new OutputFolder(folderName, new Date());
   SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
     .map(s => new TranslateSheet(s))
-    .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true))
     .reduce<OutputFolder>((folder, curr) => {
       const name = curr.getName();
       const values = curr.getTranslateRows();
@@ -114,14 +114,14 @@ global.updatePullRequest = updatePullRequest;
  */
 global.doGet = () => {
   const zip = (() => {
-    const prop = new ScriptProperties();
+    const { folderName, notConvertColor } = getScriptProperties();
     const converter = new TranslationFileConverter();
-    const outputFolder = new OutputFolder(prop.folderName, new Date());
+    const outputFolder = new OutputFolder(folderName, new Date());
     return SpreadsheetApp.getActive()
       .getSheets()
       .slice(1)
       .map(s => new TranslateSheet(s))
-      .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
+      .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true))
       .reduce<OutputFolder>((folder, curr) => {
         const name = curr.getName();
         const values = curr.getTranslateRows();

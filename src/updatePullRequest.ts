@@ -1,10 +1,10 @@
-import { ScriptProperties } from './appscript/scriptProperties';
+import { getScriptProperties } from './appscript/scriptProperties';
 
 /**
  * GitHub のリポジトリに対し dispatches イベントを発火させます。
  */
 export function updatePullRequest(): void {
-  const { githubRepository, githubToken } = new ScriptProperties();
+  const { githubRepository, githubToken } = getScriptProperties();
   const url = `https://api.github.com/repos/${githubRepository}/dispatches`;
   UrlFetchApp.fetch(url, {
     method: 'post',
