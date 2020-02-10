@@ -10,6 +10,8 @@ interface RawScriptProperties {
   TAG_COLORS: string;
   /** スクリプト出力から除外するシートの色 */
   NOT_CONVERT_COLORS: string;
+  /** ヒストリーの言語切替に必要な翻訳を生成する */
+  INCLUDE_HISTORY_SUPPORT: string;
   /** GitHub のリポジトリ名 */
   GITHUB_REPOSITORY: string;
   /** GitHub の Personal access token */
@@ -52,6 +54,11 @@ export class ScriptProperties {
   /** スクリプト出力から除外するシートの色 */
   public get notConvertColor(): string | undefined {
     return this.raw.NOT_CONVERT_COLORS?.toLowerCase();
+  }
+
+  /** ヒストリーの言語切替に必要な翻訳を生成する */
+  public get includeHistorySupport(): boolean {
+    return (this.raw.INCLUDE_HISTORY_SUPPORT?.toLowerCase() ?? 'false') !== 'false';
   }
 
   /** GitHub のリポジトリ名 */

@@ -35,6 +35,19 @@ test(`ScriptProperties#notConvertColor`, () => {
   expect(new ScriptProperties({}).notConvertColor).toBeUndefined();
 });
 
+test(`ScriptProperties#notConvertColor`, () => {
+  const props1 = new ScriptProperties({ INCLUDE_HISTORY_SUPPORT: 'True' });
+  expect(props1.includeHistorySupport).toBe(true);
+
+  const props2 = new ScriptProperties({ INCLUDE_HISTORY_SUPPORT: 'False' });
+  expect(props2.includeHistorySupport).toBe(false);
+
+  const props3 = new ScriptProperties({ INCLUDE_HISTORY_SUPPORT: 'test' });
+  expect(props3.includeHistorySupport).toBe(true);
+
+  expect(new ScriptProperties({}).includeHistorySupport).toBe(false);
+});
+
 test('ScriptProperties#githubRepository', () => {
   const { githubRepository } = new ScriptProperties({
     GITHUB_REPOSITORY: 'proudust/ddlc-jp-patch',

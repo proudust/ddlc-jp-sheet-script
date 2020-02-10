@@ -1,4 +1,10 @@
-import { parseRow, inflate, removeDuplicateStrings, generateCode } from './generator';
+import {
+  parseRow,
+  convaerHistorySupport,
+  inflate,
+  removeDuplicateStrings,
+  generateCode,
+} from './generator';
 import { SayTranslate, StringsTranslate, FileTranslate } from './translates';
 import { trimIndent } from '../util/tags';
 
@@ -37,6 +43,40 @@ describe('parseRow', () => {
   });
 });
 
+describe('convaerHistorySupport', () => {
+  test('character dialog', () => {
+    const say = [
+      new SayTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」'),
+    ];
+    expect(convaerHistorySupport(say)).toStrictEqual([
+      new StringsTranslate('{#ch0_main_41e273ca}', '「おーはーよーーー！」'),
+    ]);
+  });
+
+  test('character dialog', () => {
+    const say = [
+      new SayTranslate(
+        'ch0_main_cb634d94',
+        '',
+        'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
+        trimIndent`
+          "やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
+          "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"
+        `,
+      ),
+    ];
+    expect(convaerHistorySupport(say)).toStrictEqual([
+      new StringsTranslate(
+        '{#ch0_main_cb634d94}',
+        trimIndent`
+          やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。
+          着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。
+        `.replace('\n', '\\n'),
+      ),
+    ]);
+  });
+});
+
 describe('inflate', () => {
   test('If no translation, return empty', () => {
     expect(inflate('test', [])).toStrictEqual([]);
@@ -53,6 +93,29 @@ describe('inflate', () => {
         content: trimIndent`
           translate Japanese ch0_main_41e273ca:
               s "「おーはーよーーー！」"
+
+        `,
+      },
+    ]);
+  });
+
+  test('If includeHistorySupport is true', () => {
+    expect(
+      inflate(
+        'test',
+        [new SayTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」')],
+        true,
+      ),
+    ).toStrictEqual([
+      {
+        name: 'test.rpy',
+        content: trimIndent`
+          translate Japanese ch0_main_41e273ca:
+              s "「おーはーよーーー！」"
+
+          translate Japanese strings:
+              old "{#ch0_main_41e273ca}"
+              new "「おーはーよーーー！」"
 
         `,
       },
@@ -124,7 +187,7 @@ test('generateCode', () => {
     toSheet('test2', [['', 'strings', 'Yes', 'はい']]),
   ];
 
-  expect(generateCode(sheets)).toStrictEqual([
+  expect(generateCode(sheets, true)).toStrictEqual([
     {
       name: 'test1.rpy',
       content: trimIndent`
@@ -134,6 +197,9 @@ test('generateCode', () => {
       translate Japanese strings:
           old "Yes"
           new "はい"
+
+          old "{#ch0_main_41e273ca}"
+          new "「おーはーよーーー！」"
 
     `,
     },

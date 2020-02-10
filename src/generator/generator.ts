@@ -19,6 +19,17 @@ export function parseRow([id, attribute, original, translate]: string[]): Transl
   return;
 }
 
+/**
+ * SayTranslate オブジェクトからヒストリーの言語切替に必要な翻訳を生成します
+ * @param say 生成元の SayTranslate 配列
+ */
+export function convaerHistorySupport(say: SayTranslate[]): StringsTranslate[] {
+  return say.map(({ id, translate }) => {
+    const translates = translate.match(/"(.+?[^\\])"/g)?.map(t => t.slice(1, -1)) ?? [translate];
+    return new StringsTranslate(`{#${id}}`, translates.join('\\n'));
+  });
+}
+
 interface File {
   name: string;
   content: string;
@@ -34,13 +45,19 @@ interface GroupedTranslate {
  * パースして得られた Translate 配列から翻訳スクリプトや翻訳後のファイルを生成します
  * @param name                  シート名
  * @param translates            生成元の Translate 配列
+ * @param includeHistorySupport true の場合、ヒストリーの言語切替に必要な翻訳も生成します
  */
-export function inflate(name: string, translates: Translate[]): File[] {
+export function inflate(
+  name: string,
+  translates: Translate[],
+  includeHistorySupport = false,
+): File[] {
   const { strings = [], say = [], file: files = [] } = translates.reduce<GroupedTranslate>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (obj, cur) => ((obj[cur.type] || (obj[cur.type] = [])).push(cur as any), obj),
     {},
   );
+  if (includeHistorySupport) strings.push(...convaerHistorySupport(say));
   const script = [
     ...say?.map(t => t.inflate()),
     ...(strings.length ? ['translate Japanese strings:'] : []),
@@ -87,8 +104,9 @@ export function removeDuplicateStrings(sheets: ParsedSheet[]): ParsedSheet[] {
 /**
  * シートから翻訳ファイルを生成します
  * @param sheet                 シート
+ * @param includeHistorySupport true の場合、ヒストリーの言語切替に必要な翻訳も生成します
  */
-export function generateCode(sheets: Sheet[]): File[] {
+export function generateCode(sheets: Sheet[], includeHistorySupport: boolean): File[] {
   const parsedSheet = sheets.map(s => ({
     name: s.getName(),
     translates: s
@@ -98,7 +116,7 @@ export function generateCode(sheets: Sheet[]): File[] {
       .filter(<T>(x: T | undefined): x is T => !!x),
   }));
   return removeDuplicateStrings(parsedSheet).reduce<File[]>(
-    (files, { name, translates }) => files.concat(inflate(name, translates)),
+    (files, { name, translates }) => files.concat(inflate(name, translates, includeHistorySupport)),
     [],
   );
 }

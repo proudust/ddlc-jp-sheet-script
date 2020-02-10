@@ -82,13 +82,13 @@ global.fixActiveSheet = () => {
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、ユーザーのドライブに保存します。
  */
 global.genelateTranslationFile = () => {
-  const { folderName, notConvertColor } = getScriptProperties();
+  const { folderName, notConvertColor, includeHistorySupport } = getScriptProperties();
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
     .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
   const outputFolder = new OutputFolder(folderName, new Date());
-  outputFolder.files.push(...generateCode(sheets));
+  outputFolder.files.push(...generateCode(sheets, includeHistorySupport));
   outputFolder.save();
   const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
@@ -104,13 +104,13 @@ global.updatePullRequest = () => updatePullRequest(getScriptProperties());
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、Zip 圧縮した Base64 文字列を返す。
  */
 global.doGet = () => {
-  const { folderName, notConvertColor } = getScriptProperties();
+  const { folderName, notConvertColor, includeHistorySupport } = getScriptProperties();
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
     .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
   const outputFolder = new OutputFolder(folderName, new Date());
-  outputFolder.files.push(...generateCode(sheets));
+  outputFolder.files.push(...generateCode(sheets, includeHistorySupport));
   const zip = outputFolder.zip();
   return ContentService.createTextOutput()
     .setContent(Utilities.base64Encode(zip.getBytes()))
