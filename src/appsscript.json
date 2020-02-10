@@ -8,5 +8,5 @@
     "https://www.googleapis.com/auth/spreadsheets"
   ],
   "exceptionLogging": "STACKDRIVER",
-  "runtimeVersion": "v8"
+  "runtimeVersion": "V8"
 }
