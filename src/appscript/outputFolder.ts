@@ -1,7 +1,7 @@
 export class OutputFolder {
   public name: string;
   public files: {
-    fileName: string;
+    name: string;
     content: string;
   }[];
 
@@ -39,7 +39,7 @@ export class OutputFolder {
    * files から Blob を生成します。
    */
   private genelateBlob(): GoogleAppsScript.Base.BlobSource[] {
-    return this.files.map(({ fileName, content }) =>
+    return this.files.map(({ name: fileName, content }) =>
       Utilities.newBlob('', 'text/plain', fileName).setDataFromString(
         content.replace(/\n|\r\n|\r/g, '\n'),
         'utf-8',

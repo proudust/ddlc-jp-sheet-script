@@ -3,7 +3,7 @@ import { getScriptProperties } from './appscript/scriptProperties';
 import { TranslateSheet } from './appscript/translateSheet';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { fromSpreadsheet } from './converter/fromSpreadsheet';
-import { TranslationFileConverter } from './converter/toTranslationFile';
+import { generateCode } from './generator/generator';
 import { checkDuplicateTranslate } from './check/checkDuplicateTranslate';
 import { updatePullRequest } from './updatePullRequest';
 
@@ -83,22 +83,13 @@ global.fixActiveSheet = () => {
  */
 global.genelateTranslationFile = () => {
   const { folderName, notConvertColor } = getScriptProperties();
-  const converter = new TranslationFileConverter();
-  const outputFolder = new OutputFolder(folderName, new Date());
-  SpreadsheetApp.getActive()
+  const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
-    .map(s => new TranslateSheet(s))
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true))
-    .reduce<OutputFolder>((folder, curr) => {
-      const name = curr.getName();
-      const values = curr.getTranslateRows();
-      const translates = fromSpreadsheet(values);
-      const files = converter.toTranslationFile(name, translates);
-      folder.files.push(...files);
-      return folder;
-    }, outputFolder)
-    .save();
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
+  const outputFolder = new OutputFolder(folderName, new Date());
+  outputFolder.files.push(...generateCode(sheets));
+  outputFolder.save();
   const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
 };
@@ -113,25 +104,14 @@ global.updatePullRequest = () => updatePullRequest(getScriptProperties());
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、Zip 圧縮した Base64 文字列を返す。
  */
 global.doGet = () => {
-  const zip = (() => {
-    const { folderName, notConvertColor } = getScriptProperties();
-    const converter = new TranslationFileConverter();
-    const outputFolder = new OutputFolder(folderName, new Date());
-    return SpreadsheetApp.getActive()
-      .getSheets()
-      .slice(1)
-      .map(s => new TranslateSheet(s))
-      .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true))
-      .reduce<OutputFolder>((folder, curr) => {
-        const name = curr.getName();
-        const values = curr.getTranslateRows();
-        const translates = fromSpreadsheet(values);
-        const files = converter.toTranslationFile(name, translates);
-        folder.files.push(...files);
-        return folder;
-      }, outputFolder)
-      .zip();
-  })();
+  const { folderName, notConvertColor } = getScriptProperties();
+  const sheets = SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
+  const outputFolder = new OutputFolder(folderName, new Date());
+  outputFolder.files.push(...generateCode(sheets));
+  const zip = outputFolder.zip();
   return ContentService.createTextOutput()
     .setContent(Utilities.base64Encode(zip.getBytes()))
     .setMimeType(ContentService.MimeType.TEXT);
