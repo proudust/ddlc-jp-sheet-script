@@ -2,9 +2,7 @@ import { OutputFolder } from './appscript/outputFolder';
 import { getScriptProperties } from './appscript/scriptProperties';
 import { TranslateSheet } from './appscript/translateSheet';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
-import { fromSpreadsheet } from './converter/fromSpreadsheet';
 import { generateCode } from './generator/generator';
-import { checkDuplicateTranslate } from './check/checkDuplicateTranslate';
 import { updatePullRequest } from './updatePullRequest';
 
 declare let global: { [key: string]: Function };
@@ -15,36 +13,12 @@ declare let global: { [key: string]: Function };
  */
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
-    { name: '重複した台詞を検索', functionName: 'searchDuplicate' },
-    null,
     { name: 'シートの書式再設定（全体）', functionName: 'fixSpreadsheet' },
     { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
     null,
     { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'genelateTranslationFile' },
     { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
   ]);
-};
-
-/**
- * 同じ台詞の行の中から、異なる訳が当てられている行を検索します。
- */
-global.searchDuplicate = () => {
-  const { notConvertColor } = getScriptProperties();
-  const translates = SpreadsheetApp.getActive()
-    .getSheets()
-    .slice(1)
-    .map(s => new TranslateSheet(s))
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true))
-    .map(s => fromSpreadsheet(s.getTranslateRows()))
-    .reduce((array, curr) => array.concat(curr), []);
-  const msg = checkDuplicateTranslate(translates)
-    .map(
-      p =>
-        `${p.message}\n原文：${p.source[0].attribute} ${p.source[0].original}\\n` +
-        p.source.map((s, i) => `翻訳${i}：${s.translate} ${s.tag}\\n`).join(''),
-    )
-    .join('\\n');
-  Browser.msgBox(msg);
 };
 
 /**
