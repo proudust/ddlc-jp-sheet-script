@@ -1,13 +1,15 @@
-function resolveTenplate(literals: TemplateStringsArray, ...placeholders: string[]): string {
+type Placeholder = string | number;
+
+function resolveTenplate(literals: TemplateStringsArray, ...placeholders: Placeholder[]): string {
   return literals.reduce((str, literal) => (str += literal + (placeholders.shift() ?? '')), '');
 }
 
 export function trimMargin(string: string, marginPrefix?: string): string;
-export function trimMargin(literals: TemplateStringsArray, ...placeholders: string[]): string;
+export function trimMargin(literals: TemplateStringsArray, ...placeholders: Placeholder[]): string;
 export function trimMargin(
   arg1: string | TemplateStringsArray,
-  arg2 = '',
-  ...args: string[]
+  arg2: Placeholder = '',
+  ...args: Placeholder[]
 ): string {
   const string = typeof arg1 === 'string' ? arg1 : resolveTenplate(arg1, arg2, ...args);
   const strings = string.split('\n');
@@ -19,8 +21,8 @@ export function trimMargin(
 }
 
 export function trimIndent(string: string): string;
-export function trimIndent(literals: TemplateStringsArray, ...placeholders: string[]): string;
-export function trimIndent(arg1: string | TemplateStringsArray, ...args: string[]): string {
+export function trimIndent(literals: TemplateStringsArray, ...placeholders: Placeholder[]): string;
+export function trimIndent(arg1: string | TemplateStringsArray, ...args: Placeholder[]): string {
   const string = typeof arg1 === 'string' ? arg1 : resolveTenplate(arg1, ...args);
   const strings = string.split('\n');
   if (!strings?.[0].trim()) strings.shift();
