@@ -1,8 +1,8 @@
 import { OutputFolder } from './appscript/outputFolder';
 import { getScriptProperties } from './appscript/scriptProperties';
-import { TranslateSheet } from './appscript/translateSheet';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { generateCode } from './generator/generator';
+import { checkAll } from './check/check';
 import { updatePullRequest } from './updatePullRequest';
 
 declare let global: { [key: string]: Function };
@@ -13,12 +13,27 @@ declare let global: { [key: string]: Function };
  */
 global.onOpen = () => {
   SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
+    { name: '翻訳のチェック', functionName: 'checkTranslates' },
+    null,
     { name: 'シートの書式再設定（全体）', functionName: 'fixSpreadsheet' },
     { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
     null,
     { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'genelateTranslationFile' },
     { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
   ]);
+};
+
+/**
+ * ID や属性、翻訳のチェックを行います。
+ */
+global.checkTranslates = () => {
+  const { notConvertColor } = getScriptProperties();
+  const sheets = SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
+  const msg = checkAll(sheets).replace(/\n/g, '\\n');
+  Browser.msgBox(msg);
 };
 
 /**
