@@ -215,7 +215,10 @@ const fixProtect: SheetModifier = (() => {
  */
 const addDataValidation: SheetModifierFactory = (properties: ScriptProperties): SheetModifier => {
   const dataValidation = SpreadsheetApp.newDataValidation()
-    .requireValueInList(properties.tags.map(t => t.name), true)
+    .requireValueInList(
+      properties.tags.map(t => t.name),
+      true,
+    )
     .build();
 
   return (sheet: Sheet): void => {
@@ -241,11 +244,7 @@ const addTagsFormatRules: SheetModifierFactory = (properties: ScriptProperties):
       const builder = SpreadsheetApp.newConditionalFormatRule()
         .whenFormulaSatisfied(`=$F2="${t.name}"`)
         .setBackground(t.color);
-      return (r: GoogleAppsScript.Spreadsheet.Range) =>
-        builder
-          .copy()
-          .setRanges([r])
-          .build();
+      return (r: GoogleAppsScript.Spreadsheet.Range) => builder.copy().setRanges([r]).build();
     });
 
   return (sheet: Sheet): void => {

@@ -16,7 +16,6 @@ export function updatePullRequest({ githubRepository, githubToken }: GitHubConfi
       Authorization: `token ${githubToken}`,
     },
     payload: JSON.stringify({
-      // eslint-disable-next-line @typescript-eslint/camelcase
       event_type: 'update_translate',
     }),
   });

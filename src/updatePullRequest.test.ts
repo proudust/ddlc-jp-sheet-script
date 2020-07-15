@@ -1,6 +1,5 @@
 import { updatePullRequest } from './updatePullRequest';
 
-// eslint-disable-next-line @typescript-eslint/camelcase
 declare let global: { UrlFetchApp: Partial<GoogleAppsScript.URL_Fetch.UrlFetchApp> };
 
 beforeAll(() => (global.UrlFetchApp = {}));

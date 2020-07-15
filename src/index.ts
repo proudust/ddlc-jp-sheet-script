@@ -5,7 +5,12 @@ import { generateCode } from './generator/generator';
 import { checkAll } from './check/check';
 import { updatePullRequest } from './updatePullRequest';
 
-declare let global: { [key: string]: Function };
+type WebAppsOutput = GoogleAppsScript.HTML.HtmlOutput | GoogleAppsScript.Content.TextOutput;
+declare let global: {
+  doGet: (e?: GoogleAppsScript.Events.DoGet) => WebAppsOutput;
+  doPost: (e?: GoogleAppsScript.Events.DoPost) => WebAppsOutput;
+  [key: string]: () => void;
+};
 
 /**
  * スプレッドシートを開いたときに実行される関数です。
