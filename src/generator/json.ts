@@ -32,11 +32,10 @@ export function readRow(
 }
 
 export function generateCode(sheets: Sheet[]): File[] {
-  const content = JSON.stringify(
-    sheets.reduce<TranslationMap>(
-      (t, s) => s.getRange('A3:D').getValues().reduce<TranslationMap>(readRow, t),
-      {},
-    ),
+  const translations = sheets.reduce<TranslationMap>(
+    (t, s) => s.getRange('A3:D').getValues().reduce<TranslationMap>(readRow, t),
+    {},
   );
+  const content = JSON.stringify(translations, null, 4);
   return [{ name: 'JP_Translate.json', content }];
 }
