@@ -1,0 +1,46 @@
+env:
+  browser: true
+  es6: true
+  node: true
+  "googleappsscript/googleappsscript": true
+  "jest/globals": true
+
+extends:
+  - eslint:recommended
+  - plugin:prettier/recommended
+
+plugins:
+  - googleappsscript
+  - jest
+  - prettier
+
+rules:
+  prettier/prettier:
+    - error
+    - arrowParens: avoid
+      printWidth: 100
+      singleQuote: true
+      trailingComma: all
+  react/prop-types:
+    - off
+
+overrides:
+  - files: ["**/*.ts"]
+    parser: "@typescript-eslint/parser"
+    parserOptions:
+      ecmaFeatures:
+        jsx: true
+      ecmaVersion: 2018
+      sourceType: module
+      project: tsconfig.json
+
+    extends:
+      - plugin:@typescript-eslint/recommended
+      - prettier/@typescript-eslint
+    plugins:
+      - "@typescript-eslint"
+
+    rules:
+      "@typescript-eslint/explicit-function-return-type":
+        - warn
+        - allowExpressions: true
