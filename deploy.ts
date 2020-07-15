@@ -16,6 +16,10 @@ const dists: Dist[] = [
     name: 'DDLC Monika After Story 日本語化 作業所',
     scriptId: '1rKilgJgbw-I_EEMvhYPm17X4BkED0xQkuLo_lVWdM90iXyTOhNi9-rh6',
   },
+  {
+    name: "Dweller's Empty Path 日本語化 作業所",
+    scriptId: '1jv0pY3SZDm8_gCV_4DwI80NQTDWwJMY5Bci0ZGkNa7L2gXN_IG7XGp5P',
+  },
 ];
 
 const claspOptions = {

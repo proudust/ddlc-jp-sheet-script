@@ -2,6 +2,7 @@ import { OutputFolder } from './appscript/outputFolder';
 import { getScriptProperties } from './appscript/scriptProperties';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { generateCode } from './generator/generator';
+import { generateCode as generateJson } from './generator/json';
 import { checkAll } from './check/check';
 import { updatePullRequest } from './updatePullRequest';
 
@@ -82,7 +83,11 @@ global.genelateTranslationFile = () => {
     .slice(1)
     .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
   const outputFolder = new OutputFolder(folderName, new Date());
-  outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
+  if (exportMode.startsWith("Ren'Py")) {
+    outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
+  } else {
+    outputFolder.files.push(...generateJson(sheets));
+  }
   outputFolder.save();
   const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
@@ -104,7 +109,11 @@ global.doGet = () => {
     .slice(1)
     .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
   const outputFolder = new OutputFolder(folderName, new Date());
-  outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
+  if (exportMode.startsWith("Ren'Py")) {
+    outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
+  } else {
+    outputFolder.files.push(...generateJson(sheets));
+  }
   const zip = outputFolder.zip();
   return ContentService.createTextOutput()
     .setContent(Utilities.base64Encode(zip.getBytes()))
