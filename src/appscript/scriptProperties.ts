@@ -10,8 +10,8 @@ interface RawScriptProperties {
   TAG_COLORS: string;
   /** スクリプト出力から除外するシートの色 */
   NOT_CONVERT_COLORS: string;
-  /** ヒストリーの言語切替に必要な翻訳を生成する */
-  INCLUDE_HISTORY_SUPPORT: string;
+  /** 出力するデータの種類 (Ren'Py/Ren'Py with history support/JSON) */
+  EXPORT_MODE: string;
   /** GitHub のリポジトリ名 */
   GITHUB_REPOSITORY: string;
   /** GitHub の Personal access token */
@@ -56,9 +56,13 @@ export class ScriptProperties {
     return this.raw.NOT_CONVERT_COLORS?.toLowerCase();
   }
 
-  /** ヒストリーの言語切替に必要な翻訳を生成する */
-  public get includeHistorySupport(): boolean {
-    return (this.raw.INCLUDE_HISTORY_SUPPORT?.toLowerCase() ?? 'false') !== 'false';
+  /** 出力するデータの種類 (Ren'Py/Ren'Py with history support/JSON) */
+  public get exportMode(): "Ren'Py" | "Ren'Py with history support" | 'JSON' {
+    const mode = this.getValue('EXPORT_MODE');
+    if (mode !== "Ren'Py" && mode !== "Ren'Py with history support" && mode !== 'JSON') {
+      throw new Error(`${mode} is invalid export mode.`);
+    }
+    return mode;
   }
 
   /** GitHub のリポジトリ名 */

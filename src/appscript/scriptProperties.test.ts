@@ -35,17 +35,23 @@ test(`ScriptProperties#notConvertColor`, () => {
   expect(new ScriptProperties({}).notConvertColor).toBeUndefined();
 });
 
-test(`ScriptProperties#notConvertColor`, () => {
-  const props1 = new ScriptProperties({ INCLUDE_HISTORY_SUPPORT: 'True' });
-  expect(props1.includeHistorySupport).toBe(true);
+test(`ScriptProperties#exportMode`, () => {
+  const props1 = new ScriptProperties({ EXPORT_MODE: "Ren'Py" });
+  expect(props1.exportMode).toBe("Ren'Py");
 
-  const props2 = new ScriptProperties({ INCLUDE_HISTORY_SUPPORT: 'False' });
-  expect(props2.includeHistorySupport).toBe(false);
+  const props2 = new ScriptProperties({ EXPORT_MODE: "Ren'Py with history support" });
+  expect(props2.exportMode).toBe("Ren'Py with history support");
 
-  const props3 = new ScriptProperties({ INCLUDE_HISTORY_SUPPORT: 'test' });
-  expect(props3.includeHistorySupport).toBe(true);
+  const props3 = new ScriptProperties({ EXPORT_MODE: 'JSON' });
+  expect(props3.exportMode).toBe('JSON');
 
-  expect(new ScriptProperties({}).includeHistorySupport).toBe(false);
+  expect(() => new ScriptProperties({ EXPORT_MODE: 'test' }).exportMode).toThrowError(
+    /^\w+ is invalid export mode.$/,
+  );
+
+  expect(() => new ScriptProperties({}).exportMode).toThrowError(
+    /^\w+ is not defined in the script property.$/,
+  );
 });
 
 test('ScriptProperties#githubRepository', () => {
