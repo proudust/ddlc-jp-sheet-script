@@ -38,5 +38,5 @@ export function generateCode(sheets: Sheet[]): File[] {
       {},
     ),
   );
-  return [{ name: 'JP_Translate', content }];
+  return [{ name: 'JP_Translate.json', content }];
 }
