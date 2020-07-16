@@ -24,9 +24,17 @@ export function readRow(
 ): TranslationMap {
   if (fileName && original && translation && original !== translation) {
     if (!(fileName in translations)) translations[fileName] = {};
-    if (original in translations[fileName])
-      throw new Error(`${original} is duplicate translation.`);
-    translations[fileName][original] = translation;
+
+    const o = original.split('\n');
+    const t = translation.split('\n');
+    for (let i = 0; i < o.length; i++) {
+      if (o[i] === t[i]) continue;
+      if (o[i] in translations[fileName]) throw new Error(`${o[i]} is duplicate translation.`);
+      translations[fileName][o[i]] = t[i] ?? '';
+    }
+    if (o.length < t.length) {
+      translations[fileName][o[o.length - 1]] += ['', ...t.slice(o.length)].join('\n');
+    }
   }
   return translations;
 }
