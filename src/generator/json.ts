@@ -25,17 +25,20 @@ export function readRow(
   if (fileName && original && translation && original !== translation) {
     if (!(fileName in translations)) translations[fileName] = {};
 
-    const o = original.split('\n');
-    const t = translation.split('\n');
-    for (let i = 0; i < o.length; i++) {
-      if (o[i] === t[i]) continue;
-      if (o[i] in translations[fileName] && translations[fileName][o[i]] !== t[i]) {
-        throw new Error(`${o[i]} is duplicate translation.`);
+    const os = original.split('\n');
+    const ts = translation.split('\n');
+    for (let i = 0; i < os.length; i++) {
+      const o = os[i];
+      let t = ts[i];
+      if (i === os.length - 1 && os.length < ts.length) {
+        t += ['', ...ts.slice(os.length)].join('\n');
       }
-      translations[fileName][o[i]] = t[i] ?? '';
-    }
-    if (o.length < t.length) {
-      translations[fileName][o[o.length - 1]] += ['', ...t.slice(o.length)].join('\n');
+
+      if (o === t) continue;
+      if (o in translations[fileName] && translations[fileName][o] !== t) {
+        throw new Error(`${o} is duplicate translation.`);
+      }
+      translations[fileName][o] = t ?? '';
     }
   }
   return translations;

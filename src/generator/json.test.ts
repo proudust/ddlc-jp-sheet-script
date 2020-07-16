@@ -78,4 +78,28 @@ describe('readRow', () => {
       readRow(t1, ['Map043.json', '', '....Another nightmare..', '異なる訳']),
     ).toThrowError(/^.+ is duplicate translation.$/);
   });
+
+  test('duplicate translation row', () => {
+    const t1 = readRow({}, [
+      'Map007.json',
+      '',
+      '\\SE[8]Thank you so much!!\\.\\. What a relief\nto come across someone so kind!\\SE[1]',
+      '\\SE[8]あ、ありがとう!!\\.\\.\n親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]',
+    ]);
+    expect(
+      readRow(t1, [
+        'Map007.json',
+        '',
+        '\\SE[8]Thank you so much!! What a relief\nto come across someone so kind!\\SE[1]',
+        '\\SE[8]ありがとう!!\n親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]',
+      ]),
+    ).toEqual({
+      'Map007.json': {
+        '\\SE[8]Thank you so much!!\\.\\. What a relief': '\\SE[8]あ、ありがとう!!\\.\\.',
+        'to come across someone so kind!\\SE[1]':
+          '親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]',
+        '\\SE[8]Thank you so much!! What a relief': '\\SE[8]ありがとう!!',
+      },
+    });
+  });
 });
