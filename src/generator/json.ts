@@ -29,7 +29,9 @@ export function readRow(
     const t = translation.split('\n');
     for (let i = 0; i < o.length; i++) {
       if (o[i] === t[i]) continue;
-      if (o[i] in translations[fileName]) throw new Error(`${o[i]} is duplicate translation.`);
+      if (o[i] in translations[fileName] && translations[fileName][o[i]] !== t[i]) {
+        throw new Error(`${o[i]} is duplicate translation.`);
+      }
       translations[fileName][o[i]] = t[i] ?? '';
     }
     if (o.length < t.length) {

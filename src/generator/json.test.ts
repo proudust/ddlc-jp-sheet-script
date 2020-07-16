@@ -75,7 +75,7 @@ describe('readRow', () => {
       '....またあの嫌な夢だ..',
     ]);
     expect(() =>
-      readRow(t1, ['Map043.json', '', '....Another nightmare..', '....またあの嫌な夢だ..']),
+      readRow(t1, ['Map043.json', '', '....Another nightmare..', '異なる訳']),
     ).toThrowError(/^.+ is duplicate translation.$/);
   });
 });
