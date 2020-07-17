@@ -13,7 +13,9 @@ describe('readRow', () => {
       readRow({}, ['Map043.json', '', '....Another nightmare..', '....またあの嫌な夢だ..']),
     ).toEqual({
       'Map043.json': {
-        '....Another nightmare..': '....またあの嫌な夢だ..',
+        '.': {
+          '....Another nightmare..': '....またあの嫌な夢だ..',
+        },
       },
     });
   });
@@ -28,8 +30,10 @@ describe('readRow', () => {
       ]),
     ).toEqual({
       'Map118.json': {
-        'It feels like..\\.\\...': 'ヤバい..\\.\\...',
-        "My head's gonna burst open......\\..\\.": '頭が爆発しそう......\\..\\.',
+        '.': {
+          'It feels like..\\.\\...': 'ヤバい..\\.\\...',
+          "My head's gonna burst open......\\..\\.": '頭が爆発しそう......\\..\\.',
+        },
       },
     });
   });
@@ -44,9 +48,11 @@ describe('readRow', () => {
       ]),
     ).toEqual({
       'Map001.json': {
-        'I never did end up finding ': 'まだ見つからない日記のページ。',
-        'those last few journal ': 'この先も探し続けるのだろう。',
-        'pages...': '',
+        '.': {
+          'I never did end up finding ': 'まだ見つからない日記のページ。',
+          'those last few journal ': 'この先も探し続けるのだろう。',
+          'pages...': '',
+        },
       },
     });
   });
@@ -61,13 +67,15 @@ describe('readRow', () => {
       ]),
     ).toEqual({
       'Map002.json': {
-        'I thought you were a more': 'ビーストタイプでも',
-        'peaceful BEAST - Type.': 'もっとやさしいビーストタイプ\nだと思ってたのに。',
+        '.': {
+          'I thought you were a more': 'ビーストタイプでも',
+          'peaceful BEAST - Type.': 'もっとやさしいビーストタイプ\nだと思ってたのに。',
+        },
       },
     });
   });
 
-  test('duplicate translation row', () => {
+  test('duplicate translation and same path', () => {
     const t1 = readRow({}, [
       'Map043.json',
       '',
@@ -77,5 +85,26 @@ describe('readRow', () => {
     expect(() =>
       readRow(t1, ['Map043.json', '', '....Another nightmare..', '異なる訳']),
     ).toThrowError(/^.+ is duplicate translation.$/);
+  });
+
+  test('duplicate translation and different path', () => {
+    const t1 = readRow({}, [
+      'Map043.json',
+      '',
+      '....Another nightmare..',
+      '....またあの嫌な夢だ..',
+    ]);
+    expect(
+      readRow(t1, ['Map043.json', '.events[2]', '....Another nightmare..', '異なる訳']),
+    ).toEqual({
+      'Map043.json': {
+        '.': {
+          '....Another nightmare..': '....またあの嫌な夢だ..',
+        },
+        '.events[2]': {
+          '....Another nightmare..': '異なる訳',
+        },
+      },
+    });
   });
 });
