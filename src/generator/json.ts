@@ -36,7 +36,7 @@ export function readRow(
     const ts = translation.split('\n');
     for (let i = 0; i < os.length; i++) {
       const o = os[i];
-      let t = ts[i];
+      let t = ts[i] ?? '';
       if (i === os.length - 1 && os.length < ts.length) {
         t += ['', ...ts.slice(os.length)].join('\n');
       }
@@ -45,7 +45,7 @@ export function readRow(
       if (o in translations[fileName][jsonPath] && translations[fileName][jsonPath][o] !== t) {
         throw new Error(`${o} is duplicate translation.`);
       }
-      translations[fileName][jsonPath][o] = t ?? '';
+      translations[fileName][jsonPath][o] = t;
     }
   }
   return translations;

@@ -108,7 +108,7 @@ describe('readRow', () => {
     });
   });
 
-  test('duplicate translation and equal', () => {
+  test('duplicate translation and equal 1', () => {
     const t1 = readRow({}, [
       'Map007.json',
       '',
@@ -129,6 +129,32 @@ describe('readRow', () => {
           'to come across someone so kind!\\SE[1]':
             '親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]',
           '\\SE[8]Thank you so much!! What a relief': '\\SE[8]ありがとう!!',
+        },
+      },
+    });
+  });
+
+  test('duplicate translation and equal 2', () => {
+    const t1 = readRow({}, [
+      'Map043.json',
+      '',
+      'Looks like these are \ningredients ready to use for \nspells and formulas.',
+      '術式や儀式に使う材料みたい。',
+    ]);
+    expect(
+      readRow(t1, [
+        'Map043.json',
+        '',
+        '.\\..\\..Organic ingredients for\nspells and formulas.',
+        '.\\..\\..術式や儀式に使う薬草かな。',
+      ]),
+    ).toEqual({
+      'Map043.json': {
+        '.': {
+          'Looks like these are ': '術式や儀式に使う材料みたい。',
+          'ingredients ready to use for ': '',
+          'spells and formulas.': '',
+          '.\\..\\..Organic ingredients for': '.\\..\\..術式や儀式に使う薬草かな。',
         },
       },
     });
