@@ -4,6 +4,7 @@ import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appsc
 import { generateCode } from './generator/generator';
 import { generateCode as generateJson } from './generator/json';
 import * as RenPyCheck from './check/renpy-check';
+import * as RpgMvCheck from './check/rpgmv-check';
 import { updatePullRequest } from './updatePullRequest';
 
 type WebAppsOutput = GoogleAppsScript.HTML.HtmlOutput | GoogleAppsScript.Content.TextOutput;
@@ -34,7 +35,7 @@ global.onOpen = () => {
  */
 global.checkTranslates = () => {
   const { notConvertColor, checkMode } = getScriptProperties();
-  const checkAll = checkMode === "Ren'Py" ? RenPyCheck.checkAll : () => '';
+  const checkAll = checkMode === "Ren'Py" ? RenPyCheck.checkAll : RpgMvCheck.checkAll;
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
