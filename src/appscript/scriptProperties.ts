@@ -12,6 +12,8 @@ interface RawScriptProperties {
   NOT_CONVERT_COLORS: string;
   /** 出力するデータの種類 (Ren'Py/Ren'Py with history support/JSON) */
   EXPORT_MODE: string;
+  /** 翻訳のチェックのモード (Ren'Py/RPGMakerMV) */
+  CHECK_MODE: string;
   /** GitHub のリポジトリ名 */
   GITHUB_REPOSITORY: string;
   /** GitHub の Personal access token */
@@ -61,6 +63,15 @@ export class ScriptProperties {
     const mode = this.getValue('EXPORT_MODE');
     if (mode !== "Ren'Py" && mode !== "Ren'Py with history support" && mode !== 'JSON') {
       throw new Error(`${mode} is invalid export mode.`);
+    }
+    return mode;
+  }
+
+  /** 翻訳のチェックのモード (Ren'Py/RPGMakerMV) */
+  public get checkMode(): "Ren'Py" | 'RPGMakerMV' {
+    const mode = this.getValue('CHECK_MODE');
+    if (mode !== "Ren'Py" && mode !== 'RPGMakerMV') {
+      throw new Error(`${mode} is invalid check mode.`);
     }
     return mode;
   }

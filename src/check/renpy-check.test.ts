@@ -1,4 +1,4 @@
-import { checkId, checkAttribute, checkTextTags } from './check';
+import { checkId, checkAttribute, checkTextTags } from './renpy-check';
 
 type CheckArgs = Parameters<typeof checkId>[0];
 const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({

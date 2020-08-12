@@ -3,7 +3,7 @@ import { getScriptProperties } from './appscript/scriptProperties';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
 import { generateCode } from './generator/generator';
 import { generateCode as generateJson } from './generator/json';
-import { checkAll } from './check/check';
+import * as RenPyCheck from './check/renpy-check';
 import { updatePullRequest } from './updatePullRequest';
 
 type WebAppsOutput = GoogleAppsScript.HTML.HtmlOutput | GoogleAppsScript.Content.TextOutput;
@@ -33,7 +33,8 @@ global.onOpen = () => {
  * ID や属性、翻訳のチェックを行います。
  */
 global.checkTranslates = () => {
-  const { notConvertColor } = getScriptProperties();
+  const { notConvertColor, checkMode } = getScriptProperties();
+  const checkAll = checkMode === "Ren'Py" ? RenPyCheck.checkAll : () => '';
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
