@@ -27,6 +27,7 @@ global.onOpen = () => {
     null,
     { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'genelateTranslationFile' },
     { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
+    { name: '翻訳ファイルの出力 (Dry-run)', functionName: 'genelateDryRun' },
   ]);
 };
 
@@ -93,6 +94,23 @@ global.genelateTranslationFile = () => {
   outputFolder.save();
   const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
   Browser.msgBox(msg);
+};
+
+/**
+ * スプレッドシートの翻訳シートから翻訳スクリプトを生成します。
+ */
+global.genelateDryRun = () => {
+  const { folderName, notConvertColor, exportMode } = getScriptProperties();
+  const sheets = SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
+  const outputFolder = new OutputFolder(folderName, new Date());
+  if (exportMode.startsWith("Ren'Py")) {
+    outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
+  } else {
+    outputFolder.files.push(...generateJson(sheets));
+  }
 };
 
 /**
