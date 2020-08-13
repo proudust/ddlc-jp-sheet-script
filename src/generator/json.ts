@@ -43,7 +43,9 @@ export function readRow(
 
       if (o === t) continue;
       if (o in translations[fileName][jsonPath] && translations[fileName][jsonPath][o] !== t) {
-        throw new Error(`${o} is duplicate translation.`);
+        throw new Error(
+          `${o} is duplicate translation. (fileName: ${fileName}, original: "${original}", translation: "${translation}")`,
+        );
       }
       translations[fileName][jsonPath][o] = t;
     }
