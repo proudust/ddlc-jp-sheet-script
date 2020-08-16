@@ -8,6 +8,26 @@ describe('readRow', () => {
     expect(readRow({}, ['Map001', '', '...', '...'])).toEqual({});
   });
 
+  test('multiple jsonPath', () => {
+    expect(
+      readRow({}, [
+        'Map027.json',
+        '.events[1]\n.events[15: 20]',
+        'But...\\.\\.',
+        'だが...\\.\\.それは我の望みではない。\\.\\.',
+      ]),
+    ).toEqual({
+      'Map027.json': {
+        '.events[1]': {
+          'But...\\.\\.': 'だが...\\.\\.それは我の望みではない。\\.\\.',
+        },
+        '.events[15: 20]': {
+          'But...\\.\\.': 'だが...\\.\\.それは我の望みではない。\\.\\.',
+        },
+      },
+    });
+  });
+
   test('translation row', () => {
     expect(
       readRow({}, ['Map043.json', '', '....Another nightmare..', '....またあの嫌な夢だ..']),

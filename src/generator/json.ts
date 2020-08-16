@@ -22,32 +22,35 @@ interface TranslationMap {
 
 export function readRow(
   translations: TranslationMap,
-  [fileName, jsonPath, original, translation]: string[],
+  [fileName, attributes, original, translation]: string[],
 ): TranslationMap {
-  if (!jsonPath.startsWith('.')) jsonPath = '.';
-
   if (fileName && original && translation && original !== translation) {
-    if (!(fileName in translations)) translations[fileName] = {};
-    if (!(jsonPath in translations[fileName])) {
-      translations[fileName][jsonPath] = {};
-    }
+    const jsonPaths = attributes.split('\n').filter(jsonPath => jsonPath.startsWith('.'));
+    if (jsonPaths.length <= 0) jsonPaths.push('.');
 
-    const os = original.split('\n');
-    const ts = translation.split('\n');
-    for (let i = 0; i < os.length; i++) {
-      const o = os[i];
-      let t = ts[i] ?? '';
-      if (i === os.length - 1 && os.length < ts.length) {
-        t += ['', ...ts.slice(os.length)].join('\n');
+    for (const jsonPath of jsonPaths) {
+      if (!(fileName in translations)) translations[fileName] = {};
+      if (!(jsonPath in translations[fileName])) {
+        translations[fileName][jsonPath] = {};
       }
 
-      if (o === t) continue;
-      if (o in translations[fileName][jsonPath] && translations[fileName][jsonPath][o] !== t) {
-        throw new Error(
-          `${o} is duplicate translation. (fileName: ${fileName}, original: "${original}", translation: "${translation}")`,
-        );
+      const os = original.split('\n');
+      const ts = translation.split('\n');
+      for (let i = 0; i < os.length; i++) {
+        const o = os[i];
+        let t = ts[i] ?? '';
+        if (i === os.length - 1 && os.length < ts.length) {
+          t += ['', ...ts.slice(os.length)].join('\n');
+        }
+
+        if (o === t) continue;
+        if (o in translations[fileName][jsonPath] && translations[fileName][jsonPath][o] !== t) {
+          throw new Error(
+            `${o} is duplicate translation. (fileName: ${fileName}, original: "${original}", translation: "${translation}")`,
+          );
+        }
+        translations[fileName][jsonPath][o] = t;
       }
-      translations[fileName][jsonPath][o] = t;
     }
   }
   return translations;
