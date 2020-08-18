@@ -25,9 +25,9 @@ global.onOpen = () => {
     { name: 'シートの書式再設定（全体）', functionName: 'fixSpreadsheet' },
     { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
     null,
-    { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'genelateTranslationFile' },
+    { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'generateTranslationFile' },
     { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
-    { name: '翻訳ファイルの出力 (Dry-run)', functionName: 'genelateDryRun' },
+    { name: '翻訳ファイルの出力 (Dry-run)', functionName: 'generateDryRun' },
   ]);
 };
 
@@ -79,7 +79,7 @@ global.fixActiveSheet = () => {
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、ユーザーのドライブに保存します。
  */
-global.genelateTranslationFile = () => {
+global.generateTranslationFile = () => {
   const { folderName, notConvertColor, exportMode } = getScriptProperties();
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
@@ -99,7 +99,7 @@ global.genelateTranslationFile = () => {
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成します。
  */
-global.genelateDryRun = () => {
+global.generateDryRun = () => {
   const { folderName, notConvertColor, exportMode } = getScriptProperties();
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
