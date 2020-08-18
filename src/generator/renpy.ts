@@ -1,4 +1,4 @@
-import { SayTranslate, StringsTranslate, FileTranslate } from './translates';
+import { SayTranslate, StringsTranslate, FileTranslate } from './renpyTranslates';
 
 type Translate = StringsTranslate | SayTranslate | FileTranslate;
 

@@ -1,7 +1,7 @@
 import { OutputFolder } from './appscript/outputFolder';
 import { getScriptProperties } from './appscript/scriptProperties';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
-import { generateCode } from './generator/generator';
+import { generateCode } from './generator/renpy';
 import { generateCode as generateJson } from './generator/json';
 import * as RenPyCheck from './check/renpy-check';
 import * as RpgMvCheck from './check/rpgmv-check';

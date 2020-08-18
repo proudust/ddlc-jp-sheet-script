@@ -4,8 +4,8 @@ import {
   inflate,
   removeDuplicateStrings,
   generateCode,
-} from './generator';
-import { SayTranslate, StringsTranslate, FileTranslate } from './translates';
+} from './renpy';
+import { SayTranslate, StringsTranslate, FileTranslate } from './renpyTranslates';
 import { trimIndent } from '../util/tags';
 
 describe('parseRow', () => {

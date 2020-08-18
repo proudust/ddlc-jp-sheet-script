@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import { SayTranslate, StringsTranslate, FileTranslate } from './translates';
+import { SayTranslate, StringsTranslate, FileTranslate } from './renpyTranslates';
 import { trimIndent, trimMargin } from '../util/tags';
 
 describe('SayTranslate#inflate', () => {
