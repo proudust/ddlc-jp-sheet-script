@@ -1,6 +1,6 @@
-import { OutputFolder } from './appscript/outputFolder';
 import { getScriptProperties } from './appscript/scriptProperties';
 import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
+import * as Contexts from './generator/context';
 import { generateCode } from './generator/renpy';
 import { generateCode as generateJson } from './generator/json';
 import * as RenPyCheck from './check/renpy-check';
@@ -76,42 +76,32 @@ global.fixActiveSheet = () => {
   modifier(activeSheet);
 };
 
+function GenerateTranslationFile<TReturn>(context: Contexts.Context<TReturn>): TReturn {
+  const { notConvertColor, exportMode } = getScriptProperties();
+  const sheets = SpreadsheetApp.getActive()
+    .getSheets()
+    .slice(1)
+    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
+  const files = exportMode.startsWith("Ren'Py")
+    ? generateCode(sheets, exportMode === "Ren'Py with history support")
+    : generateJson(sheets);
+  files.forEach(file => context.addFile(file.name, file.content));
+  return context.finish();
+}
+
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、ユーザーのドライブに保存します。
  */
 global.generateTranslationFile = () => {
-  const { folderName, notConvertColor, exportMode } = getScriptProperties();
-  const sheets = SpreadsheetApp.getActive()
-    .getSheets()
-    .slice(1)
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
-  const outputFolder = new OutputFolder(folderName, new Date());
-  if (exportMode.startsWith("Ren'Py")) {
-    outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
-  } else {
-    outputFolder.files.push(...generateJson(sheets));
-  }
-  outputFolder.save();
-  const msg = `あなたのGoogle Driveのマイドライブ/${outputFolder.name}に保存されました。`;
-  Browser.msgBox(msg);
+  const { folderName } = getScriptProperties();
+  const context = new Contexts.DriveContext(folderName, new Date());
+  GenerateTranslationFile(context);
 };
 
 /**
- * スプレッドシートの翻訳シートから翻訳スクリプトを生成します。
+ * スプレッドシートの翻訳シートから翻訳スクリプトが可能かテストします。
  */
-global.generateDryRun = () => {
-  const { folderName, notConvertColor, exportMode } = getScriptProperties();
-  const sheets = SpreadsheetApp.getActive()
-    .getSheets()
-    .slice(1)
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
-  const outputFolder = new OutputFolder(folderName, new Date());
-  if (exportMode.startsWith("Ren'Py")) {
-    outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
-  } else {
-    outputFolder.files.push(...generateJson(sheets));
-  }
-};
+global.generateDryRun = () => GenerateTranslationFile(new Contexts.DryRunContext());
 
 /**
  * GitHub のリポジトリに対し dispatches イベント (type: update_translate) を発火させます。
@@ -122,20 +112,4 @@ global.updatePullRequest = () => updatePullRequest(getScriptProperties());
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトを生成し、Zip 圧縮した Base64 文字列を返す。
  */
-global.doGet = () => {
-  const { folderName, notConvertColor, exportMode } = getScriptProperties();
-  const sheets = SpreadsheetApp.getActive()
-    .getSheets()
-    .slice(1)
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
-  const outputFolder = new OutputFolder(folderName, new Date());
-  if (exportMode.startsWith("Ren'Py")) {
-    outputFolder.files.push(...generateCode(sheets, exportMode === "Ren'Py with history support"));
-  } else {
-    outputFolder.files.push(...generateJson(sheets));
-  }
-  const zip = outputFolder.zip();
-  return ContentService.createTextOutput()
-    .setContent(Utilities.base64Encode(zip.getBytes()))
-    .setMimeType(ContentService.MimeType.TEXT);
-};
+global.doGet = () => GenerateTranslationFile(new Contexts.HttpContext());
