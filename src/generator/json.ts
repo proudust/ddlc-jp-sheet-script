@@ -25,7 +25,7 @@ export function readRow(
   [fileName, attributes, original, translation]: string[],
 ): TranslationMap {
   if (fileName && original && translation && original !== translation) {
-    const jsonPaths = attributes.split('\n').filter(jsonPath => jsonPath.startsWith('.'));
+    const jsonPaths = attributes.split(/\r?\n|\r/).filter(jsonPath => jsonPath.startsWith('.'));
     if (jsonPaths.length <= 0) jsonPaths.push('.');
 
     for (const jsonPath of jsonPaths) {
@@ -34,8 +34,8 @@ export function readRow(
         translations[fileName][jsonPath] = {};
       }
 
-      const os = original.split('\n');
-      const ts = translation.split('\n');
+      const os = original.split(/\r?\n|\r/);
+      const ts = translation.split(/\r?\n|\r/);
       for (let i = 0; i < os.length; i++) {
         const o = os[i];
         let t = ts[i] ?? '';

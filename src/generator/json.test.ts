@@ -40,21 +40,40 @@ describe('readRow', () => {
     });
   });
 
-  test('multiple lines translation row', () => {
-    expect(
-      readRow({}, [
-        'Map118.json',
-        '',
-        "It feels like..\\.\\...\nMy head's gonna burst open......\\..\\.",
-        'ヤバい..\\.\\...\n頭が爆発しそう......\\..\\.',
-      ]),
-    ).toEqual({
-      'Map118.json': {
-        '.': {
-          'It feels like..\\.\\...': 'ヤバい..\\.\\...',
-          "My head's gonna burst open......\\..\\.": '頭が爆発しそう......\\..\\.',
+  describe('multiple lines translation row', () => {
+    test('LF', () => {
+      expect(
+        readRow({}, [
+          'Map118.json',
+          '',
+          "It feels like..\\.\\...\nMy head's gonna burst open......\\..\\.",
+          'ヤバい..\\.\\...\n頭が爆発しそう......\\..\\.',
+        ]),
+      ).toEqual({
+        'Map118.json': {
+          '.': {
+            'It feels like..\\.\\...': 'ヤバい..\\.\\...',
+            "My head's gonna burst open......\\..\\.": '頭が爆発しそう......\\..\\.',
+          },
         },
-      },
+      });
+    });
+    test('CRLF', () => {
+      expect(
+        readRow({}, [
+          'Map118.json',
+          '',
+          "It feels like..\\.\\...\r\nMy head's gonna burst open......\\..\\.",
+          'ヤバい..\\.\\...\r\n頭が爆発しそう......\\..\\.',
+        ]),
+      ).toEqual({
+        'Map118.json': {
+          '.': {
+            'It feels like..\\.\\...': 'ヤバい..\\.\\...',
+            "My head's gonna burst open......\\..\\.": '頭が爆発しそう......\\..\\.',
+          },
+        },
+      });
     });
   });
 
