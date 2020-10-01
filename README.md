@@ -6,4 +6,5 @@ Proudust 作成の翻訳所で使われているスクリプト
 
 - [Doki Doki Literature Club! 日本語化 作業所](https://docs.google.com/spreadsheets/d/1uqyB7x-8x_QSFKV8Um-rCwcLVUduf-FMhAZjocUGmJY/edit?usp=sharing)
 - [DDLC Monika After Story 日本語化 作業所](https://docs.google.com/spreadsheets/d/1X8rvZMdBmTrvt7rCIgfOR7R7NcjY6BFTTh0miAvMvn0/edit?usp=sharing)
+- [DDLC 3rd-anniversary Twitch Writes 日本語化 作業所](https://docs.google.com/spreadsheets/d/19psxU9KV2Q7gerIQXA-bHePlt-ZdLpZwhTAoYT1l1CU/edit?usp=sharing)
 - [Dweller's Empty Path 日本語化 作業所](https://docs.google.com/spreadsheets/d/1AyGOT092bPugMgniCWgr-SuQugrUVJRWebKQjOKPU6g/edit?usp=sharing)

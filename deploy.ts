@@ -3,11 +3,11 @@ import { writeFile } from 'fs';
 import { promisify } from 'util';
 
 interface Dist {
-  name: string;
-  scriptId: string;
+  readonly name: string;
+  readonly scriptId: string;
 }
 
-const dists: Dist[] = [
+const dists: readonly Dist[] = [
   {
     name: 'Doki Doki Literature Club! 日本語化 作業所',
     scriptId: '1zp64PCtW2FYmfDMXn4nFT5g9tA5CWPAaP-qRBg-i0OUb5mjpX1_iOHYr',
@@ -17,14 +17,18 @@ const dists: Dist[] = [
     scriptId: '1rKilgJgbw-I_EEMvhYPm17X4BkED0xQkuLo_lVWdM90iXyTOhNi9-rh6',
   },
   {
+    name: 'DDLC 3rd-anniversary Twitch Writes 日本語化 作業所',
+    scriptId: '19u-8kNq3jPbQgr6_QeLqhGH7jJLLT76YjtykLWxXl8ahX1p3GbjDkKhD',
+  },
+  {
     name: "Dweller's Empty Path 日本語化 作業所",
     scriptId: '1jv0pY3SZDm8_gCV_4DwI80NQTDWwJMY5Bci0ZGkNa7L2gXN_IG7XGp5P',
   },
-];
+] as const;
 
 const claspOptions = {
   rootDir: 'dist',
-};
+} as const;
 
 async function push(): Promise<void> {
   for (const { name, scriptId } of dists) {
