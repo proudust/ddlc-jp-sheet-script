@@ -61,6 +61,6 @@ export function generateCode(sheets: Sheet[]): File[] {
     (t, s) => s.getRange('A3:D').getValues().reduce<TranslationMap>(readRow, t),
     {},
   );
-  const content = JSON.stringify(translations, null, 4);
+  const content = JSON.stringify(translations, null, 4) + '\n';
   return [{ name: 'JP_Translate.json', content }];
 }
