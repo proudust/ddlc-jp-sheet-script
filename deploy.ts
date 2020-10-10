@@ -24,6 +24,10 @@ const dists: readonly Dist[] = [
     name: "Dweller's Empty Path 日本語化 作業所",
     scriptId: '1jv0pY3SZDm8_gCV_4DwI80NQTDWwJMY5Bci0ZGkNa7L2gXN_IG7XGp5P',
   },
+  {
+    name: 'Escaped Chasm 日本語化 作業所',
+    scriptId: '1JJPXEJ8hzzfHXnkPTfXbL3iAiPoaJB2ZTa6Iq4DkYHnNpAXfM0pe35jq',
+  },
 ] as const;
 
 const claspOptions = {
