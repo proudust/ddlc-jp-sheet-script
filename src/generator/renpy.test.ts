@@ -18,6 +18,11 @@ describe('parseRow', () => {
     ).toBeUndefined();
   });
 
+  test('ignore if translation is empty', () => {
+    expect(parseRow(['', 'strings', 'Yes', ''])).toBeUndefined();
+    expect(parseRow(['ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', ''])).toBeUndefined();
+  });
+
   test('strings statement row', () => {
     expect(parseRow(['', 'strings', 'Yes', 'はい'])).toBeInstanceOf(StringsTranslate);
   });

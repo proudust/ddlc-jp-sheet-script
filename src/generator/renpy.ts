@@ -7,7 +7,7 @@ type Translate = StringsTranslate | SayTranslate | FileTranslate;
  * @param array シートの 1 行
  */
 export function parseRow([id, attribute, original, translate]: string[]): Translate | undefined {
-  if (id === '' && attribute === '') return;
+  if ((id === '' && attribute === '') || translate === '') return;
 
   if (attribute === 'strings') return new StringsTranslate(original, translate);
 
