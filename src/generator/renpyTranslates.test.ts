@@ -83,6 +83,11 @@ describe('StringsTranslate#inflate', () => {
     `);
   });
 
+  test('If the original and translation are the same, to empty', () => {
+    const t = new StringsTranslate('[glitchtext(15)]', '[glitchtext(15)]');
+    expect(t.inflate()).toBe('');
+  });
+
   test('including line break', () => {
     const t = new StringsTranslate(
       trimIndent`
@@ -262,7 +267,7 @@ And with a breath, she blows me back afloat, and I pick up a gust of wind."""
   });
 });
 
-describe('StringsTranslate#inflate', () => {
+describe('FileTranslate#inflate', () => {
   test('not including line break', () => {
     const t = new FileTranslate(
       'CAN YOU HEAR ME.txt',

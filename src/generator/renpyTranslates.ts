@@ -30,6 +30,7 @@ export class StringsTranslate {
   public inflate(): string {
     const isMultiLines = this.original.match(/\n/g);
     if (!isMultiLines) {
+      if (this.original === this.translate) return '';
       return trimMargin`
         |    old "${this.original}"
         |    new "${this.translate}"
