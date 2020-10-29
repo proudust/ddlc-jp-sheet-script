@@ -4,7 +4,7 @@ on:
   repository_dispatch:
     types: [ncu]
   schedule:
-    - cron: "0 21 * * *"
+    - cron: '0 21 * * *'
   workflow_dispatch:
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
         uses: peter-evans/create-pull-request@v2
         with:
           branch: update-deps
-          commit-message: ":arrow_up: 依存関係のアップデート"
+          commit-message: ':arrow_up: 依存関係のアップデート'
           author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           title: 依存関係のアップデート
           body: |
