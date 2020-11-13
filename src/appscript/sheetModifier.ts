@@ -100,9 +100,10 @@ const setStatisticsFormulas: SheetModifier = (sheet: Sheet): void => {
     return [
       (sheetId && `=HYPERLINK("#gid=${sheetId}","${sheetName}")`) || sheetName,
       sheetDescription,
-      `=COUNTA('${sheetName}'!$D$2:$D)`,
-      `=COUNTIFS('${sheetName}'!$B$2:$B, "?*", '${sheetName}'!$C$2:$C, "?*") + ` +
-        `COUNTIFS('${sheetName}'!$A$2:$A, "?*", '${sheetName}'!$B$2:$B, "", '${sheetName}'!$C$2:$C, "?*")`,
+      `=COUNTIFS('${sheetName}'!$A$2:$A, "?*", '${sheetName}'!$D$2:$D, "?*") + ` +
+        `COUNTIFS('${sheetName}'!$A$2:$A, "", '${sheetName}'!$B$2:$B, "?*", '${sheetName}'!$D$2:$D, "?*")`,
+      `=COUNTIFS('${sheetName}'!$A$2:$A, "?*", '${sheetName}'!$C$2:$C, "?*") + ` +
+        `COUNTIFS('${sheetName}'!$A$2:$A, "", '${sheetName}'!$B$2:$B, "?*", '${sheetName}'!$C$2:$C, "?*")`,
       `=IF($E${thisRowIndex}<>0,$D${thisRowIndex}/$E${thisRowIndex},0)`,
       `=COUNTIF('${sheetName}'!$F$2:$F, G$${headerIndex})`,
       `=COUNTIF('${sheetName}'!$F$2:$F, H$${headerIndex})`,
