@@ -67,7 +67,7 @@ describe('SayTranslate#inflate', () => {
     );
     expect(t.inflate()).toBe(trimIndent`
       translate Japanese monika_japanese_1e92078b:
-          m 1ekbfa "あはは！大丈夫だよ[player]君。私は\\"I love you\\"をもっとたくさんの言い方で表現してみたいの。"
+          m 1ekbfa "あはは！大丈夫だよ[player]君。私は\"I love you\"をもっとたくさんの言い方で表現してみたいの。"
 
     `);
   });

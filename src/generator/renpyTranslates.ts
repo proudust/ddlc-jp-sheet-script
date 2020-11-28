@@ -38,9 +38,9 @@ export class StringsTranslate {
       `;
     } else {
       return trimMargin`
-        |    old """\\
+        |    old """\
         |${this.original.replace(/"/g, '\\"')}"""
-        |    new """\\
+        |    new """\
         |${this.translate}"""
 
       `;

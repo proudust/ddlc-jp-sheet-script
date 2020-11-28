@@ -1,7 +1,7 @@
 type Placeholder = string | number;
 
 function resolveTenplate(literals: TemplateStringsArray, ...placeholders: Placeholder[]): string {
-  return literals.reduce((str, literal) => (str += literal + (placeholders.shift() ?? '')), '');
+  return literals.raw.reduce((str, literal) => (str += literal + (placeholders.shift() ?? '')), '');
 }
 
 export function trimMargin(string: string, marginPrefix?: string): string;
