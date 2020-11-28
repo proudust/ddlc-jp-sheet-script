@@ -42,7 +42,7 @@ export class StringsTranslate {
       if (this.original === this.translate) return '';
       return trimMargin`
         |    old "${this.original}"
-        |    new "${this.translate}"
+        |    new "${this.translate.replace(/(?<!\\)"/g, '\\"')}"
 
       `;
     } else {

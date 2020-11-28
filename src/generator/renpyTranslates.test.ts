@@ -111,6 +111,15 @@ describe('StringsTranslate#inflate', () => {
     `);
   });
 
+  test('auto escape double quotes', () => {
+    const t = new StringsTranslate('Who vs. Whom', '"Who" と "Whom"');
+    expect(t.inflate()).toBe(trimMargin`
+      |    old "Who vs. Whom"
+      |    new "\"Who\" と \"Whom\""
+
+    `);
+  });
+
   test('If the original and translation are the same, to empty', () => {
     const t = new StringsTranslate('[glitchtext(15)]', '[glitchtext(15)]');
     expect(t.inflate()).toBe('');
