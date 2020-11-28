@@ -58,6 +58,34 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
+  test('auto escape double quotes 1', () => {
+    const t = new SayTranslate(
+      'monika_gtod_tip008_1df1bf5e',
+      'm 3eua',
+      "For example:{w=0.5} '{b}Natsuki asked [player] and me if we liked her cupcakes.{/b}'",
+      '例えば、こんな感じにね。{w=0.5} " "{b}Natsuki asked [player] and me if we liked her cupcakes.（ナツキは[player]君と私に、自分のカップケーキが好きか尋ねた。）{/b}""',
+    );
+    expect(t.inflate()).toBe(trimIndent`
+      translate Japanese monika_gtod_tip008_1df1bf5e:
+          m 3eua "例えば、こんな感じにね。{w=0.5} \" \"{b}Natsuki asked [player] and me if we liked her cupcakes.（ナツキは[player]君と私に、自分のカップケーキが好きか尋ねた。）{/b}\"\""
+
+    `);
+  });
+
+  test('auto escape double quotes 2', () => {
+    const t = new SayTranslate(
+      'monika_gtod_tip008_9f5daca5',
+      'm 3eud',
+      "Just like with '{b}who{/b}' and '{b}whom{/b},' the issue boils down to one of subjects and objects.",
+      '"{b}who{/b}" と "{b}whom{/b}" のときと同様に、結局は主語と目的語の問題なの。',
+    );
+    expect(t.inflate()).toBe(trimIndent`
+      translate Japanese monika_gtod_tip008_9f5daca5:
+          m 3eud "\"{b}who{/b}\" と \"{b}whom{/b}\" のときと同様に、結局は主語と目的語の問題なの。"
+
+    `);
+  });
+
   test('included escape char', () => {
     const t = new SayTranslate(
       'monika_japanese_1e92078b',

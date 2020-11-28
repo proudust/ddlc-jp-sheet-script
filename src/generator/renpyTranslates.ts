@@ -9,15 +9,24 @@ export class SayTranslate {
     public readonly translate: string,
   ) {}
 
+  /** 文頭・文末のダブルクォート以外をエスケープする */
+  private autoEscape(t: string): string {
+    return t.replace(/(?<!^|\\)"(?!$)/g, '\\"');
+  }
+
   public inflate(): string {
     const attrs = this.attribute.split(' ');
     const character = attrs.filter(s => s !== 'nointeract').join(' ');
     const nointeract = this.attribute.includes('nointeract') ? 'nointeract' : '';
-    const translates = this.translate.match(/"(.+?[^\\])"/g) || [`"${this.translate}"`];
+    const translates = this.translate.match(/(?<=^|\n)"(.+?[^\\])"(?=\n|$)/g) ?? [
+      `"${this.translate}"`,
+    ];
 
     return [
       `translate Japanese ${this.id}:`,
-      ...translates.map(t => ['   ', character, t, nointeract].filter(Boolean).join(' ')),
+      ...translates.map(t =>
+        ['   ', character, this.autoEscape(t), nointeract].filter(Boolean).join(' '),
+      ),
       '',
     ].join('\n');
   }
