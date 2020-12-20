@@ -298,6 +298,6 @@ export const initTranslateSheetModifier = (properties: ScriptProperties): SheetM
     fixProtect,
     addDataValidation(properties),
     clearFormatRules,
-    addTagsFormatRules(properties),
     addEmptyFormatRules,
+    addTagsFormatRules(properties),
   );
