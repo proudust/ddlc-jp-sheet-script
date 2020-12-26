@@ -73,10 +73,15 @@ describe('checkAttribute', () => {
 
 describe('checkAttribute', () => {
   test('Not error', () => {
-    const dialog = toArgs({
+    const dialog1 = toArgs({
       translate: 'ねぇ、[player]……',
     });
-    expect(checkEllipsis(dialog)).toBeUndefined();
+    expect(checkEllipsis(dialog1)).toBeUndefined();
+
+    const dialog2 = toArgs({
+      translate: '私って本当にドジだね、[player]君……{w=0.3}ごめんなさい。',
+    });
+    expect(checkEllipsis(dialog2)).toBeUndefined();
   });
 
   test('Error if dot ellipsis', () => {

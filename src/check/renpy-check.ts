@@ -50,7 +50,7 @@ export const checkAttribute: CheckFunc = ({ attr, original, sheetName, sheetRowN
  * 三点リーダーの訳を「……」に統一します。
  */
 export const checkEllipsis: CheckFunc = ({ translate, sheetName, sheetRowNumber }) => {
-  if (translate.match(/(\.+|…[^…])/)) {
+  if (/(\.+|[^…]…[^…])/.test(translate.replace(/{[^}]+}/, ''))) {
     return trimIndent`
         三点リーダーの訳は「……」に統一します。
         翻訳：${translate} (${sheetName}:${sheetRowNumber})
