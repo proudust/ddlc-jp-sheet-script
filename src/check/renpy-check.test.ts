@@ -71,7 +71,7 @@ describe('checkAttribute', () => {
   });
 });
 
-describe('checkAttribute', () => {
+describe('checkEllipsis', () => {
   test('Not error', () => {
     const dialog1 = toArgs({
       translate: 'ねぇ、[player]……',
@@ -82,6 +82,11 @@ describe('checkAttribute', () => {
       translate: '私って本当にドジだね、[player]君……{w=0.3}ごめんなさい。',
     });
     expect(checkEllipsis(dialog2)).toBeUndefined();
+
+    const dialog3 = toArgs({
+      translate: '[spr_obj.dlg_desc!t]、[acs_quip]',
+    });
+    expect(checkEllipsis(dialog3)).toBeUndefined();
   });
 
   test('Error if dot ellipsis', () => {
