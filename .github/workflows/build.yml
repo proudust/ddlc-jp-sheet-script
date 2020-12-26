@@ -34,10 +34,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - if: github.ref == 'refs/heads/master'
         name: Deploy
         run: echo $CLASPRC > ~/.clasprc.json && npm run deploy
