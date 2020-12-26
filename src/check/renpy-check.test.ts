@@ -1,4 +1,4 @@
-import { checkId, checkAttribute, checkTextTags } from './renpy-check';
+import { checkId, checkAttribute, checkEllipsis, checkTextTags } from './renpy-check';
 
 type CheckArgs = Parameters<typeof checkId>[0];
 const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({
@@ -68,6 +68,39 @@ describe('checkAttribute', () => {
       original: 'test',
     });
     expect(checkAttribute(short)).toBeTruthy();
+  });
+});
+
+describe('checkAttribute', () => {
+  test('Not error', () => {
+    const dialog = toArgs({
+      translate: 'ねぇ、[player]……',
+    });
+    expect(checkEllipsis(dialog)).toBeUndefined();
+  });
+
+  test('Error if dot ellipsis', () => {
+    const dialog1 = toArgs({
+      translate: 'ねぇ、[player]...',
+    });
+    expect(checkEllipsis(dialog1)).toBeTruthy();
+
+    const dialog2 = toArgs({
+      translate: 'ねぇ、[player]......',
+    });
+    expect(checkEllipsis(dialog2)).toBeTruthy();
+  });
+
+  test('Error if single horizontal ellipsis', () => {
+    const dialog1 = toArgs({
+      translate: 'ねぇ、[player]...',
+    });
+    expect(checkEllipsis(dialog1)).toBeTruthy();
+
+    const dialog2 = toArgs({
+      translate: 'ねぇ、[player]......',
+    });
+    expect(checkEllipsis(dialog2)).toBeTruthy();
   });
 });
 
