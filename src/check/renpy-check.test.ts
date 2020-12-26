@@ -103,14 +103,9 @@ describe('checkEllipsis', () => {
 
   test('Error if single horizontal ellipsis', () => {
     const dialog1 = toArgs({
-      translate: 'ねぇ、[player]...',
+      translate: '彼女は優しい娘だけど、それでもね…',
     });
     expect(checkEllipsis(dialog1)).toBeTruthy();
-
-    const dialog2 = toArgs({
-      translate: 'ねぇ、[player]......',
-    });
-    expect(checkEllipsis(dialog2)).toBeTruthy();
   });
 });
 
