@@ -87,7 +87,7 @@ export function checkAll(sheets: Sheet[]): string {
         .reduce<string[]>((errors, [id, attr, original, translate], index) => {
           const sheetRowNumber = index + 3;
           const args: CheckArgs = { id, attr, original, translate, sheetName, sheetRowNumber };
-          const checkFuncs: CheckFunc[] = [checkId, checkAttribute, checkTextTags];
+          const checkFuncs: CheckFunc[] = [checkId, checkAttribute];
           const e = checkFuncs
             .map(f => f(args))
             .filter(<T>(r: T | undefined): r is T => Boolean(r));
