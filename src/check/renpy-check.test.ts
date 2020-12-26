@@ -1,4 +1,4 @@
-import { checkId, checkAttribute, checkEllipsis, checkTextTags } from './renpy-check';
+import { checkId, checkAttribute, checkEllipsis, checkWaitTag, checkTextTags } from './renpy-check';
 
 type CheckArgs = Parameters<typeof checkId>[0];
 const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({
@@ -111,6 +111,27 @@ describe('checkEllipsis', () => {
       translate: 'ねぇ、[player]......',
     });
     expect(checkEllipsis(dialog2)).toBeTruthy();
+  });
+});
+
+describe('checkWaitTag', () => {
+  test('Not error', () => {
+    const dialog1 = toArgs({
+      translate: '{w=0.2}',
+    });
+    expect(checkWaitTag(dialog1)).toBeUndefined();
+  });
+
+  test('Error if wait tag contains space', () => {
+    const dialog1 = toArgs({
+      translate: '{w=0. 2}',
+    });
+    expect(checkWaitTag(dialog1)).toBeTruthy();
+
+    const dialog2 = toArgs({
+      translate: '{w = 0.3}',
+    });
+    expect(checkWaitTag(dialog2)).toBeTruthy();
   });
 });
 

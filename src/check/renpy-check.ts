@@ -60,6 +60,19 @@ export const checkEllipsis: CheckFunc = ({ translate, sheetName, sheetRowNumber 
 };
 
 /**
+ * {w}タグの中に空白文字があります。
+ */
+export const checkWaitTag: CheckFunc = ({ translate, sheetName, sheetRowNumber }) => {
+  const likeWaitTag = translate.match(/{\s*w\s*=[\d.\s]+}/g) ?? [];
+  if (likeWaitTag.some(s => /\s+/.test(s))) {
+    return trimIndent`
+        {w}タグの中に空白文字があります。
+        翻訳：${translate} (${sheetName}:${sheetRowNumber})
+      `;
+  }
+};
+
+/**
  * テキストタグの種類や数が原文と一致しない場合、エラー文を返します。
  */
 export const checkTextTags: CheckFunc = ({
@@ -100,7 +113,7 @@ export function checkAll(sheets: Sheet[]): string {
         .reduce<string[]>((errors, [id, attr, original, translate], index) => {
           const sheetRowNumber = index + 3;
           const args: CheckArgs = { id, attr, original, translate, sheetName, sheetRowNumber };
-          const checkFuncs: CheckFunc[] = [checkId, checkAttribute, checkEllipsis];
+          const checkFuncs: CheckFunc[] = [checkId, checkAttribute, checkEllipsis, checkWaitTag];
           const e = checkFuncs
             .map(f => f(args))
             .filter(<T>(r: T | undefined): r is T => Boolean(r));
