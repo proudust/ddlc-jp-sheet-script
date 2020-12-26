@@ -171,7 +171,7 @@ const fixFormat = (sheet: Sheet): void => {
   sheet
     .getRange(1, 1, 2, 7)
     .setValues([
-      ['ID', '属性', '原文', '翻訳', '機械翻訳', 'タグ', 'コメント'],
+      ['ID', '属性', '原文', '翻訳', '機械翻訳・修正前訳など', 'タグ', 'コメント'],
       ['', '', '', '', '', '', ''],
     ])
     .setBackground('#CFE2F3');
