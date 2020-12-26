@@ -51,7 +51,7 @@ export const checkAttribute: CheckFunc = ({ attr, original, sheetName, sheetRowN
  */
 export const checkEllipsis: CheckFunc = ({ translate, sheetName, sheetRowNumber }) => {
   const tagRemoved = translate.replace(/\[[^\]]+]/g, '').replace(/{[^}]+}/g, '');
-  if (/(\.{3}|[^…]…([^…]|$))/.test(tagRemoved)) {
+  if (/(\.{3}|(^|[^…])…([^…]|$))/.test(tagRemoved)) {
     return trimIndent`
         三点リーダーの訳は「……」に統一します。
         翻訳：${translate} (${sheetName}:${sheetRowNumber})

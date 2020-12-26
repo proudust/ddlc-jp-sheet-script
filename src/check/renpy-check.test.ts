@@ -106,6 +106,11 @@ describe('checkEllipsis', () => {
       translate: '彼女は優しい娘だけど、それでもね…',
     });
     expect(checkEllipsis(dialog1)).toBeTruthy();
+
+    const dialog2 = toArgs({
+      translate: '…待ってね。',
+    });
+    expect(checkEllipsis(dialog2)).toBeTruthy();
   });
 });
 
