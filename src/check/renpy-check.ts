@@ -56,12 +56,20 @@ export class UseUnknownAttributesChecker extends Checker {
 }
 
 /**
+ * 文字列からテキストタグを取り除いた文字列を取得します。
+ * @param s 対象の文字列
+ */
+function removeTextTag(s: string): string {
+  return s.replace(/\[[^\]]+]/g, '').replace(/{[^}]+}/g, '');
+}
+
+/**
  * 三点リーダーの訳を「……」に統一します。
  */
 export class UnificationEllipsisChecker extends Checker {
   public name = '"..."の訳は「……」で統一します';
   public check({ translate }: Pick<CheckArgs, 'translate'>): boolean {
-    const tagRemoved = translate.replace(/\[[^\]]+]/g, '').replace(/{[^}]+}/g, '');
+    const tagRemoved = removeTextTag(translate);
     return /(\.{3}|(^|[^…])…([^…]|$))/.test(tagRemoved);
   }
 }
@@ -83,7 +91,8 @@ export class CantIncludeSpaceInWaitTagsChecker extends Checker {
 export class CantIncludeHalfWidthChecker extends Checker {
   public name = '半角文字を全角文字に置き換えます';
   public check({ translate }: Pick<CheckArgs, 'translate'>): boolean {
-    return /[,，?!~]/.test(translate);
+    const tagRemoved = removeTextTag(translate);
+    return /[,，?!~]/.test(tagRemoved);
   }
 }
 

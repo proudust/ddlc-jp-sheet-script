@@ -66,6 +66,7 @@ describe('CantIncludeHalfWidthChecker', () => {
     ${'引き分け？'} | ${false}
     ${'私の勝ち!'}  | ${true}
     ${'私の勝ち！'} | ${false}
+    ${'[v_quip!t]'} | ${false}
     ${'あはは~'}    | ${true}
     ${'あはは～'}   | ${false}
   `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
