@@ -14,63 +14,68 @@ interface CheckArgs {
   attr: string;
   original: string;
   translate: string;
-  sheetName: string;
-  sheetRowNumber: number;
 }
 
-type CheckFunc = (args: CheckArgs) => string | undefined;
+abstract class Checker {
+  public abstract name: string;
+  public abstract check(row: CheckArgs): boolean;
 
-/**
- * ID の書式が正しくない場合、エラー文を返します。
- */
-export const checkId: CheckFunc = ({ id, original, sheetName, sheetRowNumber }) => {
-  const pattern = /^\w+_[0-9a-f]{8}(_\d+)?$/;
-  if (id && original && !pattern.test(id)) {
+  /**
+   * チェック処理を実行します。
+   */
+  public exec(row: CheckArgs, sheetName: string, sheetRowNumber: number): string | undefined {
+    if (!this.check(row)) return;
     return trimIndent`
-      IDの書式が間違っています。
-      原文: ${id} (${sheetName}:${sheetRowNumber})
+      ${this.name}（${sheetName}:${sheetRowNumber}）
+      ＩＤ：${row.id}, ${row.attr}
+      原文：${row.original}
+      翻訳：${row.translate}
     `;
   }
-};
+}
 
 /**
- * 不明な属性が入力されている場合、エラー文を返します。
+ * ID の書式が正しいことを確認します。
  */
-export const checkAttribute: CheckFunc = ({ attr, original, sheetName, sheetRowNumber }) => {
-  const knownAttrs = ['m', 'n', 's', 'y', 'strings', 'extend'];
-  if (attr && !knownAttrs.includes(attr.split(' ')[0])) {
-    return trimIndent`
-      属性をtypoしているかもしれません。
-      原文: ${attr} "${original}" (${sheetName}:${sheetRowNumber})
-    `;
+export class IdFormatChecker extends Checker {
+  public name = 'IDの書式が不正です';
+  public check({ id }: Pick<CheckArgs, 'id'>): boolean {
+    return !!id && !/^\w+_[0-9a-f]{8}(_\d+)?$/.test(id);
   }
-};
+}
+
+/**
+ * 既知の属性のみが使われていることを確認します。
+ */
+export class UseUnknownAttributesChecker extends Checker {
+  public name = '不明な属性が指定されています';
+  public check({ attr }: Pick<CheckArgs, 'attr'>): boolean {
+    const knownAttrs = ['m', 'n', 's', 'y', 'strings', 'extend'];
+    return !!attr && !knownAttrs.includes(attr.split(' ')[0]);
+  }
+}
 
 /**
  * 三点リーダーの訳を「……」に統一します。
  */
-export const checkEllipsis: CheckFunc = ({ translate, sheetName, sheetRowNumber }) => {
-  const tagRemoved = translate.replace(/\[[^\]]+]/g, '').replace(/{[^}]+}/g, '');
-  if (/(\.{3}|(^|[^…])…([^…]|$))/.test(tagRemoved)) {
-    return trimIndent`
-        三点リーダーの訳は「……」に統一します。
-        翻訳：${translate} (${sheetName}:${sheetRowNumber})
-      `;
+export class UnificationEllipsisChecker extends Checker {
+  public name = '"..."の訳は「……」で統一します';
+  public check({ translate }: Pick<CheckArgs, 'translate'>): boolean {
+    const tagRemoved = translate.replace(/\[[^\]]+]/g, '').replace(/{[^}]+}/g, '');
+    return /(\.{3}|(^|[^…])…([^…]|$))/.test(tagRemoved);
   }
-};
+}
 
 /**
  * {w}タグの中に空白文字があります。
  */
-export const checkWaitTag: CheckFunc = ({ translate, sheetName, sheetRowNumber }) => {
-  const likeWaitTag = translate.match(/{\s*w\s*=[\d.\s]+}/g) ?? [];
-  if (likeWaitTag.some(s => /\s+/.test(s))) {
-    return trimIndent`
-        {w}タグの中に空白文字があります。
-        翻訳：${translate} (${sheetName}:${sheetRowNumber})
-      `;
+export class CantIncludeSpaceInWaitTagsChecker extends Checker {
+  public name = '{w}タグの中を含むことはできません';
+  public check({ translate }: Pick<CheckArgs, 'translate'>): boolean {
+    const likeWaitTag = translate.match(/{\s*w\s*=[\d.\s]+}/g) ?? [];
+    return likeWaitTag.some(s => /\s+/.test(s));
   }
-};
+}
 
 /**
  * シートに対して全てのチェックをします。
@@ -83,11 +88,17 @@ export function checkAll(sheets: Sheet[]): string {
         .getRange('A3:F')
         .getValues()
         .reduce<string[]>((errors, [id, attr, original, translate], index) => {
+          if (!original) return errors;
           const sheetRowNumber = index + 3;
-          const args: CheckArgs = { id, attr, original, translate, sheetName, sheetRowNumber };
-          const checkFuncs: CheckFunc[] = [checkId, checkAttribute, checkEllipsis, checkWaitTag];
+          const args: CheckArgs = { id, attr, original, translate };
+          const checkFuncs: Checker[] = [
+            new IdFormatChecker(),
+            new UseUnknownAttributesChecker(),
+            new UnificationEllipsisChecker(),
+            new CantIncludeSpaceInWaitTagsChecker(),
+          ];
           const e = checkFuncs
-            .map(f => f(args))
+            .map(f => f.exec(args, sheetName, sheetRowNumber))
             .filter(<T>(r: T | undefined): r is T => Boolean(r));
           return errors.concat(e);
         }, []);

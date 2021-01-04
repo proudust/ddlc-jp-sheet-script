@@ -1,136 +1,58 @@
-import { checkId, checkAttribute, checkEllipsis, checkWaitTag } from './renpy-check';
+import * as RenPyChecker from './renpy-check';
 
-type CheckArgs = Parameters<typeof checkId>[0];
-const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({
-  id: '',
-  attr: '',
-  original: '',
-  translate: '',
-  sheetName: '',
-  sheetRowNumber: 0,
-  ...obj,
-});
+describe('IdFormatChecker', () => {
+  const IdFormatChecker = new RenPyChecker.IdFormatChecker();
 
-describe('checkId', () => {
-  test('Not error', () => {
-    const normal = toArgs({
-      id: 'bye_leaving_already_035e8b8a',
-      original: 'test',
-    });
-    expect(checkId(normal)).toBeUndefined();
-
-    const withSuffix = toArgs({
-      id: 'bye_leaving_already_035e8b8a_1',
-      original: 'test',
-    });
-    expect(checkId(withSuffix)).toBeUndefined();
-
-    const comment = toArgs({
-      id: '※',
-      original: '',
-    });
-    expect(checkId(comment)).toBeUndefined();
-  });
-
-  test('Error if id hash length is not 8', () => {
-    const short = toArgs({
-      id: 'bye_prompt_sleep_cdf617a',
-      original: 'test',
-    });
-    expect(checkId(short)).toBeTruthy();
-
-    const long = toArgs({
-      id: 'bye_prompt_sleep_cdf617a10',
-      original: 'test',
-    });
-    expect(checkId(long)).toBeTruthy();
+  test.each`
+    id                                  | valid
+    ${'bye_leaving_already_035e8b8a'}   | ${false}
+    ${'bye_leaving_already_035e8b8a_1'} | ${false}
+    ${'bye_prompt_sleep_cdf617a'}       | ${true}
+    ${'bye_prompt_sleep_cdf617a10'}     | ${true}
+  `('check({ id: "$id" }) => $valid', ({ id, valid }) => {
+    expect(IdFormatChecker.check({ id })).toBe(valid);
   });
 });
 
-describe('checkAttribute', () => {
-  test('Not error', () => {
-    const dialog = toArgs({
-      attr: 'm 1tkc',
-      original: 'test',
-    });
-    expect(checkAttribute(dialog)).toBeUndefined();
+describe('UseUnknownAttributesChecker', () => {
+  const UseUnknownAttributesChecker = new RenPyChecker.UseUnknownAttributesChecker();
 
-    const strings = toArgs({
-      attr: 'strings',
-      original: 'test',
-    });
-    expect(checkAttribute(strings)).toBeUndefined();
-  });
-
-  test('Error if attr is typo', () => {
-    const short = toArgs({
-      attr: 'string',
-      original: 'test',
-    });
-    expect(checkAttribute(short)).toBeTruthy();
+  test.each`
+    attr         | valid
+    ${'m 1tkc'}  | ${false}
+    ${'strings'} | ${false}
+    ${'string'}  | ${true}
+  `('check({ attr: "$attr" }) => $valid', ({ attr, valid }) => {
+    expect(UseUnknownAttributesChecker.check({ attr })).toBe(valid);
   });
 });
 
-describe('checkEllipsis', () => {
-  test('Not error', () => {
-    const dialog1 = toArgs({
-      translate: 'ねぇ、[player]……',
-    });
-    expect(checkEllipsis(dialog1)).toBeUndefined();
+describe('UnificationEllipsisChecker', () => {
+  const UnificationEllipsisChecker = new RenPyChecker.UnificationEllipsisChecker();
 
-    const dialog2 = toArgs({
-      translate: '私って本当にドジだね、[player]君……{w=0.3}ごめんなさい。',
-    });
-    expect(checkEllipsis(dialog2)).toBeUndefined();
-
-    const dialog3 = toArgs({
-      translate: '[spr_obj.dlg_desc!t]、[acs_quip]',
-    });
-    expect(checkEllipsis(dialog3)).toBeUndefined();
-  });
-
-  test('Error if dot ellipsis', () => {
-    const dialog1 = toArgs({
-      translate: 'ねぇ、[player]...',
-    });
-    expect(checkEllipsis(dialog1)).toBeTruthy();
-
-    const dialog2 = toArgs({
-      translate: 'ねぇ、[player]......',
-    });
-    expect(checkEllipsis(dialog2)).toBeTruthy();
-  });
-
-  test('Error if single horizontal ellipsis', () => {
-    const dialog1 = toArgs({
-      translate: '彼女は優しい娘だけど、それでもね…',
-    });
-    expect(checkEllipsis(dialog1)).toBeTruthy();
-
-    const dialog2 = toArgs({
-      translate: '…待ってね。',
-    });
-    expect(checkEllipsis(dialog2)).toBeTruthy();
+  test.each`
+    translate                                                  | valid
+    ${'ねぇ、[player]……'}                                      | ${false}
+    ${'ねぇ、[player]…'}                                       | ${true}
+    ${'ねぇ、[player]...'}                                     | ${true}
+    ${'ねぇ、[player]......'}                                  | ${true}
+    ${'…待ってね'}                                             | ${true}
+    ${'私って本当にドジだね、[player]君……{w=0.3}ごめんなさい'} | ${false}
+    ${'[spr_obj.dlg_desc!t]、[acs_quip]'}                      | ${false}
+  `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
+    expect(UnificationEllipsisChecker.check({ translate })).toBe(valid);
   });
 });
 
-describe('checkWaitTag', () => {
-  test('Not error', () => {
-    const dialog1 = toArgs({
-      translate: '{w=0.2}',
-    });
-    expect(checkWaitTag(dialog1)).toBeUndefined();
-  });
+describe('CantIncludeSpaceInWaitTagsChecker', () => {
+  const CantIncludeSpaceInWaitTagsChecker = new RenPyChecker.CantIncludeSpaceInWaitTagsChecker();
 
-  test('Error if wait tag contains space', () => {
-    const dialog1 = toArgs({
-      translate: '{w=0. 2}',
-    });
-    expect(checkWaitTag(dialog1)).toBeTruthy();
-
-    const dialog2 = toArgs({
-      translate: '{w = 0.3}',
-    });
-    expect(checkWaitTag(dialog2)).toBeTruthy();
+  test.each`
+    translate      | valid
+    ${'{w=0.2}'}   | ${false}
+    ${'{w=0. 2}'}  | ${true}
+    ${'{w = 0.3}'} | ${true}
+  `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
+    expect(CantIncludeSpaceInWaitTagsChecker.check({ translate })).toBe(valid);
   });
 });
