@@ -78,6 +78,24 @@ export class CantIncludeSpaceInWaitTagsChecker extends Checker {
 }
 
 /**
+ * 半角文字を全角文字に置き換えます。
+ */
+export class CantIncludeHalfWidthChecker extends Checker {
+  public name = '半角文字を全角文字に置き換えます';
+  public check({ translate }: Pick<CheckArgs, 'translate'>): boolean {
+    return /[,，?!~]/.test(translate);
+  }
+}
+
+const checkFuncs: Checker[] = [
+  new IdFormatChecker(),
+  new UseUnknownAttributesChecker(),
+  new UnificationEllipsisChecker(),
+  new CantIncludeSpaceInWaitTagsChecker(),
+  new CantIncludeHalfWidthChecker(),
+];
+
+/**
  * シートに対して全てのチェックをします。
  */
 export function checkAll(sheets: Sheet[]): string {
@@ -91,12 +109,6 @@ export function checkAll(sheets: Sheet[]): string {
           if (!original) return errors;
           const sheetRowNumber = index + 3;
           const args: CheckArgs = { id, attr, original, translate };
-          const checkFuncs: Checker[] = [
-            new IdFormatChecker(),
-            new UseUnknownAttributesChecker(),
-            new UnificationEllipsisChecker(),
-            new CantIncludeSpaceInWaitTagsChecker(),
-          ];
           const e = checkFuncs
             .map(f => f.exec(args, sheetName, sheetRowNumber))
             .filter(<T>(r: T | undefined): r is T => Boolean(r));

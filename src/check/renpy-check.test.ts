@@ -56,3 +56,19 @@ describe('CantIncludeSpaceInWaitTagsChecker', () => {
     expect(CantIncludeSpaceInWaitTagsChecker.check({ translate })).toBe(valid);
   });
 });
+
+describe('CantIncludeHalfWidthChecker', () => {
+  const CantIncludeHalfWidthChecker = new RenPyChecker.CantIncludeHalfWidthChecker();
+
+  test.each`
+    translate       | valid
+    ${'引き分け?'}  | ${true}
+    ${'引き分け？'} | ${false}
+    ${'私の勝ち!'}  | ${true}
+    ${'私の勝ち！'} | ${false}
+    ${'あはは~'}    | ${true}
+    ${'あはは～'}   | ${false}
+  `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
+    expect(CantIncludeHalfWidthChecker.check({ translate })).toBe(valid);
+  });
+});
