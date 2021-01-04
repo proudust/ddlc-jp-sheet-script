@@ -73,34 +73,6 @@ export const checkWaitTag: CheckFunc = ({ translate, sheetName, sheetRowNumber }
 };
 
 /**
- * テキストタグの種類や数が原文と一致しない場合、エラー文を返します。
- */
-export const checkTextTags: CheckFunc = ({
-  id,
-  original,
-  translate,
-  sheetName,
-  sheetRowNumber,
-}) => {
-  function extractTextTag(dialogue: string): string[] {
-    return dialogue.match(/{\w+}/g) ?? [];
-  }
-
-  if (id && translate) {
-    const otags = extractTextTag(original);
-    const ttags = extractTextTag(translate);
-    const equal = otags.every((otag, index) => otag === ttags[index]);
-    if (!equal) {
-      return trimIndent`
-        テキストタグが不足しています。
-        原文：${original}
-        翻訳：${translate} (${sheetName}:${sheetRowNumber})
-      `;
-    }
-  }
-};
-
-/**
  * シートに対して全てのチェックをします。
  */
 export function checkAll(sheets: Sheet[]): string {

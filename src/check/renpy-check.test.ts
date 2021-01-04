@@ -1,4 +1,4 @@
-import { checkId, checkAttribute, checkEllipsis, checkWaitTag, checkTextTags } from './renpy-check';
+import { checkId, checkAttribute, checkEllipsis, checkWaitTag } from './renpy-check';
 
 type CheckArgs = Parameters<typeof checkId>[0];
 const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({
@@ -132,37 +132,5 @@ describe('checkWaitTag', () => {
       translate: '{w = 0.3}',
     });
     expect(checkWaitTag(dialog2)).toBeTruthy();
-  });
-});
-
-describe('checkTextTags', () => {
-  test('Not error', () => {
-    const nw = toArgs({
-      id: '_mas_chess_dlgqfeditstart_76684384',
-      original: 'Did you edit the save file?{nw}',
-      translate: 'セーブデータを書き換えたの？{nw}',
-    });
-    expect(checkTextTags(nw)).toBeUndefined();
-  });
-
-  test('Error if text tag typo', () => {
-    const typo = toArgs({
-      id: 'monika_cares_about_dokis_082ab550',
-      original:
-        'So [player], does it make you uncomfortable when I joke about the other girls?{nw}',
-      translate: '[player]はあの子達について冗談を言って欲しくない？{ne}',
-    });
-    expect(checkTextTags(typo)).toBeTruthy();
-  });
-
-  test('Error if text tag not open', () => {
-    const notOpen = toArgs({
-      id: '_call_mas_wx_cmd_24_9718b39c',
-      original:
-        'Python also has a special data type called a {b}NoneType{/b}.{w=0.2} This type represents the absence of any data.',
-      translate:
-        'Pythonは{/b}NoneType{/b}という特別なデータ型もあって、これはデータがないということを意味するの。',
-    });
-    expect(checkTextTags(notOpen)).toBeTruthy();
   });
 });
