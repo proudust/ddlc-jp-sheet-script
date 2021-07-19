@@ -18,7 +18,7 @@ jobs:
           ssh-key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
 
       - name: Use npm cache
-        uses: actions/cache@v1
+        uses: actions/cache@v2.1.6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
