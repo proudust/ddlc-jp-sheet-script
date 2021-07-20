@@ -24,7 +24,7 @@
     "@typescript-eslint/parser": "^4.7.0",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.13.0",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-googleappsscript": "^1.0.4",
     "eslint-plugin-jest": "^24.3.6",
     "gas-webpack-plugin": "^1.2.0",
