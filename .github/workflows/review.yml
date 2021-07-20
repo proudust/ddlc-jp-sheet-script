@@ -72,7 +72,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: context.issue.number,
-                commit_id: ${{ github.event.pull_request.head.sha }},
+                commit_id: "${{ github.event.pull_request.head.sha }}",
                 event: "APPROVE",
                 body: "Passed auto review by GitHub Actions.",
               }),
