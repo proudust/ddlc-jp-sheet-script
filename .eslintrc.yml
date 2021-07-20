@@ -7,7 +7,6 @@ env:
 
 extends:
   - eslint:recommended
-  - prettier
 
 plugins:
   - googleappsscript
@@ -25,7 +24,6 @@ overrides:
 
     extends:
       - plugin:@typescript-eslint/recommended
-      - prettier/@typescript-eslint
     plugins:
       - '@typescript-eslint'
 
