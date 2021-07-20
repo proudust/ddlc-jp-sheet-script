@@ -85,7 +85,7 @@ jobs:
       - name: Merge
         uses: ridedott/merge-me-action@v2
         with:
-          GITHUB_LOGIN: dependabot-preview
+          GITHUB_LOGIN: dependabot
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ENABLE_GITHUB_API_PREVIEW: true
           MERGE_METHOD: SQUASH
