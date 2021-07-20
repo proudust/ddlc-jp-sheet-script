@@ -1,13 +1,16 @@
 name: Pull Request Auto Review
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: contains(github.head_ref, 'dependabot/npm_and_yarn')
+    if: >
+      contains(github.head_ref, 'dependabot/npm_and_yarn') &&
+      github.event.pull_request.head.repo.full_name == github.repository
+
     strategy:
       matrix:
         ref:
