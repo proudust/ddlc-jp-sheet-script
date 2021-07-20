@@ -1,4 +1,4 @@
-name: Pull Request Auto Review
+name: Dependabot Auto Merge
 
 on:
   pull_request_target:
@@ -63,6 +63,7 @@ jobs:
             const diff = require('fs').readFileSync('diff.txt', 'utf8');
             if (diff) {
               core.setFailed("Has build diff.");
+              return;
             }
             await Promise.all([
               github.issues.addLabels({
@@ -80,3 +81,11 @@ jobs:
                 body: "Passed auto review by GitHub Actions.",
               }),
             ]);
+
+      - name: Merge
+        uses: ridedott/merge-me-action@v2
+        with:
+          GITHUB_LOGIN: dependabot-preview
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ENABLE_GITHUB_API_PREVIEW: true
+          MERGE_METHOD: SQUASH
