@@ -29,6 +29,12 @@ jobs:
           node-version: 12
           cache: npm
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
       - name: Install Dependencies
         run: npm ci
 
@@ -82,7 +88,8 @@ jobs:
               }),
             ]);
 
-      - name: Merge
+      - name: Try Merge
+        continue-on-error: true
         uses: ridedott/merge-me-action@v2
         with:
           GITHUB_LOGIN: dependabot

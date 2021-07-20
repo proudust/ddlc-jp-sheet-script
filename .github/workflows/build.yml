@@ -10,7 +10,8 @@ jobs:
       github.event.pull_request.head.repo.full_name != github.repository
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Use Node.js 12
         uses: actions/setup-node@v2
@@ -32,6 +33,6 @@ jobs:
 
       - if: github.ref == 'refs/heads/master'
         name: Deploy
-        run: echo $CLASPRC > ~/.clasprc.json && npm run deploy
+        run: echo "$CLASPRC" > ~/.clasprc.json && npm run deploy
         env:
           CLASPRC: ${{ secrets.CLASPRC }}
