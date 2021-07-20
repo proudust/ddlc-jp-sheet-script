@@ -29,14 +29,14 @@ jobs:
           node-version: 16
           cache: npm
 
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Lint
         run: npm run lint
 
       - name: Test
         run: npm run test
-
-      - name: Install Dependencies
-        run: npm ci
 
       - name: Build
         run: npm run build
