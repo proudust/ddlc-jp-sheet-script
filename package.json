@@ -21,7 +21,7 @@
     "@types/jest": "^26.0.15",
     "@types/node": "^16.3.3",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
-    "@typescript-eslint/parser": "^4.7.0",
+    "@typescript-eslint/parser": "^4.28.4",
     "cpy-cli": "^3.1.1",
     "eslint": "^7.13.0",
     "eslint-plugin-googleappsscript": "^1.0.4",
