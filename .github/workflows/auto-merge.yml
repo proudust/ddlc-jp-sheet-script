@@ -90,7 +90,7 @@ jobs:
 
       - name: Try Merge
         continue-on-error: true
-        uses: ridedott/merge-me-action@v2
+        uses: proudust/merge-me-action@debug
         with:
           GITHUB_LOGIN: dependabot
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
