@@ -1,12 +1,12 @@
-import {
-  parseRow,
-  convaerHistorySupport,
-  inflate,
-  removeDuplicateStrings,
-  generateCode,
-} from './renpy';
-import { SayTranslate, StringsTranslate, FileTranslate } from './renpyTranslates';
 import { trimIndent } from '../util/tags';
+import {
+  convaerHistorySupport,
+  generateCode,
+  inflate,
+  parseRow,
+  removeDuplicateStrings,
+} from './renpy';
+import { FileTranslate, SayTranslate, StringsTranslate } from './renpyTranslates';
 
 describe('parseRow', () => {
   test('enpty or comment row', () => {
@@ -58,7 +58,7 @@ describe('convaerHistorySupport', () => {
     ]);
   });
 
-  test('character dialog', () => {
+  test('monologue dialog', () => {
     const say = [
       new SayTranslate(
         'ch0_main_cb634d94',
