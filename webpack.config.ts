@@ -1,7 +1,8 @@
-const path = require('path');
-const GasPlugin = require('gas-webpack-plugin');
+import GasPlugin from 'gas-webpack-plugin';
+import path from 'path';
+import type { Configuration } from 'webpack';
 
-module.exports = {
+const config: Configuration = {
   mode: 'development',
   entry: './src/index.ts',
   devtool: false,
@@ -22,3 +23,5 @@ module.exports = {
   },
   plugins: [new GasPlugin()],
 };
+
+export default config;
