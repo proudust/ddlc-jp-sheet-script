@@ -17,7 +17,7 @@
   "author": "proudust",
   "license": "MIT",
   "devDependencies": {
-    "@google/clasp": "^2.4.0",
+    "@google/clasp": "^2.4.1",
     "@types/google-apps-script": "^1.0.37",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.6.1",
