@@ -25,7 +25,7 @@
     "@typescript-eslint/parser": "^4.31.2",
     "eslint": "^7.32.0",
     "eslint-plugin-googleappsscript": "^1.0.4",
-    "eslint-plugin-jest": "^24.4.2",
+    "eslint-plugin-jest": "^24.5.0",
     "filemanager-webpack-plugin": "^6.1.7",
     "gas-webpack-plugin": "^2.1.0",
     "jest": "^27.2.2",
