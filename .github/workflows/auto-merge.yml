@@ -69,13 +69,13 @@ jobs:
               return;
             }
             await Promise.all([
-              github.issues.addLabels({
+              github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
                 labels: ["no-build-diff"],
               }),
-              github.pulls.createReview({
+              github.rest.pulls.createReview({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 pull_number: context.issue.number,
