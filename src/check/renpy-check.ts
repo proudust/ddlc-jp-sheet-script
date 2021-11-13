@@ -27,9 +27,9 @@ abstract class Checker {
     if (!this.check(row)) return;
     return trimIndent`
       ${this.name}（${sheetName}:${sheetRowNumber}）
-      ＩＤ：${row.id}, ${row.attr}
-      原文：${row.original}
-      翻訳：${row.translate}
+      ＩＤ: ${row.id}, ${row.attr}
+      原文: ${row.original}
+      翻訳: ${row.translate}
     `;
   }
 }
