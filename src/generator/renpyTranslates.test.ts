@@ -1,10 +1,19 @@
 /* eslint-disable no-irregular-whitespace */
-import { SayTranslate, StringsTranslate, FileTranslate } from './renpyTranslates';
-import { trimIndent, trimMargin } from '../util/tags';
+import {
+  FileTranslate,
+  SayTranslate,
+  StringsTranslate,
+} from "./renpyTranslates";
+import { trimIndent, trimMargin } from "../util/tags";
 
-describe('SayTranslate#inflate', () => {
-  test('character dialog', () => {
-    const t = new SayTranslate('ch0_main_41e273ca', 's', 'Heeeeeeeyyy!!', '「おーはーよーーー！」');
+describe("SayTranslate#inflate", () => {
+  test("character dialog", () => {
+    const t = new SayTranslate(
+      "ch0_main_41e273ca",
+      "s",
+      "Heeeeeeeyyy!!",
+      "「おーはーよーーー！」",
+    );
     expect(t.inflate()).toBe(trimIndent`
       translate Japanese ch0_main_41e273ca:
           s "「おーはーよーーー！」"
@@ -12,12 +21,12 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
-  test('monologue', () => {
+  test("monologue", () => {
     const t = new SayTranslate(
-      'ch0_main_bcc5bb00',
-      '',
+      "ch0_main_bcc5bb00",
+      "",
       "I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.",
-      '遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。',
+      "遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。",
     );
     expect(t.inflate()).toBe(trimIndent`
       translate Japanese ch0_main_bcc5bb00:
@@ -26,12 +35,12 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
-  test('nointeract', () => {
+  test("nointeract", () => {
     const t = new SayTranslate(
-      'ch3_end_sayori_dd9616f1',
-      'm nointeract',
-      'Just think of the club, okay?',
-      '「とにかくこの部のことを考えましょう、ね？」',
+      "ch3_end_sayori_dd9616f1",
+      "m nointeract",
+      "Just think of the club, okay?",
+      "「とにかくこの部のことを考えましょう、ね？」",
     );
     expect(t.inflate()).toBe(trimIndent`
       translate Japanese ch3_end_sayori_dd9616f1:
@@ -40,11 +49,11 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
-  test('split dialog', () => {
+  test("split dialog", () => {
     const t = new SayTranslate(
-      'ch0_main_cb634d94',
-      '',
-      'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
+      "ch0_main_cb634d94",
+      "",
+      "I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.",
       trimIndent`
         "やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
         "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"
@@ -58,10 +67,10 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
-  test('auto escape double quotes 1', () => {
+  test("auto escape double quotes 1", () => {
     const t = new SayTranslate(
-      'monika_gtod_tip008_1df1bf5e',
-      'm 3eua',
+      "monika_gtod_tip008_1df1bf5e",
+      "m 3eua",
       "For example:{w=0.5} '{b}Natsuki asked [player] and me if we liked her cupcakes.{/b}'",
       '例えば、こんな感じにね。{w=0.5} " "{b}Natsuki asked [player] and me if we liked her cupcakes.（ナツキは[player]君と私に、自分のカップケーキが好きか尋ねた。）{/b}""',
     );
@@ -72,10 +81,10 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
-  test('auto escape double quotes 2', () => {
+  test("auto escape double quotes 2", () => {
     const t = new SayTranslate(
-      'monika_gtod_tip008_9f5daca5',
-      'm 3eud',
+      "monika_gtod_tip008_9f5daca5",
+      "m 3eud",
       "Just like with '{b}who{/b}' and '{b}whom{/b},' the issue boils down to one of subjects and objects.",
       '"{b}who{/b}" と "{b}whom{/b}" のときと同様に、結局は主語と目的語の問題なの。',
     );
@@ -86,10 +95,10 @@ describe('SayTranslate#inflate', () => {
     `);
   });
 
-  test('included escape char', () => {
+  test("included escape char", () => {
     const t = new SayTranslate(
-      'monika_japanese_1e92078b',
-      'm 1ekbfa',
+      "monika_japanese_1e92078b",
+      "m 1ekbfa",
       "Ahaha! It's okay [player]. It just means that I can say 'I love you' in more ways than one!",
       'あはは！大丈夫だよ[player]君。私は\\"I love you\\"をもっとたくさんの言い方で表現してみたいの。',
     );
@@ -101,9 +110,9 @@ describe('SayTranslate#inflate', () => {
   });
 });
 
-describe('StringsTranslate#inflate', () => {
-  test('not including line break', () => {
-    const t = new StringsTranslate('Ghost Under the Light', '燈の下の幽霊');
+describe("StringsTranslate#inflate", () => {
+  test("not including line break", () => {
+    const t = new StringsTranslate("Ghost Under the Light", "燈の下の幽霊");
     expect(t.inflate()).toBe(trimMargin`
       |    old "Ghost Under the Light"
       |    new "燈の下の幽霊"
@@ -111,8 +120,8 @@ describe('StringsTranslate#inflate', () => {
     `);
   });
 
-  test('auto escape double quotes', () => {
-    const t = new StringsTranslate('Who vs. Whom', '"Who" と "Whom"');
+  test("auto escape double quotes", () => {
+    const t = new StringsTranslate("Who vs. Whom", '"Who" と "Whom"');
     expect(t.inflate()).toBe(trimMargin`
       |    old "Who vs. Whom"
       |    new "\"Who\" と \"Whom\""
@@ -120,12 +129,12 @@ describe('StringsTranslate#inflate', () => {
     `);
   });
 
-  test('If the original and translation are the same, to empty', () => {
-    const t = new StringsTranslate('[glitchtext(15)]', '[glitchtext(15)]');
-    expect(t.inflate()).toBe('');
+  test("If the original and translation are the same, to empty", () => {
+    const t = new StringsTranslate("[glitchtext(15)]", "[glitchtext(15)]");
+    expect(t.inflate()).toBe("");
   });
 
-  test('including line break', () => {
+  test("including line break", () => {
     const t = new StringsTranslate(
       trimIndent`
         An old tale tells of a lady who wanders Earth.
@@ -304,10 +313,10 @@ And with a breath, she blows me back afloat, and I pick up a gust of wind."""
   });
 });
 
-describe('FileTranslate#inflate', () => {
-  test('not including line break', () => {
+describe("FileTranslate#inflate", () => {
+  test("not including line break", () => {
     const t = new FileTranslate(
-      'CAN YOU HEAR ME.txt',
+      "CAN YOU HEAR ME.txt",
       trimIndent`
         "There's a little devil inside all of us."
 
@@ -340,7 +349,7 @@ describe('FileTranslate#inflate', () => {
       `,
     );
     expect(t.inflate()).toStrictEqual({
-      name: 'CAN YOU HEAR ME.txt',
+      name: "CAN YOU HEAR ME.txt",
       content: trimIndent`
         "私たちの中には小さな悪魔がいる"
 

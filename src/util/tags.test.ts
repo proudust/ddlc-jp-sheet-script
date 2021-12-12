@@ -1,42 +1,42 @@
-import { trimMargin, trimIndent } from './tags';
+import { trimIndent, trimMargin } from "./tags";
 
-describe('trimMargin', () => {
-  test('use tag', () => {
+describe("trimMargin", () => {
+  test("use tag", () => {
     const before = trimMargin`ABC
             |123
                 |456`;
-    expect(before).toBe('ABC\n123\n456');
+    expect(before).toBe("ABC\n123\n456");
   });
 
-  test('use function', () => {
+  test("use function", () => {
     const before = trimMargin(
       `
 #XYZ
     #foo
     #bar
 `,
-      '#',
+      "#",
     );
-    expect(before).toBe('XYZ\nfoo\nbar');
+    expect(before).toBe("XYZ\nfoo\nbar");
   });
 });
 
-describe('trimIndent', () => {
-  test('use tag', () => {
+describe("trimIndent", () => {
+  test("use tag", () => {
     const before = trimIndent`
         ABC
          123
           456
         `;
-    expect(before).toBe('ABC\n 123\n  456');
+    expect(before).toBe("ABC\n 123\n  456");
   });
 
-  test('use function', () => {
+  test("use function", () => {
     const before = trimIndent(`
         ABC
          123
           456
     `);
-    expect(before).toBe('ABC\n 123\n  456');
+    expect(before).toBe("ABC\n 123\n  456");
   });
 });
