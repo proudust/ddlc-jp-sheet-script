@@ -5,13 +5,13 @@
   "scripts": {
     "fix": "run-s fix:prettier fix:eslint",
     "fix:eslint": "npm run lint:eslint -- --fix",
-    "fix:prettier": "npm run lint:prettier -- --write",
+    "fix:prettier": "",
     "lint": "run-p -l -c --aggregate-output lint:*",
     "lint:eslint": "eslint --ignore-path .gitignore src",
-    "lint:prettier": "prettier --check --ignore-path .gitignore .",
+    "lint:prettier": "",
     "test": "run-p -l -c --aggregate-output lint:* unit",
     "unit": "jest",
-    "build": "webpack",
+    "build": "deno run  --allow-read --allow-env --allow-net --allow-write --allow-run build.ts",
     "deploy": "ts-node -O '{\"module\":\"commonjs\"}' deploy.ts"
   },
   "author": "proudust",
@@ -26,17 +26,12 @@
     "eslint": "^7.32.0",
     "eslint-plugin-googleappsscript": "^1.0.4",
     "eslint-plugin-jest": "^25.3.0",
-    "filemanager-webpack-plugin": "^6.1.7",
-    "gas-webpack-plugin": "^2.1.0",
     "jest": "^27.4.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "ts-jest": "^27.1.0",
-    "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
-    "typescript": "^4.5.2",
-    "webpack": "^5.64.4",
-    "webpack-cli": "^4.9.1"
+    "typescript": "^4.5.2"
   },
   "jest": {
     "transform": {
