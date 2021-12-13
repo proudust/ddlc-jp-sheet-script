@@ -66,10 +66,10 @@ export function inflate(
     say = [],
     file: files = [],
   } = translates.reduce<GroupedTranslate>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (
       obj,
       cur,
+      // deno-lint-ignore no-explicit-any
     ) => ((obj[cur.type] || (obj[cur.type] = [])).push(cur as any), obj),
     {},
   );
