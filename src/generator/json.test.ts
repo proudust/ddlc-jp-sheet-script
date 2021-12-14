@@ -1,22 +1,22 @@
-import { readRow } from "./json";
+import { assertEquals, assertThrows } from "../../deps.ts";
+import { readRow } from "./json.ts";
 
-describe("readRow", () => {
-  test("enpty or comment row", () => {
-    expect(readRow({}, ["", "", "", ""])).toEqual({});
-    expect(readRow({}, ["", "", "EV001", ""])).toEqual({});
-    expect(readRow({}, ["Map001", "", "...", ""])).toEqual({});
-    expect(readRow({}, ["Map001", "", "...", "..."])).toEqual({});
-  });
+Deno.test("[readRow] enpty or comment row", () => {
+  assertEquals(readRow({}, ["", "", "", ""]), {});
+  assertEquals(readRow({}, ["", "", "EV001", ""]), {});
+  assertEquals(readRow({}, ["Map001", "", "...", ""]), {});
+  assertEquals(readRow({}, ["Map001", "", "...", "..."]), {});
+});
 
-  test("multiple jsonPath", () => {
-    expect(
-      readRow({}, [
-        "Map027.json",
-        ".events[1]\n.events[15: 20]",
-        "But...\\.\\.",
-        "だが...\\.\\.それは我の望みではない。\\.\\.",
-      ]),
-    ).toEqual({
+Deno.test("[readRow] multiple jsonPath", () => {
+  assertEquals(
+    readRow({}, [
+      "Map027.json",
+      ".events[1]\n.events[15: 20]",
+      "But...\\.\\.",
+      "だが...\\.\\.それは我の望みではない。\\.\\.",
+    ]),
+    {
       "Map027.json": {
         ".events[1]": {
           "But...\\.\\.": "だが...\\.\\.それは我の望みではない。\\.\\.",
@@ -25,72 +25,74 @@ describe("readRow", () => {
           "But...\\.\\.": "だが...\\.\\.それは我の望みではない。\\.\\.",
         },
       },
-    });
-  });
+    },
+  );
+});
 
-  test("translation row", () => {
-    expect(
-      readRow({}, [
-        "Map043.json",
-        "",
-        "....Another nightmare..",
-        "....またあの嫌な夢だ..",
-      ]),
-    ).toEqual({
+Deno.test("[readRow] translation row", () => {
+  assertEquals(
+    readRow({}, [
+      "Map043.json",
+      "",
+      "....Another nightmare..",
+      "....またあの嫌な夢だ..",
+    ]),
+    {
       "Map043.json": {
         ".": {
           "....Another nightmare..": "....またあの嫌な夢だ..",
         },
       },
-    });
-  });
+    },
+  );
+});
 
-  describe("multiple lines translation row", () => {
-    test("LF", () => {
-      expect(
-        readRow({}, [
-          "Map118.json",
-          "",
-          "It feels like..\\.\\...\nMy head's gonna burst open......\\..\\.",
-          "ヤバい..\\.\\...\n頭が爆発しそう......\\..\\.",
-        ]),
-      ).toEqual({
-        "Map118.json": {
-          ".": {
-            "It feels like..\\.\\...": "ヤバい..\\.\\...",
-            "My head's gonna burst open......\\..\\.": "頭が爆発しそう......\\..\\.",
-          },
+Deno.test("[readRow] multiple lines translation row LF", () => {
+  assertEquals(
+    readRow({}, [
+      "Map118.json",
+      "",
+      "It feels like..\\.\\...\nMy head's gonna burst open......\\..\\.",
+      "ヤバい..\\.\\...\n頭が爆発しそう......\\..\\.",
+    ]),
+    {
+      "Map118.json": {
+        ".": {
+          "It feels like..\\.\\...": "ヤバい..\\.\\...",
+          "My head's gonna burst open......\\..\\.": "頭が爆発しそう......\\..\\.",
         },
-      });
-    });
-    test("CRLF", () => {
-      expect(
-        readRow({}, [
-          "Map118.json",
-          "",
-          "It feels like..\\.\\...\r\nMy head's gonna burst open......\\..\\.",
-          "ヤバい..\\.\\...\r\n頭が爆発しそう......\\..\\.",
-        ]),
-      ).toEqual({
-        "Map118.json": {
-          ".": {
-            "It feels like..\\.\\...": "ヤバい..\\.\\...",
-            "My head's gonna burst open......\\..\\.": "頭が爆発しそう......\\..\\.",
-          },
+      },
+    },
+  );
+});
+Deno.test("[readRow] multiple lines translation row CRLF", () => {
+  assertEquals(
+    readRow({}, [
+      "Map118.json",
+      "",
+      "It feels like..\\.\\...\r\nMy head's gonna burst open......\\..\\.",
+      "ヤバい..\\.\\...\r\n頭が爆発しそう......\\..\\.",
+    ]),
+    {
+      "Map118.json": {
+        ".": {
+          "It feels like..\\.\\...": "ヤバい..\\.\\...",
+          "My head's gonna burst open......\\..\\.": "頭が爆発しそう......\\..\\.",
         },
-      });
-    });
-  });
+      },
+    },
+  );
+});
 
-  test("fewer lines than the original", () => {
-    expect(
-      readRow({}, [
-        "Map001.json",
-        "",
-        "I never did end up finding \nthose last few journal \npages...",
-        "まだ見つからない日記のページ。\nこの先も探し続けるのだろう。",
-      ]),
-    ).toEqual({
+Deno.test("[readRow] fewer lines than the original", () => {
+  assertEquals(
+    readRow({}, [
+      "Map001.json",
+      "",
+      "I never did end up finding \nthose last few journal \npages...",
+      "まだ見つからない日記のページ。\nこの先も探し続けるのだろう。",
+    ]),
+    {
       "Map001.json": {
         ".": {
           "I never did end up finding ": "まだ見つからない日記のページ。",
@@ -98,56 +100,58 @@ describe("readRow", () => {
           "pages...": "",
         },
       },
-    });
-  });
+    },
+  );
+});
 
-  test("more lines than the original", () => {
-    expect(
-      readRow({}, [
-        "Map002.json",
-        "",
-        "I thought you were a more\npeaceful BEAST - Type.",
-        "ビーストタイプでも\nもっとやさしいビーストタイプ\nだと思ってたのに。",
-      ]),
-    ).toEqual({
+Deno.test("[readRow] more lines than the original", () => {
+  assertEquals(
+    readRow({}, [
+      "Map002.json",
+      "",
+      "I thought you were a more\npeaceful BEAST - Type.",
+      "ビーストタイプでも\nもっとやさしいビーストタイプ\nだと思ってたのに。",
+    ]),
+    {
       "Map002.json": {
         ".": {
           "I thought you were a more": "ビーストタイプでも",
           "peaceful BEAST - Type.": "もっとやさしいビーストタイプ\nだと思ってたのに。",
         },
       },
-    });
-  });
+    },
+  );
+});
 
-  test("duplicate translation and same path", () => {
-    const t1 = readRow({}, [
-      "Map043.json",
-      "",
-      "....Another nightmare..",
-      "....またあの嫌な夢だ..",
-    ]);
-    expect(() =>
-      readRow(t1, ["Map043.json", "", "....Another nightmare..", "異なる訳"])
-    ).toThrowError(
-      /^.+ is duplicate translation\. \(fileName: .+, original: ".+", translation: ".+"\)$/,
-    );
-  });
+Deno.test("[readRow] duplicate translation and same path", () => {
+  const t1 = readRow({}, [
+    "Map043.json",
+    "",
+    "....Another nightmare..",
+    "....またあの嫌な夢だ..",
+  ]);
+  assertThrows(
+    () => readRow(t1, ["Map043.json", "", "....Another nightmare..", "異なる訳"]),
+    undefined,
+    " is duplicate translation.",
+  );
+});
 
-  test("duplicate translation and different path", () => {
-    const t1 = readRow({}, [
+Deno.test("[readRow] duplicate translation and different path", () => {
+  const t1 = readRow({}, [
+    "Map043.json",
+    "",
+    "....Another nightmare..",
+    "....またあの嫌な夢だ..",
+  ]);
+  assertEquals(
+    readRow(t1, [
       "Map043.json",
-      "",
+      ".events[2]",
       "....Another nightmare..",
-      "....またあの嫌な夢だ..",
-    ]);
-    expect(
-      readRow(t1, [
-        "Map043.json",
-        ".events[2]",
-        "....Another nightmare..",
-        "異なる訳",
-      ]),
-    ).toEqual({
+      "異なる訳",
+    ]),
+    {
       "Map043.json": {
         ".": {
           "....Another nightmare..": "....またあの嫌な夢だ..",
@@ -156,24 +160,25 @@ describe("readRow", () => {
           "....Another nightmare..": "異なる訳",
         },
       },
-    });
-  });
+    },
+  );
+});
 
-  test("duplicate translation and equal 1", () => {
-    const t1 = readRow({}, [
+Deno.test("[readRow] duplicate translation and equal 1", () => {
+  const t1 = readRow({}, [
+    "Map007.json",
+    "",
+    "\\SE[8]Thank you so much!!\\.\\. What a relief\nto come across someone so kind!\\SE[1]",
+    "\\SE[8]あ、ありがとう!!\\.\\.\n親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]",
+  ]);
+  assertEquals(
+    readRow(t1, [
       "Map007.json",
       "",
-      "\\SE[8]Thank you so much!!\\.\\. What a relief\nto come across someone so kind!\\SE[1]",
-      "\\SE[8]あ、ありがとう!!\\.\\.\n親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]",
-    ]);
-    expect(
-      readRow(t1, [
-        "Map007.json",
-        "",
-        "\\SE[8]Thank you so much!! What a relief\nto come across someone so kind!\\SE[1]",
-        "\\SE[8]ありがとう!!\n親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]",
-      ]),
-    ).toEqual({
+      "\\SE[8]Thank you so much!! What a relief\nto come across someone so kind!\\SE[1]",
+      "\\SE[8]ありがとう!!\n親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]",
+    ]),
+    {
       "Map007.json": {
         ".": {
           "\\SE[8]Thank you so much!!\\.\\. What a relief":
@@ -183,24 +188,25 @@ describe("readRow", () => {
           "\\SE[8]Thank you so much!! What a relief": "\\SE[8]ありがとう!!",
         },
       },
-    });
-  });
+    },
+  );
+});
 
-  test("duplicate translation and equal 2", () => {
-    const t1 = readRow({}, [
+Deno.test("[readRow] duplicate translation and equal 2", () => {
+  const t1 = readRow({}, [
+    "Map043.json",
+    "",
+    "Looks like these are \ningredients ready to use for \nspells and formulas.",
+    "術式や儀式に使う材料みたい。",
+  ]);
+  assertEquals(
+    readRow(t1, [
       "Map043.json",
       "",
-      "Looks like these are \ningredients ready to use for \nspells and formulas.",
-      "術式や儀式に使う材料みたい。",
-    ]);
-    expect(
-      readRow(t1, [
-        "Map043.json",
-        "",
-        ".\\..\\..Organic ingredients for\nspells and formulas.",
-        ".\\..\\..術式や儀式に使う薬草かな。",
-      ]),
-    ).toEqual({
+      ".\\..\\..Organic ingredients for\nspells and formulas.",
+      ".\\..\\..術式や儀式に使う薬草かな。",
+    ]),
+    {
       "Map043.json": {
         ".": {
           "Looks like these are ": "術式や儀式に使う材料みたい。",
@@ -209,6 +215,6 @@ describe("readRow", () => {
           ".\\..\\..Organic ingredients for": ".\\..\\..術式や儀式に使う薬草かな。",
         },
       },
-    });
-  });
+    },
+  );
 });

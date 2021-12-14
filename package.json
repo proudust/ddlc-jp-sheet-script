@@ -10,7 +10,7 @@
     "lint:deno-lint": "deno lint --config deno.jsonc",
     "lint:deno-fmt": "deno fmt --check --config deno.jsonc",
     "test": "run-p -l -c --aggregate-output lint:* unit",
-    "unit": "jest",
+    "unit": "deno test src",
     "build": "deno run --allow-read --allow-env --allow-net --allow-write --allow-run build.ts",
     "deploy": "ts-node -O '{\"module\":\"commonjs\"}' deploy.ts"
   },

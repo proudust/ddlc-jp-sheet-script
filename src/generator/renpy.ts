@@ -2,7 +2,7 @@ import {
   FileTranslate,
   SayTranslate,
   StringsTranslate,
-} from "./renpyTranslates";
+} from "./renpyTranslates.ts";
 
 type Translate = StringsTranslate | SayTranslate | FileTranslate;
 

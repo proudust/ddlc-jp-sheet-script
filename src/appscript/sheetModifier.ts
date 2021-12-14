@@ -1,4 +1,6 @@
-import { ScriptProperties } from "./scriptProperties";
+/// <reference path="https://raw.githubusercontent.com/proudust/deno-gas-types/main/types/index.d.ts" />
+
+import { ScriptProperties } from "./scriptProperties.ts";
 
 type Sheet = GoogleAppsScript.Spreadsheet.Sheet;
 /** シートの設定関数 */

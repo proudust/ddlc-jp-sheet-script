@@ -1,4 +1,5 @@
-import { checkLength } from "./rpgmv-check";
+import { assertEquals } from "../../deps.ts";
+import { checkLength } from "./rpgmv-check.ts";
 
 type CheckArgs = Parameters<typeof checkLength>[0];
 const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({
@@ -11,18 +12,16 @@ const toArgs = (obj: Partial<CheckArgs>): CheckArgs => ({
   ...obj,
 });
 
-describe("checkId", () => {
-  test("Not error", () => {
-    const normal = toArgs({
-      translate: "ごめんね！\\.\\.さっきまで裏で\nちょいと仕事してたもんだからさ。",
-    });
-    expect(checkLength(normal)).toBeUndefined();
+Deno.test("[checkId] Not error", () => {
+  const normal = toArgs({
+    translate: "ごめんね！\\.\\.さっきまで裏で\nちょいと仕事してたもんだからさ。",
   });
+  assertEquals(checkLength(normal), undefined);
+});
 
-  test("Error", () => {
-    const normal = toArgs({
-      translate: "ごめんね! \\.\\.さっきまで裏でちょいと\n仕事してたもんだからさ。",
-    });
-    expect(checkLength(normal)).toBeTruthy();
+Deno.test("[checkId] Error", () => {
+  const normal = toArgs({
+    translate: "ごめんね! \\.\\.さっきまで裏でちょいと\n仕事してたもんだからさ。",
   });
+  assertEquals(!!checkLength(normal), true);
 });

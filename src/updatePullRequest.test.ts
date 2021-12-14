@@ -1,28 +1,34 @@
-import { updatePullRequest } from "./updatePullRequest";
+import { assertSpyCalls, assertThrows, stub } from "../deps.ts";
+import { updatePullRequest } from "./updatePullRequest.ts";
 
-declare let global: {
-  UrlFetchApp: Partial<GoogleAppsScript.URL_Fetch.UrlFetchApp>;
+declare let globalThis: {
+  UrlFetchApp: {
+    fetch(): void;
+  };
 };
 
-beforeAll(() => (global.UrlFetchApp = {}));
+globalThis.UrlFetchApp = {
+  fetch: () => {},
+};
 
 const props = {
   githubRepository: "proudust/ddlc-jp-patch",
   githubToken: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 };
 
-test("calls UrlFetchApp.fetch only once", () => {
-  const fetch = jest.fn();
-  global.UrlFetchApp.fetch = fetch;
-
-  updatePullRequest(props);
-  expect(fetch.mock.calls.length).toBe(1);
+Deno.test("calls UrlFetchApp.fetch only once", () => {
+  const fetch = stub(UrlFetchApp, "fetch");
+  try {
+    updatePullRequest(props);
+    assertSpyCalls(fetch, 1);
+  } finally {
+    fetch.restore();
+  }
 });
 
-test("If UrlFetchApp.fetch returns an exception, dont catch that exception.", () => {
-  global.UrlFetchApp.fetch = jest.fn(() => {
+Deno.test("If UrlFetchApp.fetch returns an exception, dont catch that exception.", () => {
+  globalThis.UrlFetchApp.fetch = () => {
     throw new Error();
-  });
-
-  expect(() => updatePullRequest(props)).toThrowError();
+  };
+  assertThrows(() => updatePullRequest(props));
 });

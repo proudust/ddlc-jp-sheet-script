@@ -1,14 +1,16 @@
-import { getScriptProperties } from "./appscript/scriptProperties";
+/// <reference path="https://raw.githubusercontent.com/proudust/deno-gas-types/main/types/index.d.ts" />
+
+import { getScriptProperties } from "./appscript/scriptProperties.ts";
 import {
   initStatisticsSheetModifier,
   initTranslateSheetModifier,
-} from "./appscript/sheetModifier";
-import * as Contexts from "./generator/context";
-import { generateCode } from "./generator/renpy";
-import { generateCode as generateJson } from "./generator/json";
-import * as RenPyCheck from "./check/renpy-check";
-import * as RpgMvCheck from "./check/rpgmv-check";
-import { updatePullRequest } from "./updatePullRequest";
+} from "./appscript/sheetModifier.ts";
+import * as Contexts from "./generator/context.ts";
+import { generateCode } from "./generator/renpy.ts";
+import { generateCode as generateJson } from "./generator/json.ts";
+import * as RenPyCheck from "./check/renpy-check.ts";
+import * as RpgMvCheck from "./check/rpgmv-check.ts";
+import { updatePullRequest } from "./updatePullRequest.ts";
 
 type WebAppsOutput =
   | GoogleAppsScript.HTML.HtmlOutput

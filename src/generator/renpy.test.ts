@@ -1,120 +1,127 @@
-import { trimIndent } from "../util/tags";
+import { assert, assertEquals } from "../../deps.ts";
+import { trimIndent } from "../util/tags.ts";
 import {
   convaerHistorySupport,
   generateCode,
   inflate,
   parseRow,
   removeDuplicateStrings,
-} from "./renpy";
+} from "./renpy.ts";
 import {
   FileTranslate,
   SayTranslate,
   StringsTranslate,
-} from "./renpyTranslates";
+} from "./renpyTranslates.ts";
 
-describe("parseRow", () => {
-  test("enpty or comment row", () => {
-    expect(parseRow(["", "", "", ""])).toBeUndefined();
-    expect(parseRow(["※Yesの場合", "", "", ""])).toBeUndefined();
-    expect(parseRow(["", "", "※Yesの場合", ""])).toBeUndefined();
-    expect(
-      parseRow([
-        "poem_special1.png",
-        "poem_special1",
-        "happy thoughts",
-        "シアワセ",
-      ]),
-    ).toBeUndefined();
-  });
-
-  test("ignore if translation is empty", () => {
-    expect(parseRow(["", "strings", "Yes", ""])).toBeUndefined();
-    expect(parseRow(["ch0_main_41e273ca", "s", "Heeeeeeeyyy!!", ""]))
-      .toBeUndefined();
-  });
-
-  test("strings statement row", () => {
-    expect(parseRow(["", "strings", "Yes", "はい"])).toBeInstanceOf(
-      StringsTranslate,
-    );
-  });
-
-  test("say statement row", () => {
-    expect(
-      parseRow(["ch0_main_41e273ca", "s", "Heeeeeeeyyy!!", "「おーはーよーーー！」"]),
-    ).toBeInstanceOf(SayTranslate);
-    expect(
-      parseRow(["ch0_main_41e273ca_1", "s", "Heeeeeeeyyy!!", "「おーはーよーーー！」"]),
-    ).toBeInstanceOf(SayTranslate);
-  });
-
-  test("file row", () => {
-    expect(
-      parseRow([
-        "CAN YOU HEAR ME.txt",
-        "file",
-        "There's a little devil inside all of us.",
-        "私たちの中には小さな悪魔がいる",
-      ]),
-    ).toBeInstanceOf(FileTranslate);
-  });
+Deno.test("[parseRow] enpty or comment row", () => {
+  assertEquals(parseRow(["", "", "", ""]), undefined);
+  assertEquals(parseRow(["※Yesの場合", "", "", ""]), undefined);
+  assertEquals(parseRow(["", "", "※Yesの場合", ""]), undefined);
+  assertEquals(
+    parseRow([
+      "poem_special1.png",
+      "poem_special1",
+      "happy thoughts",
+      "シアワセ",
+    ]),
+    undefined,
+  );
 });
 
-describe("convaerHistorySupport", () => {
-  test("character dialog", () => {
-    const say = [
+Deno.test("[parseRow] ignore if translation is empty", () => {
+  assertEquals(parseRow(["", "strings", "Yes", ""]), undefined);
+  assertEquals(
+    parseRow(["ch0_main_41e273ca", "s", "Heeeeeeeyyy!!", ""]),
+    undefined,
+  );
+});
+
+Deno.test("[parseRow] strings statement row", () => {
+  assert(parseRow(["", "strings", "Yes", "はい"]) instanceof StringsTranslate);
+});
+
+Deno.test("[parseRow] say statement row", () => {
+  assert(
+    parseRow([
+      "ch0_main_41e273ca",
+      "s",
+      "Heeeeeeeyyy!!",
+      "「おーはーよーーー！」",
+    ]) instanceof SayTranslate,
+  );
+  assert(
+    parseRow([
+      "ch0_main_41e273ca_1",
+      "s",
+      "Heeeeeeeyyy!!",
+      "「おーはーよーーー！」",
+    ]) instanceof SayTranslate,
+  );
+});
+
+Deno.test("[parseRow] file row", () => {
+  assert(
+    parseRow([
+      "CAN YOU HEAR ME.txt",
+      "file",
+      "There's a little devil inside all of us.",
+      "私たちの中には小さな悪魔がいる",
+    ]) instanceof FileTranslate,
+  );
+});
+
+Deno.test("[convaerHistorySupport] character dialog", () => {
+  const say = [
+    new SayTranslate(
+      "ch0_main_41e273ca",
+      "s",
+      "Heeeeeeeyyy!!",
+      "「おーはーよーーー！」",
+    ),
+  ];
+  assertEquals(convaerHistorySupport(say), [
+    new StringsTranslate("{#ch0_main_41e273ca}", "「おーはーよーーー！」"),
+  ]);
+});
+
+Deno.test("[convaerHistorySupport] monologue dialog", () => {
+  const say = [
+    new SayTranslate(
+      "ch0_main_cb634d94",
+      "",
+      "I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.",
+      trimIndent`
+          "やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
+          "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"
+        `,
+    ),
+  ];
+  assertEquals(convaerHistorySupport(say), [
+    new StringsTranslate(
+      "{#ch0_main_cb634d94}",
+      trimIndent`
+          やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。
+          着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。
+        `.replace("\n", "\\n"),
+    ),
+  ]);
+});
+
+Deno.test("[inflate] If no translation, return empty", () => {
+  assertEquals(inflate("test", []), []);
+});
+
+Deno.test('[inflate] If no string translation, do not include "translate Japanese strings:"', () => {
+  assertEquals(
+    inflate("test", [
       new SayTranslate(
         "ch0_main_41e273ca",
         "s",
         "Heeeeeeeyyy!!",
         "「おーはーよーーー！」",
       ),
-    ];
-    expect(convaerHistorySupport(say)).toStrictEqual([
-      new StringsTranslate("{#ch0_main_41e273ca}", "「おーはーよーーー！」"),
-    ]);
-  });
-
-  test("monologue dialog", () => {
-    const say = [
-      new SayTranslate(
-        "ch0_main_cb634d94",
-        "",
-        "I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.",
-        trimIndent`
-          "やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
-          "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"
-        `,
-      ),
-    ];
-    expect(convaerHistorySupport(say)).toStrictEqual([
-      new StringsTranslate(
-        "{#ch0_main_cb634d94}",
-        trimIndent`
-          やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。
-          着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。
-        `.replace("\n", "\\n"),
-      ),
-    ]);
-  });
-});
-
-describe("inflate", () => {
-  test("If no translation, return empty", () => {
-    expect(inflate("test", [])).toStrictEqual([]);
-  });
-
-  test('If no string translation, do not include "translate Japanese strings:"', () => {
-    expect(
-      inflate("test", [
-        new SayTranslate(
-          "ch0_main_41e273ca",
-          "s",
-          "Heeeeeeeyyy!!",
-          "「おーはーよーーー！」",
-        ),
-      ]),
-    ).toStrictEqual([
+    ]),
+    [
       {
         name: "test.rpy",
         content: trimIndent`
@@ -123,24 +130,25 @@ describe("inflate", () => {
 
         `,
       },
-    ]);
-  });
+    ],
+  );
+});
 
-  test("If includeHistorySupport is true", () => {
-    expect(
-      inflate(
-        "test",
-        [
-          new SayTranslate(
-            "ch0_main_41e273ca",
-            "s",
-            "Heeeeeeeyyy!!",
-            "「おーはーよーーー！」",
-          ),
-        ],
-        true,
-      ),
-    ).toStrictEqual([
+Deno.test("[inflate] If includeHistorySupport is true", () => {
+  assertEquals(
+    inflate(
+      "test",
+      [
+        new SayTranslate(
+          "ch0_main_41e273ca",
+          "s",
+          "Heeeeeeeyyy!!",
+          "「おーはーよーーー！」",
+        ),
+      ],
+      true,
+    ),
+    [
       {
         name: "test.rpy",
         content: trimIndent`
@@ -153,24 +161,24 @@ describe("inflate", () => {
 
         `,
       },
-    ]);
-  });
-
-  test("If only file translation, do not return script file", () => {
-    const t = [
-      new FileTranslate(
-        "CAN YOU HEAR ME.txt",
-        "There's a little devil inside all of us.",
-        "私たちの中には小さな悪魔がいる",
-      ),
-    ];
-    expect(inflate("test", t)).toStrictEqual([
-      { name: "CAN YOU HEAR ME.txt", content: "私たちの中には小さな悪魔がいる" },
-    ]);
-  });
+    ],
+  );
 });
 
-test("removeDuplicateStrings", () => {
+Deno.test("[inflate] If only file translation, do not return script file", () => {
+  const t = [
+    new FileTranslate(
+      "CAN YOU HEAR ME.txt",
+      "There's a little devil inside all of us.",
+      "私たちの中には小さな悪魔がいる",
+    ),
+  ];
+  assertEquals(inflate("test", t), [
+    { name: "CAN YOU HEAR ME.txt", content: "私たちの中には小さな悪魔がいる" },
+  ]);
+});
+
+Deno.test("removeDuplicateStrings", () => {
   const parsedSheet = [
     {
       name: "test1",
@@ -190,7 +198,7 @@ test("removeDuplicateStrings", () => {
       translates: [new StringsTranslate("Heeeeeeeyyy!!", "「おーはーよーーー！」")],
     },
   ];
-  expect(removeDuplicateStrings(parsedSheet)).toStrictEqual([
+  assertEquals(removeDuplicateStrings(parsedSheet), [
     {
       name: "test1",
       translates: [
@@ -206,7 +214,7 @@ test("removeDuplicateStrings", () => {
   ]);
 });
 
-test("generateCode", () => {
+Deno.test("generateCode", () => {
   type Sheet = Parameters<typeof generateCode>[0][0];
   const toSheet = (
     name: string,
@@ -234,7 +242,7 @@ test("generateCode", () => {
     toSheet("test2", [["", "strings", "Yes", "はい"]]),
   ];
 
-  expect(generateCode(sheets, true)).toStrictEqual([
+  assertEquals(generateCode(sheets, true), [
     {
       name: "test1.rpy",
       content: trimIndent`
