@@ -4,10 +4,10 @@
  * キャラの台詞のサンプル (DDLC 本編から引用)
  */
 export const characterSay = {
-  id: 'ch0_main_41e273ca',
-  attribute: 's',
-  original: 'Heeeeeeeyyy!!',
-  translate: '「おーはーよーーー！」',
+  id: "ch0_main_41e273ca",
+  attribute: "s",
+  original: "Heeeeeeeyyy!!",
+  translate: "「おーはーよーーー！」",
   translateScript: `translate Japanese ch0_main_41e273ca:
     s "「おーはーよーーー！」"
 `,
@@ -17,10 +17,10 @@ export const characterSay = {
  * モノローグ台詞のサンプル (DDLC 本編から引用)
  */
 export const monologueSay = {
-  id: 'ch0_main_bcc5bb00',
-  original: `I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.`,
-  translate:
-    '遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。',
+  id: "ch0_main_bcc5bb00",
+  original:
+    `I see an annoying girl running toward me from the distance, waving her arms in the air like she's totally oblivious to any attention she might draw to herself.`,
+  translate: "遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。",
   translateScript: `translate Japanese ch0_main_bcc5bb00:
     "遠くから鬱陶しい女の子が、宙に手を振りながら周囲の目をまったく気にしない様子で、こちらに走ってくる。"
 `,
@@ -30,10 +30,10 @@ export const monologueSay = {
  * 選択肢と同時に表示される台詞のサンプル (DDLC 本編から引用)
  */
 export const nointeractSay = {
-  id: 'ch3_end_sayori_dd9616f1',
-  attribute: 'm nointeract',
+  id: "ch3_end_sayori_dd9616f1",
+  attribute: "m nointeract",
   original: `Just think of the club, okay?`,
-  translate: '「とにかくこの部のことを考えましょう、ね？」',
+  translate: "「とにかくこの部のことを考えましょう、ね？」",
   translateScript: `translate Japanese ch3_end_sayori_dd9616f1:
     m "「とにかくこの部のことを考えましょう、ね？」" nointeract
 `,
@@ -43,10 +43,10 @@ export const nointeractSay = {
  * 分割が必要な長台詞のサンプル (DDLC 本編から引用)
  */
 export const longSay = {
-  id: 'ch0_main_cb634d94',
-  attribute: '',
+  id: "ch0_main_cb634d94",
+  attribute: "",
   original:
-    'I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.',
+    "I dejectedly follow Sayori across the school and upstairs - a section of the school I rarely visit, being generally used for third-year classes and activities.",
   translate: `"やれやれと思いながらサヨリの後について校舎をわたり階段を上っていく。"
 "着いたのは、学校の中でも普段は３年生の授業や活動で使用され、自分は滅多に行くことがない場所だった。"`,
   translateScript: `translate Japanese ch0_main_cb634d94:
@@ -59,8 +59,8 @@ export const longSay = {
  * エスケープされた文字を含む台詞のサンプル (DDLC Monika After Story から引用)
  */
 export const escapeSay = {
-  id: 'monika_japanese_1e92078b',
-  character: 'm 1ekbfa',
+  id: "monika_japanese_1e92078b",
+  character: "m 1ekbfa",
   original:
     "Ahaha! It's okay [player]. It just means that I can say 'I love you' in more ways than one!",
   translate: `あはは！大丈夫だよ[player]君。私は\\"I love you\\"をもっとたくさんの言い方で表現してみたいの。`,
@@ -73,8 +73,8 @@ export const escapeSay = {
  * ファイルのサンプル (DDLC 本編から引用)
  */
 export const file = {
-  id: 'CAN YOU HEAR ME.txt',
-  attribute: 'file',
+  id: "CAN YOU HEAR ME.txt",
+  attribute: "file",
   original: `"There's a little devil inside all of us."
 
 Beneath their manufactured perception - their artificial reality - is a
@@ -107,10 +107,10 @@ All I did was untie the knot.`,
  * 詞のサンプル (DDLC 本編から引用)
  */
 export const poemTitle = {
-  id: '',
-  attribute: 'strings',
-  original: 'Ghost Under the Light',
-  translate: '燈の下の幽霊',
+  id: "",
+  attribute: "strings",
+  original: "Ghost Under the Light",
+  translate: "燈の下の幽霊",
   translateScript: `    old "Ghost Under the Light"
     new "燈の下の幽霊"
 `,

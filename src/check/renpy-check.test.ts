@@ -1,75 +1,75 @@
-import * as RenPyChecker from './renpy-check';
+import { assertEquals } from "../../deps.ts";
+import {
+  CantIncludeHalfWidthChecker,
+  CantIncludeSpaceInWaitTagsChecker,
+  IdFormatChecker,
+  UnificationEllipsisChecker,
+  UseUnknownAttributesChecker,
+} from "./renpy-check.ts";
 
-describe('IdFormatChecker', () => {
-  const IdFormatChecker = new RenPyChecker.IdFormatChecker();
-
-  test.each`
-    id                                  | valid
-    ${'bye_leaving_already_035e8b8a'}   | ${false}
-    ${'bye_leaving_already_035e8b8a_1'} | ${false}
-    ${'bye_prompt_sleep_cdf617a'}       | ${true}
-    ${'bye_prompt_sleep_cdf617a10'}     | ${true}
-  `('check({ id: "$id" }) => $valid', ({ id, valid }) => {
-    expect(IdFormatChecker.check({ id })).toBe(valid);
-  });
+Deno.test({
+  name: "IdFormatChecker",
+  fn() {
+    const check = (id: string) => new IdFormatChecker().check({ id });
+    assertEquals(check("bye_leaving_already_035e8b8a"), false);
+    assertEquals(check("bye_leaving_already_035e8b8a_1"), false);
+    assertEquals(check("bye_prompt_sleep_cdf617a"), true);
+    assertEquals(check("bye_prompt_sleep_cdf617a10"), true);
+  },
 });
 
-describe('UseUnknownAttributesChecker', () => {
-  const UseUnknownAttributesChecker = new RenPyChecker.UseUnknownAttributesChecker();
+Deno.test({
+  name: "UseUnknownAttributesChecker",
+  fn() {
+    const check = (attr: string) =>
+      new UseUnknownAttributesChecker().check({ attr });
 
-  test.each`
-    attr         | valid
-    ${'m 1tkc'}  | ${false}
-    ${'strings'} | ${false}
-    ${'string'}  | ${true}
-  `('check({ attr: "$attr" }) => $valid', ({ attr, valid }) => {
-    expect(UseUnknownAttributesChecker.check({ attr })).toBe(valid);
-  });
+    assertEquals(check("m 1tkc"), false);
+    assertEquals(check("strings"), false);
+    assertEquals(check("string"), true);
+  },
 });
 
-describe('UnificationEllipsisChecker', () => {
-  const UnificationEllipsisChecker = new RenPyChecker.UnificationEllipsisChecker();
+Deno.test({
+  name: "UnificationEllipsisChecker",
+  fn() {
+    const check = (translate: string) =>
+      new UnificationEllipsisChecker().check({ translate });
 
-  test.each`
-    translate                                                  | valid
-    ${'ねぇ、[player]……'}                                      | ${false}
-    ${'ねぇ、[player]…'}                                       | ${true}
-    ${'ねぇ、[player]...'}                                     | ${true}
-    ${'ねぇ、[player]......'}                                  | ${true}
-    ${'…待ってね'}                                             | ${true}
-    ${'私って本当にドジだね、[player]君……{w=0.3}ごめんなさい'} | ${false}
-    ${'[spr_obj.dlg_desc!t]、[acs_quip]'}                      | ${false}
-  `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
-    expect(UnificationEllipsisChecker.check({ translate })).toBe(valid);
-  });
+    assertEquals(check("ねぇ、[player]……"), false);
+    assertEquals(check("ねぇ、[player]…"), true);
+    assertEquals(check("ねぇ、[player]..."), true);
+    assertEquals(check("ねぇ、[player]......"), true);
+    assertEquals(check("…待ってね"), true);
+    assertEquals(check("私って本当にドジだね、[player]君……{w=0.3}ごめんなさい"), false);
+    assertEquals(check("[spr_obj.dlg_desc!t]、[acs_quip]"), false);
+  },
 });
 
-describe('CantIncludeSpaceInWaitTagsChecker', () => {
-  const CantIncludeSpaceInWaitTagsChecker = new RenPyChecker.CantIncludeSpaceInWaitTagsChecker();
+Deno.test({
+  name: "CantIncludeSpaceInWaitTagsChecker",
+  fn() {
+    const check = (translate: string) =>
+      new CantIncludeSpaceInWaitTagsChecker().check({ translate });
 
-  test.each`
-    translate      | valid
-    ${'{w=0.2}'}   | ${false}
-    ${'{w=0. 2}'}  | ${true}
-    ${'{w = 0.3}'} | ${true}
-  `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
-    expect(CantIncludeSpaceInWaitTagsChecker.check({ translate })).toBe(valid);
-  });
+    assertEquals(check("{w=0.2}"), false);
+    assertEquals(check("{w=0. 2}"), true);
+    assertEquals(check("{w = 0.3}"), true);
+  },
 });
 
-describe('CantIncludeHalfWidthChecker', () => {
-  const CantIncludeHalfWidthChecker = new RenPyChecker.CantIncludeHalfWidthChecker();
+Deno.test({
+  name: "CantIncludeHalfWidthChecker",
+  fn() {
+    const check = (translate: string) =>
+      new CantIncludeHalfWidthChecker().check({ translate });
 
-  test.each`
-    translate       | valid
-    ${'引き分け?'}  | ${true}
-    ${'引き分け？'} | ${false}
-    ${'私の勝ち!'}  | ${true}
-    ${'私の勝ち！'} | ${false}
-    ${'[v_quip!t]'} | ${false}
-    ${'あはは~'}    | ${true}
-    ${'あはは～'}   | ${false}
-  `('check({ translate: "$translate" }) => $valid', ({ translate, valid }) => {
-    expect(CantIncludeHalfWidthChecker.check({ translate })).toBe(valid);
-  });
+    assertEquals(check("引き分け?"), true);
+    assertEquals(check("引き分け？"), false);
+    assertEquals(check("私の勝ち!"), true);
+    assertEquals(check("私の勝ち！"), false);
+    assertEquals(check("[v_quip!t]"), false);
+    assertEquals(check("あはは~"), true);
+    assertEquals(check("あはは～"), false);
+  },
 });

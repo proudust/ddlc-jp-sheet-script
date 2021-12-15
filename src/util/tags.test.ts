@@ -1,42 +1,39 @@
-import { trimMargin, trimIndent } from './tags';
+import { assertEquals } from "../../deps.ts";
+import { trimIndent, trimMargin } from "./tags.ts";
 
-describe('trimMargin', () => {
-  test('use tag', () => {
-    const before = trimMargin`ABC
+Deno.test("[trimMargin] use tag", () => {
+  const before = trimMargin`ABC
             |123
                 |456`;
-    expect(before).toBe('ABC\n123\n456');
-  });
+  assertEquals(before, "ABC\n123\n456");
+});
 
-  test('use function', () => {
-    const before = trimMargin(
-      `
+Deno.test("[trimMargin] use function", () => {
+  const before = trimMargin(
+    `
 #XYZ
     #foo
     #bar
 `,
-      '#',
-    );
-    expect(before).toBe('XYZ\nfoo\nbar');
-  });
+    "#",
+  );
+  assertEquals(before, "XYZ\nfoo\nbar");
 });
 
-describe('trimIndent', () => {
-  test('use tag', () => {
-    const before = trimIndent`
+Deno.test("[trimIndent] use tag", () => {
+  const before = trimIndent`
         ABC
          123
           456
         `;
-    expect(before).toBe('ABC\n 123\n  456');
-  });
+  assertEquals(before, "ABC\n 123\n  456");
+});
 
-  test('use function', () => {
-    const before = trimIndent(`
+Deno.test("[trimIndent] use function", () => {
+  const before = trimIndent(`
         ABC
          123
           456
     `);
-    expect(before).toBe('ABC\n 123\n  456');
-  });
+  assertEquals(before, "ABC\n 123\n  456");
 });

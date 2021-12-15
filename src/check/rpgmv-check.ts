@@ -1,4 +1,4 @@
-import { trimIndent } from '../util/tags';
+import { trimIndent } from "../util/tags.ts";
 
 interface Range {
   getValues(): string[][];
@@ -23,15 +23,19 @@ type CheckFunc = (args: CheckArgs) => string | undefined;
 /**
  * 字数が全角 16 文字 (半角 32 文字) を超える場合
  */
-export const checkLength: CheckFunc = ({ translate, sheetName, sheetRowNumber }) => {
-  const lines = translate.split('\n').map(s => s.replace(/\\(?:SE\[\d+\]|\.)/g, ''));
+export const checkLength: CheckFunc = (
+  { translate, sheetName, sheetRowNumber },
+) => {
+  const lines = translate.split("\n").map((s) =>
+    s.replace(/\\(?:SE\[\d+\]|\.)/g, "")
+  );
   const length = Math.max(
-    ...lines.map(s =>
+    ...lines.map((s) =>
       s
-        .split('')
-        .map(c => c.charCodeAt(0))
-        .map(i => (33 <= i && i <= 126 ? 1 : 2))
-        .reduce<number>((prev, curr) => prev + curr, 0),
+        .split("")
+        .map((c) => c.charCodeAt(0))
+        .map((i) => (33 <= i && i <= 126 ? 1 : 2))
+        .reduce<number>((prev, curr) => prev + curr, 0)
     ),
   );
   if (40 < length) {
@@ -55,18 +59,25 @@ export function checkAll(sheets: Sheet[]): string {
     .reduce<string[]>((errors, sheet) => {
       const sheetName = sheet.getName();
       const e = sheet
-        .getRange('A3:F')
+        .getRange("A3:F")
         .getValues()
         .reduce<string[]>((errors, [id, attr, original, translate], index) => {
           const sheetRowNumber = index + 3;
-          const args: CheckArgs = { id, attr, original, translate, sheetName, sheetRowNumber };
+          const args: CheckArgs = {
+            id,
+            attr,
+            original,
+            translate,
+            sheetName,
+            sheetRowNumber,
+          };
           const checkFuncs: CheckFunc[] = [checkLength];
           const e = checkFuncs
-            .map(f => f(args))
+            .map((f) => f(args))
             .filter(<T>(r: T | undefined): r is T => Boolean(r));
           return errors.concat(e);
         }, []);
       return errors.concat(e);
     }, [])
-    .join('\n\n');
+    .join("\n\n");
 }

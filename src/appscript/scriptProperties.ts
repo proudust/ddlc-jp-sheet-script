@@ -34,19 +34,22 @@ export class ScriptProperties {
    * 未加工のスクリプトのプロパティから値を取得します。
    * @throws 指定のプロパティが未定義の場合、エラーをスローします。
    */
-  private getValue<T extends keyof RawScriptProperties>(key: T): RawScriptProperties[T] {
-    return this.raw[key] ?? throwError(`${key} is not defined in the script property.`);
+  private getValue<T extends keyof RawScriptProperties>(
+    key: T,
+  ): RawScriptProperties[T] {
+    return this.raw[key] ??
+      throwError(`${key} is not defined in the script property.`);
   }
 
   /** 出力フォルダ名 */
   public get folderName(): string {
-    return this.getValue('FOLDER_NAME');
+    return this.getValue("FOLDER_NAME");
   }
 
   /** タグの配列 */
   public get tags(): { name: string; color: string }[] {
-    const names = this.getValue('TAG_NAMES').split(',');
-    const colors = this.getValue('TAG_COLORS').split(',');
+    const names = this.getValue("TAG_NAMES").split(",");
+    const colors = this.getValue("TAG_COLORS").split(",");
     return names.map((name, index) => ({
       name,
       color: colors[index],
@@ -59,18 +62,21 @@ export class ScriptProperties {
   }
 
   /** 出力するデータの種類 (Ren'Py/Ren'Py with history support/JSON) */
-  public get exportMode(): "Ren'Py" | "Ren'Py with history support" | 'JSON' {
-    const mode = this.getValue('EXPORT_MODE');
-    if (mode !== "Ren'Py" && mode !== "Ren'Py with history support" && mode !== 'JSON') {
+  public get exportMode(): "Ren'Py" | "Ren'Py with history support" | "JSON" {
+    const mode = this.getValue("EXPORT_MODE");
+    if (
+      mode !== "Ren'Py" && mode !== "Ren'Py with history support" &&
+      mode !== "JSON"
+    ) {
       throw new Error(`${mode} is invalid export mode.`);
     }
     return mode;
   }
 
   /** 翻訳のチェックのモード (Ren'Py/RPGMakerMV) */
-  public get checkMode(): "Ren'Py" | 'RPGMakerMV' {
-    const mode = this.getValue('CHECK_MODE');
-    if (mode !== "Ren'Py" && mode !== 'RPGMakerMV') {
+  public get checkMode(): "Ren'Py" | "RPGMakerMV" {
+    const mode = this.getValue("CHECK_MODE");
+    if (mode !== "Ren'Py" && mode !== "RPGMakerMV") {
       throw new Error(`${mode} is invalid check mode.`);
     }
     return mode;
@@ -78,16 +84,17 @@ export class ScriptProperties {
 
   /** GitHub のリポジトリ名 */
   public get githubRepository(): string {
-    return this.getValue('GITHUB_REPOSITORY');
+    return this.getValue("GITHUB_REPOSITORY");
   }
 
   /** GitHub の Personal access token */
   public get githubToken(): string {
-    return this.getValue('GITHUB_TOKEN');
+    return this.getValue("GITHUB_TOKEN");
   }
 }
 
 export function getScriptProperties(): ScriptProperties {
-  const raw: Partial<RawScriptProperties> = PropertiesService.getScriptProperties().getProperties();
+  const raw: Partial<RawScriptProperties> = PropertiesService
+    .getScriptProperties().getProperties();
   return new ScriptProperties(raw);
 }

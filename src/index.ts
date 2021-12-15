@@ -1,13 +1,20 @@
-import { getScriptProperties } from './appscript/scriptProperties';
-import { initStatisticsSheetModifier, initTranslateSheetModifier } from './appscript/sheetModifier';
-import * as Contexts from './generator/context';
-import { generateCode } from './generator/renpy';
-import { generateCode as generateJson } from './generator/json';
-import * as RenPyCheck from './check/renpy-check';
-import * as RpgMvCheck from './check/rpgmv-check';
-import { updatePullRequest } from './updatePullRequest';
+/// <reference path="https://raw.githubusercontent.com/proudust/deno-gas-types/main/types/index.d.ts" />
 
-type WebAppsOutput = GoogleAppsScript.HTML.HtmlOutput | GoogleAppsScript.Content.TextOutput;
+import { getScriptProperties } from "./appscript/scriptProperties.ts";
+import {
+  initStatisticsSheetModifier,
+  initTranslateSheetModifier,
+} from "./appscript/sheetModifier.ts";
+import * as Contexts from "./generator/context.ts";
+import { generateCode } from "./generator/renpy.ts";
+import { generateCode as generateJson } from "./generator/json.ts";
+import * as RenPyCheck from "./check/renpy-check.ts";
+import * as RpgMvCheck from "./check/rpgmv-check.ts";
+import { updatePullRequest } from "./updatePullRequest.ts";
+
+type WebAppsOutput =
+  | GoogleAppsScript.HTML.HtmlOutput
+  | GoogleAppsScript.Content.TextOutput;
 declare let global: {
   doGet: (e?: GoogleAppsScript.Events.DoGet) => WebAppsOutput;
   doPost: (e?: GoogleAppsScript.Events.DoPost) => WebAppsOutput;
@@ -19,15 +26,18 @@ declare let global: {
  * スプレッドシートにメニューバーを追加します。
  */
 global.onOpen = () => {
-  SpreadsheetApp.getActiveSpreadsheet().addMenu('スクリプト', [
-    { name: '翻訳のチェック', functionName: 'checkTranslates' },
+  SpreadsheetApp.getActiveSpreadsheet().addMenu("スクリプト", [
+    { name: "翻訳のチェック", functionName: "checkTranslates" },
     null,
-    { name: 'シートの書式再設定（全体）', functionName: 'fixSpreadsheet' },
-    { name: 'シートの書式再設定（アクティブのみ）', functionName: 'fixActiveSheet' },
+    { name: "シートの書式再設定（全体）", functionName: "fixSpreadsheet" },
+    { name: "シートの書式再設定（アクティブのみ）", functionName: "fixActiveSheet" },
     null,
-    { name: '翻訳ファイルの出力 (Google Drive)', functionName: 'generateTranslationFile' },
-    { name: '翻訳ファイルの出力 (GitHub)', functionName: 'updatePullRequest' },
-    { name: '翻訳ファイルの出力 (Dry-run)', functionName: 'generateDryRun' },
+    {
+      name: "翻訳ファイルの出力 (Google Drive)",
+      functionName: "generateTranslationFile",
+    },
+    { name: "翻訳ファイルの出力 (GitHub)", functionName: "updatePullRequest" },
+    { name: "翻訳ファイルの出力 (Dry-run)", functionName: "generateDryRun" },
   ]);
 };
 
@@ -36,12 +46,16 @@ global.onOpen = () => {
  */
 global.checkTranslates = () => {
   const { notConvertColor, checkMode } = getScriptProperties();
-  const checkAll = checkMode === "Ren'Py" ? RenPyCheck.checkAll : RpgMvCheck.checkAll;
+  const checkAll = checkMode === "Ren'Py"
+    ? RenPyCheck.checkAll
+    : RpgMvCheck.checkAll;
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
-  const msg = checkAll(sheets).replace(/\n/g, '\\n');
+    .filter(
+      (s) => (notConvertColor ? notConvertColor != s.getTabColor() : true),
+    );
+  const msg = checkAll(sheets).replace(/\n/g, "\\n");
   Browser.msgBox(msg);
 };
 
@@ -58,8 +72,14 @@ global.fixSpreadsheet = () => {
 
   activeSpreadsheet
     .getSheets()
-    .filter(s => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true))
-    .forEach(s => translateModifier(s));
+    .filter(
+      (
+        s,
+      ) => (prop.notConvertColor
+        ? prop.notConvertColor != s.getTabColor()
+        : true),
+    )
+    .forEach((s) => translateModifier(s));
 };
 
 /**
@@ -76,16 +96,20 @@ global.fixActiveSheet = () => {
   modifier(activeSheet);
 };
 
-function GenerateTranslationFile<TReturn>(context: Contexts.Context<TReturn>): TReturn {
+function GenerateTranslationFile<TReturn>(
+  context: Contexts.Context<TReturn>,
+): TReturn {
   const { notConvertColor, exportMode } = getScriptProperties();
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
-    .filter(s => (notConvertColor ? notConvertColor != s.getTabColor() : true));
+    .filter(
+      (s) => (notConvertColor ? notConvertColor != s.getTabColor() : true),
+    );
   const files = exportMode.startsWith("Ren'Py")
     ? generateCode(sheets, exportMode === "Ren'Py with history support")
     : generateJson(sheets);
-  files.forEach(file => context.addFile(file.name, file.content));
+  files.forEach((file) => context.addFile(file.name, file.content));
   return context.finish();
 }
 
@@ -101,7 +125,8 @@ global.generateTranslationFile = () => {
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトが可能かテストします。
  */
-global.generateDryRun = () => GenerateTranslationFile(new Contexts.DryRunContext());
+global.generateDryRun = () =>
+  GenerateTranslationFile(new Contexts.DryRunContext());
 
 /**
  * GitHub のリポジトリに対し dispatches イベント (type: update_translate) を発火させます。
