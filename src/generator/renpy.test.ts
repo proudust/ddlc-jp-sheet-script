@@ -1,5 +1,4 @@
-import { assert, assertEquals } from "../../deps.ts";
-import { trimIndent } from "../util/tags.ts";
+import { assert, assertEquals, trimIndent } from "../../deps.ts";
 import {
   convaerHistorySupport,
   generateCode,

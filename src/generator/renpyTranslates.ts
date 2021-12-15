@@ -1,4 +1,4 @@
-import { trimMargin } from "../util/tags.ts";
+import { trimMargin } from "../../deps.ts";
 
 export class SayTranslate {
   public readonly type = "say";
