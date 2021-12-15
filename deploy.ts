@@ -1,6 +1,4 @@
-import { exec } from "child_process";
-import { writeFile } from "fs";
-import { promisify } from "util";
+import { $ } from "https://deno.land/x/zx_deno/mod.mjs";
 
 interface Dist {
   readonly name: string;
@@ -34,15 +32,11 @@ const claspOptions = {
   rootDir: "dist",
 } as const;
 
-async function push(): Promise<void> {
-  for (const { name, scriptId } of dists) {
-    console.log(`push to "${name}"`);
-    await promisify(writeFile)(
-      ".clasp.json",
-      JSON.stringify({ ...claspOptions, scriptId }),
-    );
-    await promisify(exec)("clasp push -f");
-  }
+for (const { name, scriptId } of dists) {
+  console.log(`push to "${name}"`);
+  await Deno.writeTextFile(
+    ".clasp.json",
+    JSON.stringify({ ...claspOptions, scriptId }),
+  );
+  await $`clasp push -f`;
 }
-
-push();
