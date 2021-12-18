@@ -1,12 +1,18 @@
 import { build } from "https://deno.land/x/esbuild@v0.12.15/mod.js";
-import { default as GasPlugin } from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
+import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
+import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.2/index.js";
 
 const bundleTask = build({
   bundle: true,
   charset: "utf8",
   entryPoints: ["src/index.ts"],
   outfile: "dist/out.js",
-  plugins: [GasPlugin],
+  logLevel: "debug",
+  target: "es2019",
+  plugins: [
+    httpPlugin,
+    gasPlugin,
+  ],
 });
 
 const copyTask = async (): Promise<void> => {
