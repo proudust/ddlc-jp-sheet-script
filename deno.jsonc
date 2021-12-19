@@ -6,6 +6,9 @@
         "dist",
         "node_modules"
       ]
+    },
+    "options": {
+      "lineWidth": 100
     }
   },
   "lint": {

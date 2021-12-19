@@ -26,9 +26,7 @@ type CheckFunc = (args: CheckArgs) => string | undefined;
 export const checkLength: CheckFunc = (
   { translate, sheetName, sheetRowNumber },
 ) => {
-  const lines = translate.split("\n").map((s) =>
-    s.replace(/\\(?:SE\[\d+\]|\.)/g, "")
-  );
+  const lines = translate.split("\n").map((s) => s.replace(/\\(?:SE\[\d+\]|\.)/g, ""));
   const length = Math.max(
     ...lines.map((s) =>
       s

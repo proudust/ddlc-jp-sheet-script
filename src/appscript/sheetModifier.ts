@@ -15,9 +15,7 @@ type SheetModifierFactory = (properties: ScriptProperties) => SheetModifier;
  * @returns 対象の名前付き範囲の Range オブジェクト
  */
 function getStatisticsRange(sheet: Sheet): GoogleAppsScript.Spreadsheet.Range {
-  const [namedRange = null] = sheet.getNamedRanges().filter((r) =>
-    r.getName() === "statistics"
-  );
+  const [namedRange = null] = sheet.getNamedRanges().filter((r) => r.getName() === "statistics");
   if (!namedRange) throw new Error("statistics NamedRange is not found.");
   return namedRange.getRange();
 }
@@ -238,8 +236,7 @@ const fixProtect: SheetModifier = (() => {
   const owner = SpreadsheetApp.getActive().getOwner();
   if (!owner) throw Error("owner is null.");
   return (sheet: Sheet): void => {
-    const protect =
-      sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0] ||
+    const protect = sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET)[0] ||
       sheet.protect();
     protect
       .addEditor(owner)
@@ -272,8 +269,7 @@ const addDataValidation: SheetModifierFactory = (
  * シートの条件付き書式を削除します。
  * @param sheet 翻訳シート
  */
-const clearFormatRules: SheetModifier = (sheet: Sheet): void =>
-  sheet.clearConditionalFormatRules();
+const clearFormatRules: SheetModifier = (sheet: Sheet): void => sheet.clearConditionalFormatRules();
 
 /**
  * シートにタグによる条件付き書式を設定します。
@@ -288,8 +284,7 @@ const addTagsFormatRules: SheetModifierFactory = (
       const builder = SpreadsheetApp.newConditionalFormatRule()
         .whenFormulaSatisfied(`=$F2="${t.name}"`)
         .setBackground(t.color);
-      return (r: GoogleAppsScript.Spreadsheet.Range) =>
-        builder.copy().setRanges([r]).build();
+      return (r: GoogleAppsScript.Spreadsheet.Range) => builder.copy().setRanges([r]).build();
     });
 
   return (sheet: Sheet): void => {

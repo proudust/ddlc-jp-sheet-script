@@ -17,9 +17,7 @@ export class SayTranslate {
   public inflate(): string {
     const attrs = this.attribute.split(" ");
     const character = attrs.filter((s) => s !== "nointeract").join(" ");
-    const nointeract = this.attribute.includes("nointeract")
-      ? "nointeract"
-      : "";
+    const nointeract = this.attribute.includes("nointeract") ? "nointeract" : "";
     const translates = this.translate.match(/(?<=^|\n)"(.+?[^\\])"(?=\n|$)/g) ??
       [
         `"${this.translate}"`,

@@ -21,8 +21,7 @@ Deno.test({
 Deno.test({
   name: "UseUnknownAttributesChecker",
   fn() {
-    const check = (attr: string) =>
-      new UseUnknownAttributesChecker().check({ attr });
+    const check = (attr: string) => new UseUnknownAttributesChecker().check({ attr });
 
     assertEquals(check("m 1tkc"), false);
     assertEquals(check("strings"), false);
@@ -33,8 +32,7 @@ Deno.test({
 Deno.test({
   name: "UnificationEllipsisChecker",
   fn() {
-    const check = (translate: string) =>
-      new UnificationEllipsisChecker().check({ translate });
+    const check = (translate: string) => new UnificationEllipsisChecker().check({ translate });
 
     assertEquals(check("ねぇ、[player]……"), false);
     assertEquals(check("ねぇ、[player]…"), true);
@@ -61,8 +59,7 @@ Deno.test({
 Deno.test({
   name: "CantIncludeHalfWidthChecker",
   fn() {
-    const check = (translate: string) =>
-      new CantIncludeHalfWidthChecker().check({ translate });
+    const check = (translate: string) => new CantIncludeHalfWidthChecker().check({ translate });
 
     assertEquals(check("引き分け?"), true);
     assertEquals(check("引き分け？"), false);

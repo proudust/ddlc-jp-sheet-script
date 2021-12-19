@@ -46,9 +46,7 @@ global.onOpen = () => {
  */
 global.checkTranslates = () => {
   const { notConvertColor, checkMode } = getScriptProperties();
-  const checkAll = checkMode === "Ren'Py"
-    ? RenPyCheck.checkAll
-    : RpgMvCheck.checkAll;
+  const checkAll = checkMode === "Ren'Py" ? RenPyCheck.checkAll : RpgMvCheck.checkAll;
   const sheets = SpreadsheetApp.getActive()
     .getSheets()
     .slice(1)
@@ -75,9 +73,7 @@ global.fixSpreadsheet = () => {
     .filter(
       (
         s,
-      ) => (prop.notConvertColor
-        ? prop.notConvertColor != s.getTabColor()
-        : true),
+      ) => (prop.notConvertColor ? prop.notConvertColor != s.getTabColor() : true),
     )
     .forEach((s) => translateModifier(s));
 };
@@ -125,8 +121,7 @@ global.generateTranslationFile = () => {
 /**
  * スプレッドシートの翻訳シートから翻訳スクリプトが可能かテストします。
  */
-global.generateDryRun = () =>
-  GenerateTranslationFile(new Contexts.DryRunContext());
+global.generateDryRun = () => GenerateTranslationFile(new Contexts.DryRunContext());
 
 /**
  * GitHub のリポジトリに対し dispatches イベント (type: update_translate) を発火させます。

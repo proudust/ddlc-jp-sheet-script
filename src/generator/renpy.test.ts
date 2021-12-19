@@ -7,11 +7,7 @@ import {
   parseRow,
   removeDuplicateStrings,
 } from "./renpy.ts";
-import {
-  FileTranslate,
-  SayTranslate,
-  StringsTranslate,
-} from "./renpyTranslates.ts";
+import { FileTranslate, SayTranslate, StringsTranslate } from "./renpyTranslates.ts";
 
 Deno.test("[parseRow] enpty or comment row", () => {
   assertEquals(parseRow(["", "", "", ""]), undefined);

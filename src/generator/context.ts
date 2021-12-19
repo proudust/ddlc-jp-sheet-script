@@ -33,8 +33,7 @@ export class DriveContext implements Context<void> {
     const hour = zeroPadding(createDate.getHours());
     const min = zeroPadding(createDate.getMinutes());
     const sec = zeroPadding(createDate.getSeconds());
-    this.folderName =
-      `${folderPrefix}_${year}-${month}-${day} ${hour}:${min}:${sec}`;
+    this.folderName = `${folderPrefix}_${year}-${month}-${day} ${hour}:${min}:${sec}`;
   }
 
   /** 出力するファイルを追加する */
@@ -55,8 +54,7 @@ export class DriveContext implements Context<void> {
 }
 
 /** Zip 圧縮して Base64 文字列を HTTP で表示する場合のコンテキスト */
-export class HttpContext
-  implements Context<GoogleAppsScript.Content.TextOutput> {
+export class HttpContext implements Context<GoogleAppsScript.Content.TextOutput> {
   /** 保存するファイルの Blob */
   private readonly blobs: GoogleAppsScript.Base.BlobSource[] = [];
 

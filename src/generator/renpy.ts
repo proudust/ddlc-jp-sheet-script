@@ -1,8 +1,4 @@
-import {
-  FileTranslate,
-  SayTranslate,
-  StringsTranslate,
-} from "./renpyTranslates.ts";
+import { FileTranslate, SayTranslate, StringsTranslate } from "./renpyTranslates.ts";
 
 type Translate = StringsTranslate | SayTranslate | FileTranslate;
 
@@ -32,9 +28,7 @@ export function parseRow(
  */
 export function convaerHistorySupport(say: SayTranslate[]): StringsTranslate[] {
   return say.map(({ id, translate }) => {
-    const translates = translate.match(/"(.+?[^\\])"/g)?.map((t) =>
-      t.slice(1, -1)
-    ) ?? [translate];
+    const translates = translate.match(/"(.+?[^\\])"/g)?.map((t) => t.slice(1, -1)) ?? [translate];
     return new StringsTranslate(`{#${id}}`, translates.join("\\n"));
   });
 }
@@ -136,8 +130,7 @@ export function generateCode(
       .filter(<T>(x: T | undefined): x is T => !!x),
   }));
   return removeDuplicateStrings(parsedSheet).reduce<File[]>(
-    (files, { name, translates }) =>
-      files.concat(inflate(name, translates, includeHistorySupport)),
+    (files, { name, translates }) => files.concat(inflate(name, translates, includeHistorySupport)),
     [],
   );
 }
