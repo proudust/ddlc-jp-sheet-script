@@ -39,10 +39,8 @@ export function extract(
 
 const anyCommand = z.object({
   code: z.number(),
-  parameters: z.array(z.union([z.number(), z.string()])),
+  parameters: z.array(z.unknown()),
 });
-
-type AnyCommand = z.infer<typeof anyCommand>;
 
 const mapJson = z.object({
   events: z.array(z.nullable(
