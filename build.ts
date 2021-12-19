@@ -7,7 +7,6 @@ const bundleTask = build({
   charset: "utf8",
   entryPoints: ["src/index.ts"],
   outfile: "dist/out.js",
-  logLevel: "debug",
   target: "es2019",
   plugins: [
     httpPlugin,
