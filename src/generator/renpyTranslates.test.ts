@@ -1,10 +1,10 @@
-import { assertEquals } from "../../deps.ts";
+import { trimIndent, trimMargin } from "../../deps.ts";
+import { assertEquals } from "../../dev-deps.ts";
 import {
   FileTranslate,
   SayTranslate,
   StringsTranslate,
 } from "./renpyTranslates.ts";
-import { trimIndent, trimMargin } from "../util/tags.ts";
 
 Deno.test("[SayTranslate] inflate character dialog", () => {
   const t = new SayTranslate(

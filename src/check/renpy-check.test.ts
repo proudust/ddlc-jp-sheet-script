@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps.ts";
+import { assertEquals } from "../../dev-deps.ts";
 import {
   CantIncludeHalfWidthChecker,
   CantIncludeSpaceInWaitTagsChecker,

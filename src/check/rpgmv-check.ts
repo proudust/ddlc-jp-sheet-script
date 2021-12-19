@@ -1,4 +1,4 @@
-import { trimIndent } from "../util/tags.ts";
+import { trimIndent } from "../../deps.ts";
 
 interface Range {
   getValues(): string[][];

@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "../../deps.ts";
+import { assertEquals, assertThrows } from "../../dev-deps.ts";
 import { readRow } from "./json.ts";
 
 Deno.test("[readRow] enpty or comment row", () => {
