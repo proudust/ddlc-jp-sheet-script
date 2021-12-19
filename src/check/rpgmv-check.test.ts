@@ -1,4 +1,4 @@
-import { assertEquals } from "../../deps.ts";
+import { assertEquals } from "../../dev-deps.ts";
 import { checkLength } from "./rpgmv-check.ts";
 
 type CheckArgs = Parameters<typeof checkLength>[0];

@@ -1,4 +1,4 @@
-import { assertSpyCalls, assertThrows, stub } from "../deps.ts";
+import { assertSpyCalls, assertThrows, stub } from "../dev-deps.ts";
 import { updatePullRequest } from "./updatePullRequest.ts";
 
 declare let globalThis: {

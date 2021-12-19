@@ -1,4 +1,4 @@
-import { assertEquals, assertThrows } from "../../deps.ts";
+import { assertEquals, assertThrows } from "../../dev-deps.ts";
 import { ScriptProperties } from "./scriptProperties.ts";
 
 Deno.test("ScriptProperties#folderName", () => {

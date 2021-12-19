@@ -1,4 +1,5 @@
-import { assertEquals, trimIndent, trimMargin } from "../../deps.ts";
+import { trimIndent, trimMargin } from "../../deps.ts";
+import { assertEquals } from "../../dev-deps.ts";
 import {
   FileTranslate,
   SayTranslate,
