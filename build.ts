@@ -35,7 +35,7 @@ async function gasBuild(dist: string, name: string) {
     charset: "utf8",
     entryPoints: ["src/index.ts"],
     outfile: join(dist, "out.js"),
-    target: "es2019",
+    target: "es2017", // Workaround for jquery/esprima#2034
     plugins: [
       httpPlugin,
       gasPlugin,
