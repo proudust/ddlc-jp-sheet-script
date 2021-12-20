@@ -11,8 +11,8 @@
     "lint:deno-fmt": "deno fmt --check --config deno.jsonc",
     "test": "run-p -l -c --aggregate-output lint:* unit",
     "unit": "deno test src",
-    "build": "deno run --allow-read --allow-env --allow-net --allow-write --allow-run build.ts",
-    "deploy": "deno run --allow-read --allow-env --allow-write --allow-run deploy.ts"
+    "build": "deno run --allow-read --allow-env --allow-net --allow-write --allow-run --no-check=remote build.ts",
+    "deploy": "deno run --allow-read --allow-env --allow-net --allow-write --allow-run --no-check=remote build.ts deploy"
   },
   "author": "proudust",
   "license": "MIT",
