@@ -1,5 +1,6 @@
 import { parse } from "https://deno.land/std@0.118.0/flags/mod.ts";
 import { join } from "https://deno.land/std@0.118.0/path/mod.ts";
+import { colors } from "https://deno.land/x/cliffy@v0.20.1/ansi/mod.ts";
 import { build } from "https://deno.land/x/esbuild@v0.12.15/mod.js";
 import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.2/index.js";
@@ -28,7 +29,7 @@ const profiles = {
   },
 } as const;
 
-async function gasBuild(dist: string) {
+async function gasBuild(dist: string, name: string) {
   const bundleTask = build({
     bundle: true,
     charset: "utf8",
@@ -45,12 +46,15 @@ async function gasBuild(dist: string) {
     await Deno.copyFile("src/appsscript.json", join(dist, "appsscript.json"));
   };
   await Promise.all([bundleTask, copyTask()]);
+  console.log(colors.bold.green("✓"), " ", name);
 }
 
-async function gasDeploy(source: string, scriptId: string) {
+async function gasDeploy(source: string, name: string, scriptId: string) {
   await Deno.writeTextFile(join(source, ".clasp.json"), JSON.stringify({ scriptId }));
+  $.verbose = false;
   cd(source);
   await $`clasp push -f`;
+  console.log(colors.bold.green("✓"), " ", name);
 }
 
 const args = parse(Deno.args, {});
@@ -58,18 +62,18 @@ const args = parse(Deno.args, {});
 switch (args._[0] || "build") {
   case "build": {
     await Promise.all(
-      Object.entries(profiles).map(async ([id]) => {
+      Object.entries(profiles).map(async ([id, { name }]) => {
         const dist = join("dist", id);
-        await gasBuild(dist);
+        await gasBuild(dist, name);
       }),
     );
     break;
   }
   case "deploy": {
     await Promise.all(
-      Object.entries(profiles).map(async ([id, { scriptId }]) => {
+      Object.entries(profiles).map(async ([id, { name, scriptId }]) => {
         const dist = join("dist", id);
-        await gasDeploy(dist, scriptId);
+        await gasDeploy(dist, name, scriptId);
       }),
     );
     break;
