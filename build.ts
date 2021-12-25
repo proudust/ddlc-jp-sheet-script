@@ -29,6 +29,30 @@ const profiles = {
   },
 } as const;
 
+async function cliBuild() {
+  const targets = [
+    "x86_64-unknown-linux-gnu",
+    "x86_64-pc-windows-msvc",
+    "x86_64-apple-darwin",
+    "aarch64-apple-darwin",
+  ];
+
+  return await Promise.all(targets.map(async (target) => {
+    const dist = join("dist", `cli-${target}`);
+    await Deno.mkdir(dist, { recursive: true });
+    $.verbose = false;
+    await $`
+      deno compile \
+        --allow-read \
+        --allow-write \
+        --output ${dist}/extract \
+        --target ${target} \
+        src/cli/cli.ts
+    `;
+    console.log(colors.bold.green("✓"), " ", "CLI", target);
+  }));
+}
+
 async function gasBuild(dist: string, name: string) {
   const bundleTask = build({
     bundle: true,
@@ -61,12 +85,13 @@ const args = parse(Deno.args, {});
 
 switch (args._[0] || "build") {
   case "build": {
-    await Promise.all(
-      Object.entries(profiles).map(async ([id, { name }]) => {
+    await Promise.all([
+      cliBuild(),
+      ...Object.entries(profiles).map(async ([id, { name }]) => {
         const dist = join("dist", id);
         await gasBuild(dist, name);
       }),
-    );
+    ]);
     break;
   }
   case "deploy": {
