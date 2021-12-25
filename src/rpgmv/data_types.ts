@@ -44,6 +44,19 @@ export const textCommand = z.object({
 
 export type TextCommand = z.infer<typeof textCommand>;
 
+// -- CommonEvents.json
+
+export const commonEventsJson = z.array(
+  z.nullable(z.object({
+    list: z.array(z.object({
+      code: z.number(),
+      parameters: z.array(z.unknown()),
+    })),
+  })),
+);
+
+export type CommonEventsJson = z.infer<typeof commonEventsJson>;
+
 // -- MapXXX.json
 
 export const mapJson = z.object({
