@@ -27,7 +27,14 @@ export function extract(
   fileName: string,
   fileContent: string,
 ): Translatable[] {
-  const json: j.UnknownJson = JSON.parse(fileContent);
+  let json: j.UnknownJson;
+  try {
+    json = JSON.parse(fileContent);
+  } catch (e: unknown) {
+    if (e instanceof SyntaxError) return [];
+    throw e;
+  }
+
   if (check(j.mapJson, json)) {
     return extractFromMapJson(fileName, json);
   } else if (check(j.commonEventsJson, json)) {
