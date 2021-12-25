@@ -1,8 +1,8 @@
 {
   "name": "ddlc-jp-sheet-script",
-  "version": "1.0.0",
   "private": true,
   "scripts": {
+    "start": "deno run --allow-read --allow-write src/cli/cli.ts",
     "fix": "run-s fix:*",
     "fix:deno-lint": "deno lint --config deno.jsonc",
     "fix:deno-fmt": "deno fmt --config deno.jsonc",
