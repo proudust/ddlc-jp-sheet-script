@@ -3,13 +3,14 @@ import { expandGlob } from "https://deno.land/std@0.118.0/fs/mod.ts";
 import { basename } from "https://deno.land/std@0.118.0/path/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
 import { extract, type Translatable } from "../rpgmv/extract.ts";
+import { version } from "../../version.ts";
 
 type CommandOptions = void;
 type CommandArguments = [paths: string[] | undefined];
 
 await new Command<CommandOptions, CommandArguments>()
   .name("extract")
-  .version("0.1.0")
+  .version(version)
   .description("RPG Maker MV Extract Dialogue CLI")
   .arguments("[...file|dir]")
   .action(async (_, paths = [Deno.cwd()]) => {

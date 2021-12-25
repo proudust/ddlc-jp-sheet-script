@@ -4,7 +4,7 @@ import { colors } from "https://deno.land/x/cliffy@v0.20.1/ansi/mod.ts";
 import { build } from "https://deno.land/x/esbuild@v0.12.15/mod.js";
 import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.2/index.js";
-import { $, cd } from "https://deno.land/x/zx_deno@1.2.2/mod.mjs";
+import { $, cd, ProcessOutput } from "https://deno.land/x/zx_deno@1.2.2/mod.mjs";
 
 const profiles = {
   "ddlc": {
@@ -29,6 +29,25 @@ const profiles = {
   },
 } as const;
 
+async function generateVersionJson() {
+  $.verbose = false;
+  const version = Deno.env.get("GIT_DESCRIBE") || await (async () => {
+    try {
+      const { stdout } = await $`git describe --tags`;
+      return stdout;
+    } catch {
+      const distance = Number((await $`git log --oneline --no-merges | wc -l`).stdout);
+      if (!Number.isNaN(distance)) {
+        const sha = (await $`git rev-parse --short HEAD`).stdout.trim();
+        return `0.0.0-${distance}-g${sha}`;
+      } else {
+        return `0.0.0-0-nocommit`;
+      }
+    }
+  })();
+  await Deno.writeTextFile("version.ts", `export const version = "${version}";\n`);
+}
+
 async function cliBuild() {
   const targets = [
     "x86_64-unknown-linux-gnu",
@@ -41,15 +60,22 @@ async function cliBuild() {
     const dist = join("dist", `cli-${target}`);
     await Deno.mkdir(dist, { recursive: true });
     $.verbose = false;
-    await $`
-      deno compile \
-        --allow-read \
-        --allow-write \
-        --output ${dist}/extract \
-        --target ${target} \
-        src/cli/cli.ts
-    `;
-    console.log(colors.bold.green("✓"), " ", "CLI", target);
+    try {
+      await $`
+        deno compile \
+          --allow-read \
+          --allow-write \
+          --output ${dist}/extract \
+          --target ${target} \
+          src/cli/cli.ts
+      `;
+      console.log(colors.bold.green("✓"), " ", "CLI", target);
+    } catch (e: unknown) {
+      if (e instanceof ProcessOutput) {
+        console.error(e.stderr);
+      }
+      throw e;
+    }
   }));
 }
 
@@ -85,6 +111,7 @@ const args = parse(Deno.args, {});
 
 switch (args._[0] || "build") {
   case "build": {
+    await generateVersionJson();
     await Promise.all([
       cliBuild(),
       ...Object.entries(profiles).map(async ([id, { name }]) => {
