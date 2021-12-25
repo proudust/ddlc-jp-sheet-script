@@ -1,4 +1,5 @@
 import { takeWhile, z } from "../../deps.ts";
+import * as j from "./data_types.ts";
 
 // deno-lint-ignore no-explicit-any
 function check<T extends z.ZodType<any, any, any>>(
@@ -17,60 +18,17 @@ function guard<T extends z.ZodType<any, any, any>>(
 
 export type Translatable = TranslatableTextCommand | TranslatableChoicesCommand;
 
-type UnknownJson =
-  | null
-  | string
-  | number
-  | boolean
-  | { [K in string]?: UnknownJson }
-  | UnknownJson[];
-
 export function extract(
   fileName: string,
   fileContent: string,
 ): Translatable[] {
-  const json: UnknownJson = JSON.parse(fileContent);
-  if (check(mapJson, json)) {
+  const json: j.UnknownJson = JSON.parse(fileContent);
+  if (check(j.mapJson, json)) {
     return extractFromMapJson(fileName, json);
   } else {
     return [];
   }
 }
-
-const anyCommand = z.object({
-  code: z.number(),
-  parameters: z.array(z.unknown()),
-});
-
-const mapJson = z.object({
-  events: z.array(z.nullable(
-    z.object({
-      name: z.string(),
-      pages: z.array(z.object({
-        list: z.array(anyCommand),
-      })),
-    }),
-  )),
-});
-
-type MapJson = z.infer<typeof mapJson>;
-
-const textCommand = z.object({
-  code: z.literal(401),
-  parameters: z.tuple([z.string()]),
-});
-
-type TextCommand = z.infer<typeof textCommand>;
-
-const faceCommand = z.object({
-  code: z.literal(101),
-  parameters: z.tuple([z.string(), z.number(), z.number(), z.number()]),
-});
-
-const choicesCommand = z.object({
-  code: z.literal(102),
-  parameters: z.tuple([z.array(z.string()), z.number(), z.number(), z.number(), z.number()]),
-});
 
 interface TranslatableTextCommand {
   fileName: string;
@@ -88,7 +46,7 @@ interface TranslatableChoicesCommand {
   original: string;
 }
 
-const extractFromMapJson = (fileName: string, json: MapJson): Translatable[] =>
+const extractFromMapJson = (fileName: string, json: j.MapJson): Translatable[] =>
   (json.events || []).flatMap((event, eIndex) =>
     (event?.pages || []).flatMap((page, pIndex) => {
       const { list } = page;
@@ -97,7 +55,7 @@ const extractFromMapJson = (fileName: string, json: MapJson): Translatable[] =>
 
       for (let cIndex = 0; cIndex < list.length; cIndex++) {
         // Single Text
-        const chunk = takeWhile(page.list.slice(cIndex), guard(textCommand)) as TextCommand[];
+        const chunk = takeWhile(page.list.slice(cIndex), guard(j.textCommand)) as j.TextCommand[];
         if (chunk.length === 1) {
           translatable.push({
             fileName,
@@ -121,11 +79,11 @@ const extractFromMapJson = (fileName: string, json: MapJson): Translatable[] =>
         }
         // Face
         const curr = list[cIndex];
-        if (check(faceCommand, curr)) {
+        if (check(j.faceCommand, curr)) {
           faceFile = curr.parameters[0];
         }
         // Choices
-        if (check(choicesCommand, curr)) {
+        if (check(j.choicesCommand, curr)) {
           translatable.push(...curr.parameters[0].map((original, i) => ({
             fileName,
             jqFilter: `.events[${eIndex}].pages[${pIndex}].list[${cIndex}].parameters[0][${i}]`,
