@@ -42,7 +42,7 @@ jobs:
           GIT_DESCRIBE: ${{ steps.ghd.outputs.describe }}
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ddlc-jp-sheet-script@${{ steps.ghd.outputs.describe }}
           path: dist
