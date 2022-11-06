@@ -1,6 +1,6 @@
-import { takeWhile } from "https://deno.land/std@0.162.0/collections/mod.ts";
-import * as c from "./command/mod.ts";
-import * as j from "./json/mod.ts";
+import { extractFromPage } from "./extract_from_page.ts";
+import { type CommonEventsJson, isCommonEventsJson } from "./json/common_events.ts";
+import { isMapJson, type MapJson } from "./json/map.ts";
 
 export type UnknownJson =
   | null
@@ -26,9 +26,9 @@ export function extract(fileName: string, fileContent: string): Translatable[] {
     throw e;
   }
 
-  if (j.isMapJson(json)) {
+  if (isMapJson(json)) {
     return extractFromMapJson(fileName, json);
-  } else if (j.isCommonEventsJson(json)) {
+  } else if (isCommonEventsJson(json)) {
     return extractFromCommonEventsJson(fileName, json);
   } else {
     return [];
@@ -37,114 +37,28 @@ export function extract(fileName: string, fileContent: string): Translatable[] {
 
 const extractFromMapJson = (
   fileName: string,
-  json: j.MapJson,
+  json: MapJson,
 ): Translatable[] =>
   (json.events || []).flatMap((event, eIndex) =>
-    (event?.pages || []).flatMap((page, pIndex) => {
-      const { list } = page;
-      const translatable: Translatable[] = [];
-      let faceFile = "";
-
-      for (let cIndex = 0; cIndex < list.length; cIndex++) {
-        // Single Text
-        const chunk = takeWhile(
-          page.list.slice(cIndex),
-          c.isTextCommand,
-        ) as c.TextCommand[];
-        if (chunk.length === 1) {
-          translatable.push({
-            fileName,
-            jqFilter: `.events[${eIndex}].pages[${pIndex}].list[${cIndex}].parameters[0]`,
-            faceFile,
-            original: chunk[0].parameters[0],
-          });
-          continue;
-        }
-        // Multi Text
-        if (1 < chunk.length) {
-          const end = cIndex + chunk.length;
-          translatable.push({
-            fileName,
-            jqFilter: `.events[${eIndex}].pages[${pIndex}].list[${cIndex}:${end}][].parameters[0]`,
-            faceFile,
-            original: chunk.map(({ parameters }) => parameters[0]).join("\n"),
-          });
-          cIndex += chunk.length - 1;
-          continue;
-        }
-        // Face
-        const curr = list[cIndex];
-        if (c.isFaceCommand(curr)) {
-          faceFile = curr.parameters[0];
-        }
-        // Choices
-        if (c.isChoicesCommand(curr)) {
-          translatable.push(...curr.parameters[0].map((original, i) => ({
-            fileName,
-            jqFilter: `.events[${eIndex}].pages[${pIndex}].list[${cIndex}].parameters[0][${i}]`,
-            faceFile,
-            original,
-          } as const)));
-        }
-      }
-
-      return translatable;
-    })
+    (event?.pages || []).flatMap((page, pIndex) =>
+      extractFromPage(page).map(({ jqFilter, ...other }) => ({
+        fileName,
+        jqFilter: `.events[${eIndex}].pages[${pIndex}]${jqFilter}`,
+        ...other,
+      }))
+    )
   );
 
 const extractFromCommonEventsJson = (
   fileName: string,
-  json: j.CommonEventsJson,
+  json: CommonEventsJson,
 ): Translatable[] =>
   json
-    .filter(<T>(event: T): event is Exclude<T, null> => !!event)
-    .flatMap((event, eIndex) => {
-      const { list } = event;
-      const translatable: Translatable[] = [];
-      let faceFile = "";
-
-      for (let cIndex = 0; cIndex < list.length; cIndex++) {
-        // Single Text
-        const chunk = takeWhile(
-          list.slice(cIndex),
-          c.isTextCommand,
-        ) as c.TextCommand[];
-        if (chunk.length === 1) {
-          translatable.push({
-            fileName,
-            jqFilter: `.[${eIndex}].list[${cIndex}].parameters[0]`,
-            faceFile,
-            original: chunk[0].parameters[0],
-          });
-          continue;
-        }
-        // Multi Text
-        if (1 < chunk.length) {
-          const end = cIndex + chunk.length;
-          translatable.push({
-            fileName,
-            jqFilter: `.[${eIndex}].list[${cIndex}:${end}][].parameters[0]`,
-            faceFile,
-            original: chunk.map(({ parameters }) => parameters[0]).join("\n"),
-          });
-          cIndex += chunk.length - 1;
-          continue;
-        }
-        // Face
-        const curr = list[cIndex];
-        if (c.isFaceCommand(curr)) {
-          faceFile = curr.parameters[0];
-        }
-        // Choices
-        if (c.isChoicesCommand(curr)) {
-          translatable.push(...curr.parameters[0].map((original, i) => ({
-            fileName,
-            jqFilter: `.events[${eIndex}].list[${cIndex}].parameters[0][${i}]`,
-            faceFile,
-            original,
-          } as const)));
-        }
-      }
-
-      return translatable;
-    });
+    .filter(<T>(page: T): page is Exclude<T, null> => !!page)
+    .flatMap((page, eIndex) =>
+      extractFromPage(page).map(({ jqFilter, ...other }) => ({
+        fileName,
+        jqFilter: `.[${eIndex}]${jqFilter}`,
+        ...other,
+      }))
+    );
