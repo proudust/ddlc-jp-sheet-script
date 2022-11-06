@@ -2,8 +2,8 @@ import { stringify } from "https://deno.land/std@0.118.0/encoding/csv.ts";
 import { expandGlob } from "https://deno.land/std@0.118.0/fs/mod.ts";
 import { basename } from "https://deno.land/std@0.118.0/path/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
-import { extract, type Translatable } from "../rpgmv/extract.ts";
 import { version } from "../../version.ts";
+import { extract, type Translatable } from "../rpgmv/extract.ts";
 
 type CommandOptions = void;
 type CommandArguments = [paths: string[] | undefined];
@@ -21,11 +21,11 @@ await new Command<CommandOptions, CommandArguments>()
         const fileName = basename(path);
         return (async () => extract(fileName, await Deno.readTextFile(path)))();
       } else {
-        const primises: Promise<Translatable[]>[] = [];
+        const promises: Promise<Translatable[]>[] = [];
         for await (const f of expandGlob("**/*.json", { root: path })) {
-          primises.push((async () => extract(f.name, await Deno.readTextFile(f.path)))());
+          promises.push((async () => extract(f.name, await Deno.readTextFile(f.path)))());
         }
-        return (await Promise.all(primises)).flat();
+        return (await Promise.all(promises)).flat();
       }
     }))).flat();
 
