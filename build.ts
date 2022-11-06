@@ -67,7 +67,7 @@ async function cliBuild() {
           --allow-write \
           --output ${dist}/extract \
           --target ${target} \
-          src/cli/cli.ts
+          cli/cli.ts
       `;
       console.log(colors.bold.green("✓"), " ", "CLI", target);
     } catch (e: unknown) {

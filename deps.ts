@@ -1,6 +1,4 @@
 /// <reference path="https://raw.githubusercontent.com/proudust/deno-gas-types/main/types/index.d.ts" />
-export { takeWhile } from "https://deno.land/std@0.162.0/collections/mod.ts";
-export { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
 export {
   trimIndent,
   trimMargin,

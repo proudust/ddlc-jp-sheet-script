@@ -1,4 +1,4 @@
-import { z } from "../../deps.ts";
+import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
 
 export type UnknownJson =
   | null

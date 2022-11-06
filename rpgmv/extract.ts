@@ -1,4 +1,5 @@
-import { takeWhile, z } from "../../deps.ts";
+import { takeWhile } from "https://deno.land/std@0.162.0/collections/mod.ts";
+import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
 import * as j from "./data_types.ts";
 
 // deno-lint-ignore no-explicit-any
