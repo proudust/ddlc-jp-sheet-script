@@ -1,6 +1,15 @@
 import { takeWhile } from "https://deno.land/std@0.162.0/collections/mod.ts";
 import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
-import * as j from "./data_types.ts";
+import * as c from "./command/mod.ts";
+import * as j from "./json/mod.ts";
+
+export type UnknownJson =
+  | null
+  | string
+  | number
+  | boolean
+  | { [K in string]?: UnknownJson }
+  | UnknownJson[];
 
 // deno-lint-ignore no-explicit-any
 function check<T extends z.ZodType<any, any, any>>(
@@ -28,7 +37,7 @@ export function extract(
   fileName: string,
   fileContent: string,
 ): Translatable[] {
-  let json: j.UnknownJson;
+  let json: UnknownJson;
   try {
     json = JSON.parse(fileContent);
   } catch (e: unknown) {
@@ -54,7 +63,7 @@ const extractFromMapJson = (fileName: string, json: j.MapJson): Translatable[] =
 
       for (let cIndex = 0; cIndex < list.length; cIndex++) {
         // Single Text
-        const chunk = takeWhile(page.list.slice(cIndex), guard(j.textCommand)) as j.TextCommand[];
+        const chunk = takeWhile(page.list.slice(cIndex), guard(c.textCommand)) as c.TextCommand[];
         if (chunk.length === 1) {
           translatable.push({
             fileName,
@@ -78,11 +87,11 @@ const extractFromMapJson = (fileName: string, json: j.MapJson): Translatable[] =
         }
         // Face
         const curr = list[cIndex];
-        if (check(j.faceCommand, curr)) {
+        if (check(c.faceCommand, curr)) {
           faceFile = curr.parameters[0];
         }
         // Choices
-        if (check(j.choicesCommand, curr)) {
+        if (check(c.choicesCommand, curr)) {
           translatable.push(...curr.parameters[0].map((original, i) => ({
             fileName,
             jqFilter: `.events[${eIndex}].pages[${pIndex}].list[${cIndex}].parameters[0][${i}]`,
@@ -106,7 +115,7 @@ const extractFromCommonEventsJson = (fileName: string, json: j.CommonEventsJson)
 
       for (let cIndex = 0; cIndex < list.length; cIndex++) {
         // Single Text
-        const chunk = takeWhile(list.slice(cIndex), guard(j.textCommand)) as j.TextCommand[];
+        const chunk = takeWhile(list.slice(cIndex), guard(c.textCommand)) as c.TextCommand[];
         if (chunk.length === 1) {
           translatable.push({
             fileName,
@@ -130,11 +139,11 @@ const extractFromCommonEventsJson = (fileName: string, json: j.CommonEventsJson)
         }
         // Face
         const curr = list[cIndex];
-        if (check(j.faceCommand, curr)) {
+        if (check(c.faceCommand, curr)) {
           faceFile = curr.parameters[0];
         }
         // Choices
-        if (check(j.choicesCommand, curr)) {
+        if (check(c.choicesCommand, curr)) {
           translatable.push(...curr.parameters[0].map((original, i) => ({
             fileName,
             jqFilter: `.events[${eIndex}].list[${cIndex}].parameters[0][${i}]`,
