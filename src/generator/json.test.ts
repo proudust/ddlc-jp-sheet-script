@@ -1,7 +1,7 @@
 import { assertEquals, assertThrows } from "../../dev-deps.ts";
 import { readRow } from "./json.ts";
 
-Deno.test("[readRow] enpty or comment row", () => {
+Deno.test("[readRow] empty or comment row", () => {
   assertEquals(readRow({}, ["", "", "", ""]), {});
   assertEquals(readRow({}, ["", "", "EV001", ""]), {});
   assertEquals(readRow({}, ["Map001", "", "...", ""]), {});
