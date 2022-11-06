@@ -102,7 +102,7 @@ switch (args._[0] || "build") {
     await Promise.all([
       cliBuild(),
       ...Object.entries(profiles).map(async ([id, { name }]) => {
-        const dist = join("dist", id);
+        const dist = join("dist", `gas-${id}`);
         await gasBuild(dist, name);
       }),
     ]);
@@ -111,7 +111,7 @@ switch (args._[0] || "build") {
   case "deploy": {
     await Promise.all(
       Object.entries(profiles).map(async ([id, { name, scriptId }]) => {
-        const dist = join("dist", id);
+        const dist = join("dist", `gas-${id}`);
         await gasDeploy(dist, name, scriptId);
       }),
     );
