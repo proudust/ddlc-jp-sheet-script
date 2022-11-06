@@ -1,4 +1,5 @@
 import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
+import { guard } from "../zod.ts";
 
 export const mapJson = z.object({
   events: z.array(
@@ -13,5 +14,7 @@ export const mapJson = z.object({
     })),
   ),
 });
+
+export const isMapJson = guard(mapJson);
 
 export type MapJson = z.infer<typeof mapJson>;

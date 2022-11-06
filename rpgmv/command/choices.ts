@@ -1,4 +1,5 @@
 import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
+import { guard } from "../zod.ts";
 
 export const choicesCommand = z.object({
   code: z.literal(102),
@@ -10,5 +11,7 @@ export const choicesCommand = z.object({
     z.number(),
   ]),
 });
+
+export const isChoicesCommand = guard(choicesCommand);
 
 export type ChoicesCommand = z.infer<typeof choicesCommand>;

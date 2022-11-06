@@ -1,4 +1,5 @@
 import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
+import { guard } from "../zod.ts";
 
 export const commonEventsJson = z.array(
   z.nullable(z.object({
@@ -8,5 +9,7 @@ export const commonEventsJson = z.array(
     })),
   })),
 );
+
+export const isCommonEventsJson = guard(commonEventsJson);
 
 export type CommonEventsJson = z.infer<typeof commonEventsJson>;
