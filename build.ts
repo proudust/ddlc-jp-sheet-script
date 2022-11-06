@@ -5,6 +5,7 @@ import { build } from "https://deno.land/x/esbuild@v0.15.13/mod.js";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.3/index.js";
 import { $, cd, ProcessOutput } from "https://deno.land/x/zx_deno@1.2.2/mod.mjs";
 import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.5.0/mod.ts";
+import { ghDescribe } from "https://raw.githubusercontent.com/proudust/gh-describe/v1.5.1/core/mod.ts";
 
 const profiles = {
   "ddlc": {
@@ -29,23 +30,9 @@ const profiles = {
   },
 } as const;
 
-async function generateVersionJson() {
-  $.verbose = false;
-  const version = Deno.env.get("GIT_DESCRIBE") || await (async () => {
-    try {
-      const { stdout } = await $`git describe --tags`;
-      return stdout.trim();
-    } catch {
-      const distance = Number((await $`git log --oneline --no-merges | wc -l`).stdout);
-      if (!Number.isNaN(distance)) {
-        const sha = (await $`git rev-parse --short HEAD`).stdout.trim();
-        return `0.0.0-${distance}-g${sha}`;
-      } else {
-        return `0.0.0-0-nocommit`;
-      }
-    }
-  })();
-  await Deno.writeTextFile("version.ts", `export const version = "${version}";\n`);
+async function generateVersionTs() {
+  const { describe } = await ghDescribe({ defaultTag: "0.0.0" });
+  await Deno.writeTextFile("version.ts", `export const version = "${describe}";\n`);
 }
 
 async function cliBuild() {
@@ -111,7 +98,7 @@ const args = parse(Deno.args, {});
 
 switch (args._[0] || "build") {
   case "build": {
-    await generateVersionJson();
+    await generateVersionTs();
     await Promise.all([
       cliBuild(),
       ...Object.entries(profiles).map(async ([id, { name }]) => {

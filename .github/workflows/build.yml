@@ -24,12 +24,6 @@ jobs:
         with:
           deno-version: v1.x
 
-      - name: Git Describe
-        id: ghd
-        uses: proudust/gh-describe@v1
-        with:
-          default: 0.0.0
-
       - name: Install Dependencies
         run: npm ci
 
@@ -39,7 +33,7 @@ jobs:
       - name: Build
         run: deno task build
         env:
-          GIT_DESCRIBE: ${{ steps.ghd.outputs.describe }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
