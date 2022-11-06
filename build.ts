@@ -103,7 +103,7 @@ async function gasDeploy(source: string, name: string, scriptId: string) {
   await Deno.writeTextFile(join(source, ".clasp.json"), JSON.stringify({ scriptId }));
   $.verbose = false;
   cd(source);
-  await $`clasp push -f`;
+  await $`npx clasp push -f`;
   console.log(colors.bold.green("✓"), " ", name);
 }
 
