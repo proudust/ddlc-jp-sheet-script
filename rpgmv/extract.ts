@@ -75,19 +75,17 @@ function extractFromMapJson(fileName: string, json: MapJson): Translatable[] {
   ];
 }
 
-const extractFromCommonEventsJson = (
-  fileName: string,
-  json: CommonEventsJson,
-): Translatable[] =>
-  json
-    .filter(<T>(page: T): page is Exclude<T, null> => !!page)
-    .flatMap((page, eIndex) =>
-      extractFromPage(page).map(({ jqFilter, ...other }) => ({
+function extractFromCommonEventsJson(fileName: string, json: CommonEventsJson): Translatable[] {
+  return json.flatMap((page, eIndex) =>
+    page
+      ? extractFromPage(page).map(({ jqFilter, ...other }) => ({
         fileName,
         jqFilter: `.[${eIndex}]${jqFilter}`,
         ...other,
       }))
-    );
+      : []
+  );
+}
 
 function extractFromSystemJson(fileName: string, json: SystemJson): Translatable[] {
   return [
