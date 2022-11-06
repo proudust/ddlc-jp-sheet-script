@@ -2,14 +2,6 @@ import { extractFromPage } from "./extract_from_page.ts";
 import { type CommonEventsJson, isCommonEventsJson } from "./json/common_events.ts";
 import { isMapJson, type MapJson } from "./json/map.ts";
 
-export type UnknownJson =
-  | null
-  | string
-  | number
-  | boolean
-  | { [K in string]?: UnknownJson }
-  | UnknownJson[];
-
 export type TranslatableSource = "EventText" | "EventChoices";
 
 export interface Translatable {
@@ -21,7 +13,7 @@ export interface Translatable {
 }
 
 export function extract(fileName: string, fileContent: string): Translatable[] {
-  let json: UnknownJson;
+  let json: unknown;
   try {
     json = JSON.parse(fileContent);
   } catch (e: unknown) {
