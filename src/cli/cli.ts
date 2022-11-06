@@ -27,15 +27,13 @@ await new Command<CommandOptions, CommandArguments>()
         }
         return (await Promise.all(promises)).flat();
       }
-    }))).flat();
+    })))
+      .flat()
+      .map((x) => ({ ...x, original: x.original.replaceAll("\n", "\\n") }));
 
     const tab = await stringify(
       translatables as unknown as Record<string, unknown>[],
-      [
-        "fileName",
-        "jqFilter",
-        { prop: "original", fn: (str: string) => str.replaceAll("\n", "\\n") },
-      ],
+      ["fileName", "jqFilter", "original"],
       { separator: "\t" },
     );
 
