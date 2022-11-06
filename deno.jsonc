@@ -2,7 +2,6 @@
   "fmt": {
     "files": {
       "exclude": [
-        ".history",
         "dist",
         "node_modules"
       ]
@@ -11,13 +10,26 @@
       "lineWidth": 100
     }
   },
-  "lint": {
+  "test": {
     "files": {
       "exclude": [
-        ".history",
         "dist",
         "node_modules"
       ]
     }
+  },
+  "lint": {
+    "files": {
+      "exclude": [
+        "dist",
+        "node_modules"
+      ]
+    }
+  },
+  "tasks": {
+    "build": "deno run --allow-env --allow-net --allow-read --allow-run --allow-write build.ts",
+    "deploy": "deno task build deploy",
+    "start:cli": "deno run --allow-read --allow-write cli/cli.ts",
+    "test": "deno fmt --check & deno lint & deno test"
   }
 }

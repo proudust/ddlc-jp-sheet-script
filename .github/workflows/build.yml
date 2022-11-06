@@ -34,10 +34,10 @@ jobs:
         run: npm ci
 
       - name: Lint and Test
-        run: npm test
+        run: deno task test
 
       - name: Build
-        run: npm run build
+        run: deno task build
         env:
           GIT_DESCRIBE: ${{ steps.ghd.outputs.describe }}
 
@@ -49,6 +49,6 @@ jobs:
 
       - if: github.ref == 'refs/heads/master'
         name: Deploy
-        run: echo "$CLASPRC" > ~/.clasprc.json && npm run deploy
+        run: echo "$CLASPRC" > ~/.clasprc.json && deno task deploy
         env:
           CLASPRC: ${{ secrets.CLASPRC }}
