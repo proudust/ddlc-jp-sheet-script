@@ -4,7 +4,7 @@ import { colors } from "https://deno.land/x/cliffy@v0.25.4/ansi/mod.ts";
 import { build } from "https://deno.land/x/esbuild@v0.15.13/mod.js";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.2/index.js";
 import { $, cd, ProcessOutput } from "https://deno.land/x/zx_deno@1.2.2/mod.mjs";
-import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
+import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.5.0/mod.ts";
 
 const profiles = {
   "ddlc": {
