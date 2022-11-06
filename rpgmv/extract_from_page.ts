@@ -11,10 +11,13 @@ interface EventPage {
   list: Command[];
 }
 
-export interface Translatable {
+type TranslatableSource = "EventText" | "EventChoices";
+
+interface Translatable {
   jqFilter: string;
   faceFile: string;
   original: string;
+  source: TranslatableSource;
 }
 
 export function extractFromPage(page: EventPage) {
@@ -31,6 +34,7 @@ export function extractFromPage(page: EventPage) {
         jqFilter: `.list[${i}].parameters[0]`,
         faceFile,
         original: texts[0].parameters[0],
+        source: "EventText",
       });
       continue;
     }
@@ -41,6 +45,7 @@ export function extractFromPage(page: EventPage) {
         jqFilter: `.list[${i}:${i + texts.length}][].parameters[0]`,
         faceFile,
         original: texts.map(({ parameters }) => parameters[0]).join("\n"),
+        source: "EventText",
       });
       i += texts.length - 1;
       continue;
@@ -59,6 +64,7 @@ export function extractFromPage(page: EventPage) {
         jqFilter: `.list[${i}].parameters[0][${j}]`,
         faceFile,
         original,
+        source: "EventChoices",
       } as const)));
       continue;
     }

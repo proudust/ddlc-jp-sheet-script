@@ -10,11 +10,14 @@ export type UnknownJson =
   | { [K in string]?: UnknownJson }
   | UnknownJson[];
 
+export type TranslatableSource = "EventText" | "EventChoices";
+
 export interface Translatable {
   fileName: string;
   jqFilter: string;
   faceFile: string;
   original: string;
+  source: TranslatableSource;
 }
 
 export function extract(fileName: string, fileContent: string): Translatable[] {
