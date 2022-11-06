@@ -1,3 +1,5 @@
+/// <reference path="https://raw.githubusercontent.com/proudust/deno-gas-types/main/types/index.d.ts" />
+
 /**
  * 未加工のスクリプトのプロパティを表します。
  */
