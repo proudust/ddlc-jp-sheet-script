@@ -1,10 +1,10 @@
-import { parse } from "https://deno.land/std@0.118.0/flags/mod.ts";
-import { join } from "https://deno.land/std@0.118.0/path/mod.ts";
+import { parse } from "https://deno.land/std@0.162.0/flags/mod.ts";
+import { join } from "https://deno.land/std@0.162.0/path/mod.ts";
 import { colors } from "https://deno.land/x/cliffy@v0.20.1/ansi/mod.ts";
 import { build } from "https://deno.land/x/esbuild@v0.12.15/mod.js";
-import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.2/index.js";
 import { $, cd, ProcessOutput } from "https://deno.land/x/zx_deno@1.2.2/mod.mjs";
+import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.3.2/mod.ts";
 
 const profiles = {
   "ddlc": {
@@ -34,7 +34,7 @@ async function generateVersionJson() {
   const version = Deno.env.get("GIT_DESCRIBE") || await (async () => {
     try {
       const { stdout } = await $`git describe --tags`;
-      return stdout;
+      return stdout.trim();
     } catch {
       const distance = Number((await $`git log --oneline --no-merges | wc -l`).stdout);
       if (!Number.isNaN(distance)) {

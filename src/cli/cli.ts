@@ -1,6 +1,6 @@
-import { stringify } from "https://deno.land/std@0.118.0/encoding/csv.ts";
-import { expandGlob } from "https://deno.land/std@0.118.0/fs/mod.ts";
-import { basename } from "https://deno.land/std@0.118.0/path/mod.ts";
+import { stringify } from "https://deno.land/std@0.162.0/encoding/csv.ts";
+import { expandGlob } from "https://deno.land/std@0.162.0/fs/mod.ts";
+import { basename } from "https://deno.land/std@0.162.0/path/mod.ts";
 import { Command } from "https://deno.land/x/cliffy@v0.20.1/command/mod.ts";
 import { version } from "../../version.ts";
 import { extract, type Translatable } from "../rpgmv/extract.ts";
@@ -31,10 +31,12 @@ await new Command<CommandOptions, CommandArguments>()
       .flat()
       .map((x) => ({ ...x, original: x.original.replaceAll("\n", "\\n") }));
 
-    const tab = await stringify(
+    const tab = stringify(
       translatables as unknown as Record<string, unknown>[],
-      ["fileName", "jqFilter", "original"],
-      { separator: "\t" },
+      {
+        columns: ["fileName", "jqFilter", "original"],
+        separator: "\t",
+      },
     );
 
     await Deno.writeTextFile("dialogues.tab", tab);
