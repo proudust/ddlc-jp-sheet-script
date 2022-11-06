@@ -132,7 +132,6 @@ Deno.test("[readRow] duplicate translation and same path", () => {
   ]);
   assertThrows(
     () => readRow(t1, ["Map043.json", "", "....Another nightmare..", "異なる訳"]),
-    undefined,
     " is duplicate translation.",
   );
 });

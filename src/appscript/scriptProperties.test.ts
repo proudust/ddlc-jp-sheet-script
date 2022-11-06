@@ -7,7 +7,6 @@ Deno.test("ScriptProperties#folderName", () => {
 
   assertThrows(
     () => new ScriptProperties({}).folderName,
-    undefined,
     " is not defined in the script property.",
   );
 });
@@ -28,7 +27,6 @@ Deno.test("ScriptProperties#tags", () => {
 
   assertThrows(
     () => new ScriptProperties({}).tags,
-    undefined,
     " is not defined in the script property.",
   );
 });
@@ -56,13 +54,11 @@ Deno.test(`ScriptProperties#exportMode`, () => {
 
   assertThrows(
     () => new ScriptProperties({ EXPORT_MODE: "test" }).exportMode,
-    undefined,
     " is invalid export mode.",
   );
 
   assertThrows(
     () => new ScriptProperties({}).exportMode,
-    undefined,
     " is not defined in the script property.",
   );
 });
@@ -75,7 +71,6 @@ Deno.test("ScriptProperties#githubRepository", () => {
 
   assertThrows(
     () => new ScriptProperties({}).githubRepository,
-    undefined,
     " is not defined in the script property.",
   );
 });
@@ -88,7 +83,6 @@ Deno.test("ScriptProperties#githubToken", () => {
 
   assertThrows(
     () => new ScriptProperties({}).githubToken,
-    undefined,
     " is not defined in the script property.",
   );
 });
