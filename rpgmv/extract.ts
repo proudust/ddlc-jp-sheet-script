@@ -1,7 +1,7 @@
 import { takeWhile } from "https://deno.land/std@0.162.0/collections/mod.ts";
-import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
 import * as c from "./command/mod.ts";
 import * as j from "./json/mod.ts";
+import { check, guard } from "./zod.ts";
 
 export type UnknownJson =
   | null
@@ -11,21 +11,6 @@ export type UnknownJson =
   | { [K in string]?: UnknownJson }
   | UnknownJson[];
 
-// deno-lint-ignore no-explicit-any
-function check<T extends z.ZodType<any, any, any>>(
-  zodObject: T,
-  data: unknown,
-): data is z.infer<T> {
-  return zodObject.safeParse(data).success;
-}
-
-// deno-lint-ignore no-explicit-any
-function guard<T extends z.ZodType<any, any, any>>(
-  zodObject: T,
-): (data: unknown) => data is z.infer<T> {
-  return (data: unknown): data is z.infer<T> => zodObject.safeParse(data).success;
-}
-
 export interface Translatable {
   fileName: string;
   jqFilter: string;
@@ -33,10 +18,7 @@ export interface Translatable {
   original: string;
 }
 
-export function extract(
-  fileName: string,
-  fileContent: string,
-): Translatable[] {
+export function extract(fileName: string, fileContent: string): Translatable[] {
   let json: UnknownJson;
   try {
     json = JSON.parse(fileContent);
