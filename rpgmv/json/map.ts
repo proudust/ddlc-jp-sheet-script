@@ -2,6 +2,7 @@ import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
 import { guard } from "../zod.ts";
 
 export const mapJson = z.object({
+  displayName: z.string(),
   events: z.array(
     z.nullable(z.object({
       name: z.string(),

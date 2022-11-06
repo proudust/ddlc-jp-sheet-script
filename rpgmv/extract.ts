@@ -2,12 +2,12 @@ import { extractFromPage } from "./extract_from_page.ts";
 import { type CommonEventsJson, isCommonEventsJson } from "./json/common_events.ts";
 import { isMapJson, type MapJson } from "./json/map.ts";
 
-export type TranslatableSource = "EventText" | "EventChoices";
+export type TranslatableSource = "MapName" | "EventName" | "EventText" | "EventChoices";
 
 export interface Translatable {
   fileName: string;
   jqFilter: string;
-  faceFile: string;
+  faceFile?: string;
   original: string;
   source: TranslatableSource;
 }
@@ -30,19 +30,50 @@ export function extract(fileName: string, fileContent: string): Translatable[] {
   }
 }
 
-const extractFromMapJson = (
-  fileName: string,
-  json: MapJson,
-): Translatable[] =>
-  (json.events || []).flatMap((event, eIndex) =>
-    (event?.pages || []).flatMap((page, pIndex) =>
-      extractFromPage(page).map(({ jqFilter, ...other }) => ({
+function extractFromMapJson(fileName: string, json: MapJson): Translatable[] {
+  const { displayName, events } = json;
+  const translatable: Translatable[] = [];
+
+  if (displayName) {
+    translatable.push({
+      fileName,
+      jqFilter: ".displayName",
+      original: json.displayName,
+      source: "MapName",
+    });
+  }
+
+  for (let eIndex = 0; eIndex < events.length; eIndex++) {
+    const event = events[eIndex];
+    if (!event) {
+      continue;
+    }
+    const { name, pages } = event;
+
+    if (name) {
+      translatable.push({
         fileName,
-        jqFilter: `.events[${eIndex}].pages[${pIndex}]${jqFilter}`,
-        ...other,
-      }))
-    )
-  );
+        jqFilter: `.events[${eIndex}].name`,
+        original: name,
+        source: "EventName",
+      });
+    }
+
+    for (let pIndex = 0; pIndex < pages.length; pIndex++) {
+      const page = pages[pIndex];
+
+      translatable.push(
+        ...extractFromPage(page).map(({ jqFilter, ...other }) => ({
+          fileName,
+          jqFilter: `.events[${eIndex}].pages[${pIndex}]${jqFilter}`,
+          ...other,
+        })),
+      );
+    }
+  }
+
+  return translatable;
+}
 
 const extractFromCommonEventsJson = (
   fileName: string,
