@@ -1,9 +1,9 @@
 import { parse } from "https://deno.land/std@0.162.0/flags/mod.ts";
 import { join } from "https://deno.land/std@0.162.0/path/mod.ts";
 import { colors } from "https://deno.land/x/cliffy@v0.25.4/ansi/mod.ts";
+import $ from "https://deno.land/x/dax@0.17.0/mod.ts";
 import { build } from "https://deno.land/x/esbuild@v0.15.13/mod.js";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.3/index.js";
-import { $, cd, ProcessOutput } from "https://deno.land/x/zx_deno@1.2.2/mod.mjs";
 import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.5.0/mod.ts";
 import { ghDescribe } from "https://raw.githubusercontent.com/proudust/gh-describe/v1.5.1/core/mod.ts";
 
@@ -46,23 +46,9 @@ async function cliBuild() {
   return await Promise.all(targets.map(async (target) => {
     const dist = join("dist", `cli-${target}`);
     await Deno.mkdir(dist, { recursive: true });
-    $.verbose = false;
-    try {
-      await $`
-        deno compile \
-          --allow-read \
-          --allow-write \
-          --output ${dist}/extract \
-          --target ${target} \
-          cli/cli.ts
-      `;
-      console.log(colors.bold.green("✓"), " ", "CLI", target);
-    } catch (e: unknown) {
-      if (e instanceof ProcessOutput) {
-        console.error(e.stderr);
-      }
-      throw e;
-    }
+
+    await $`deno compile --allow-read --allow-write --output ${dist}/extract --target ${target} cli/cli.ts`;
+    console.log(colors.bold.green("✓"), " ", "CLI", target);
   }));
 }
 
@@ -88,9 +74,9 @@ async function gasBuild(dist: string, name: string) {
 
 async function gasDeploy(source: string, name: string, scriptId: string) {
   await Deno.writeTextFile(join(source, ".clasp.json"), JSON.stringify({ scriptId }));
-  $.verbose = false;
-  cd(source);
-  await $`deno run --allow-env --allow-net --allow-read --allow-sys --allow-write npm:@google/clasp push -f`;
+  await $`deno run --allow-env --allow-net --allow-read --allow-sys --allow-write npm:@google/clasp@2.4.1 push -f`
+    .cwd(source)
+    .stdin("\n");
   console.log(colors.bold.green("✓"), " ", name);
 }
 
