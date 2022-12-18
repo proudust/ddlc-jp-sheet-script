@@ -90,7 +90,7 @@ async function gasDeploy(source: string, name: string, scriptId: string) {
   await Deno.writeTextFile(join(source, ".clasp.json"), JSON.stringify({ scriptId }));
   $.verbose = false;
   cd(source);
-  await $`npx clasp push -f`;
+  await $`deno run --allow-env --allow-net --allow-read --allow-sys --allow-write npm:@google/clasp push -f`;
   console.log(colors.bold.green("✓"), " ", name);
 }
 
