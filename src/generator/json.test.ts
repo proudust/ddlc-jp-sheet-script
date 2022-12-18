@@ -181,7 +181,8 @@ Deno.test("[readRow] duplicate translation and equal 1", () => {
       "Map007.json": {
         ".": {
           "\\SE[8]Thank you so much!!\\.\\. What a relief": "\\SE[8]あ、ありがとう!!\\.\\.",
-          "to come across someone so kind!\\SE[1]": "親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]",
+          "to come across someone so kind!\\SE[1]":
+            "親切な人が通りかかってくれて\n本当に助かったよ!\\SE[1]",
           "\\SE[8]Thank you so much!! What a relief": "\\SE[8]ありがとう!!",
         },
       },
