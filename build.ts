@@ -5,7 +5,7 @@ import $ from "https://deno.land/x/dax@0.17.0/mod.ts";
 import { build } from "https://deno.land/x/esbuild@v0.15.13/mod.js";
 import httpPlugin from "https://deno.land/x/esbuild_plugin_http_fetch@v1.0.3/index.js";
 import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.5.0/mod.ts";
-import { ghDescribe } from "https://raw.githubusercontent.com/proudust/gh-describe/v1.5.1/core/mod.ts";
+import { ghDescribe } from "https://deno.land/x/gh_describe@v1.5.3/mod.ts";
 
 const profiles = {
   "ddlc": {
