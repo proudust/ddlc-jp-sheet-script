@@ -19,7 +19,7 @@ jobs:
           deno-version: v1.x
 
       - name: Restore Dependencies
-        run: echo 'export const version = "";' >version.ts && deno cache *.ts **/*.ts npm:@google/clasp@2.4.1 --reload
+        run: echo 'export const version = "";' >version.ts && deno cache *.ts **/*.ts npm:@google/clasp@2.4.2 --reload
 
       - name: Lint and Test
         run: deno task test
