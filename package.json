@@ -1,7 +1,0 @@
-{
-  "name": "ddlc-jp-sheet-script",
-  "private": true,
-  "devDependencies": {
-    "@google/clasp": "^2.4.2"
-  }
-}
