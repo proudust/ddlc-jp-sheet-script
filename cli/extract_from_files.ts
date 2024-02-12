@@ -1,5 +1,5 @@
-import { expandGlob } from "https://deno.land/std@0.162.0/fs/mod.ts";
-import { basename } from "https://deno.land/std@0.162.0/path/mod.ts";
+import { expandGlob } from "https://deno.land/std@0.213.0/fs/mod.ts";
+import { basename } from "https://deno.land/std@0.213.0/path/mod.ts";
 import { extract, type Translatable } from "../rpgmv/extract.ts";
 
 export async function extractFromFile(path: string): Promise<Translatable[]> {

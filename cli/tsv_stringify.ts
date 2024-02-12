@@ -1,4 +1,4 @@
-import { stringify } from "https://deno.land/std@0.162.0/encoding/csv.ts";
+import { stringify } from "https://deno.land/std@0.213.0/csv/stringify.ts";
 import { type Translatable } from "../rpgmv/extract.ts";
 
 export function tsvStringify(translatable: Translatable[]) {

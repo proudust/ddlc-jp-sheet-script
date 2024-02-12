@@ -1,5 +1,5 @@
-import { parse } from "https://deno.land/std@0.162.0/flags/mod.ts";
-import { join } from "https://deno.land/std@0.162.0/path/mod.ts";
+import { parse } from "https://deno.land/std@0.213.0/flags/mod.ts";
+import { join } from "https://deno.land/std@0.213.0/path/mod.ts";
 import { colors } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts";
 import $ from "https://deno.land/x/dax@0.39.1/mod.ts";
 import { build, type Plugin } from "https://deno.land/x/esbuild@v0.20.0/mod.js";
