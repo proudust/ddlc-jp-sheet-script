@@ -4,7 +4,7 @@ import { colors } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts";
 import $ from "https://deno.land/x/dax@0.39.1/mod.ts";
 import { build, type Plugin } from "https://deno.land/x/esbuild@v0.20.0/mod.js";
 import { denoPlugins } from "https://deno.land/x/esbuild_deno_loader@0.9.0/mod.ts";
-import { ghDescribe } from "https://deno.land/x/gh_describe@v1.5.3/mod.ts";
+import { ghDescribe } from "https://deno.land/x/gh_describe@v2.0.0/mod.ts";
 import { GasPlugin } from "npm:esbuild-gas-plugin@0.8.0";
 
 const profiles = {
