@@ -1,4 +1,4 @@
-import { z } from "https://deno.land/x/zod@v3.19.1/mod.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { guard } from "../zod.ts";
 
 export const textCommand = z.object({
