@@ -4,37 +4,19 @@
       "https://raw.githubusercontent.com/proudust/deno-gas-types/main/types/index.d.ts"
     ]
   },
+  "exclude": [
+    "dist",
+    "node_modules"
+  ],
   "fmt": {
-    "files": {
-      "exclude": [
-        "dist",
-        "node_modules"
-      ]
-    },
-    "options": {
-      "lineWidth": 100
-    }
-  },
-  "test": {
-    "files": {
-      "exclude": [
-        "dist",
-        "node_modules"
-      ]
-    }
-  },
-  "lint": {
-    "files": {
-      "exclude": [
-        "dist",
-        "node_modules"
-      ]
-    }
+    "lineWidth": 100
   },
   "tasks": {
     "build": "deno run --allow-env --allow-net --allow-read --allow-run --allow-write build.ts",
     "deploy": "deno task build deploy",
+    "lock": "(rm deno.lock || true) && deno cache -r *.ts **/*.ts npm:@google/clasp@2.4.2",
     "start:cli": "deno run --allow-read --allow-write cli/cli.ts",
-    "test": "deno fmt --check & deno lint & deno test"
+    "test": "deno fmt --check & deno lint & deno test",
+    "udd": "(rm -r dist/dnt || true) && udd *.ts **/*.ts --dry-run"
   }
 }

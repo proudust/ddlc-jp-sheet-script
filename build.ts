@@ -2,7 +2,7 @@ import { parse } from "https://deno.land/std@0.162.0/flags/mod.ts";
 import { join } from "https://deno.land/std@0.162.0/path/mod.ts";
 import { colors } from "https://deno.land/x/cliffy@v0.25.4/ansi/mod.ts";
 import $ from "https://deno.land/x/dax@0.17.0/mod.ts";
-import { build } from "https://deno.land/x/esbuild@v0.15.16/mod.js";
+import { build } from "https://deno.land/x/esbuild@v0.20.0/mod.js";
 import { denoPlugin } from "https://deno.land/x/esbuild_deno_loader@0.6.0/mod.ts";
 import { ghDescribe } from "https://deno.land/x/gh_describe@v1.5.3/mod.ts";
 import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.5.0/mod.ts";

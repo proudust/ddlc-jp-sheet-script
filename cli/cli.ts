@@ -9,7 +9,7 @@ await new Command()
   .description("RPG Maker MV Extract Dialogue CLI")
   .arguments("[...file|dir]")
   .action(async (_, ...paths) => {
-    const translatable = (await extractFromFiles(paths || [Deno.cwd()]));
+    const translatable = await extractFromFiles(paths || [Deno.cwd()]);
     const tab = tsvStringify(translatable);
     await Deno.writeTextFile("dialogues.tab", tab);
   })
