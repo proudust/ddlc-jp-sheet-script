@@ -1,4 +1,4 @@
-import { Command } from "https://deno.land/x/cliffy@v0.25.4/command/mod.ts";
+import { Command } from "https://deno.land/x/cliffy@v1.0.0-rc.3/command/mod.ts";
 import { version } from "../version.ts";
 import { extractFromFiles } from "./extract_from_files.ts";
 import { tsvStringify } from "./tsv_stringify.ts";
