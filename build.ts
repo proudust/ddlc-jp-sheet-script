@@ -2,10 +2,10 @@ import { parse } from "https://deno.land/std@0.162.0/flags/mod.ts";
 import { join } from "https://deno.land/std@0.162.0/path/mod.ts";
 import { colors } from "https://deno.land/x/cliffy@v1.0.0-rc.3/ansi/mod.ts";
 import $ from "https://deno.land/x/dax@0.39.1/mod.ts";
-import { build } from "https://deno.land/x/esbuild@v0.20.0/mod.js";
+import { build, type Plugin } from "https://deno.land/x/esbuild@v0.20.0/mod.js";
 import { denoPlugin } from "https://deno.land/x/esbuild_deno_loader@0.6.0/mod.ts";
 import { ghDescribe } from "https://deno.land/x/gh_describe@v1.5.3/mod.ts";
-import gasPlugin from "https://esm.sh/esbuild-gas-plugin@0.5.0/mod.ts";
+import { GasPlugin } from "npm:esbuild-gas-plugin@0.8.0";
 
 const profiles = {
   "ddlc": {
@@ -60,8 +60,8 @@ async function gasBuild(dist: string, name: string) {
     outfile: join(dist, "out.js"),
     target: "es2017", // Workaround for jquery/esprima#2034
     plugins: [
-      denoPlugin(),
-      gasPlugin,
+      denoPlugin() as unknown as Plugin,
+      GasPlugin as unknown as Plugin,
     ],
   });
   const copyTask = async (): Promise<void> => {
