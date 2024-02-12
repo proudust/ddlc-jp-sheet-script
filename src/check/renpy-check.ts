@@ -1,4 +1,4 @@
-import { trimIndent } from "../../deps.ts";
+import { dedent } from "npm:@qnighy/dedent@0.1.1";
 
 interface Range {
   getValues(): string[][];
@@ -29,7 +29,7 @@ abstract class Checker {
     sheetRowNumber: number,
   ): string | undefined {
     if (!this.check(row)) return;
-    return trimIndent`
+    return dedent`
       ${this.name}（${sheetName}:${sheetRowNumber}）
       ＩＤ: ${row.id}, ${row.attr}
       原文: ${row.original}

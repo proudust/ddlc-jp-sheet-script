@@ -1,4 +1,4 @@
-import { trimMargin } from "../../deps.ts";
+import { dedent } from "npm:@qnighy/dedent@0.1.1";
 
 export class SayTranslate {
   public readonly type = "say";
@@ -46,18 +46,16 @@ export class StringsTranslate {
     const isMultiLines = this.original.match(/\n/g);
     if (!isMultiLines) {
       if (this.original === this.translate) return "";
-      return trimMargin`
-        |    old "${this.original}"
-        |    new "${this.translate.replace(/(?<!\\)"/g, '\\"')}"
-
+      return dedent`\
+        ${"    "}old "${this.original}"
+        ${"    "}new "${this.translate.replace(/(?<!\\)"/g, '\\"')}"
       `;
     } else {
-      return trimMargin`
-        |    old """\
-        |${this.original.replace(/"/g, '\\"')}"""
-        |    new """\
-        |${this.translate}"""
-
+      return dedent`\
+        ${"    "}old """\\
+        ${this.original.replace(/"/g, '\\"')}"""
+        ${"    "}new """\\
+        ${this.translate}"""
       `;
     }
   }

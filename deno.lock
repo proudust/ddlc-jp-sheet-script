@@ -3,6 +3,7 @@
   "packages": {
     "specifiers": {
       "npm:@google/clasp@2.4.2": "npm:@google/clasp@2.4.2_inquirer@8.2.6",
+      "npm:@qnighy/dedent@0.1.1": "npm:@qnighy/dedent@0.1.1",
       "npm:esbuild-gas-plugin@0.8.0": "npm:esbuild-gas-plugin@0.8.0"
     },
     "npm": {
@@ -158,6 +159,10 @@
           "ts2gas": "ts2gas@4.2.0",
           "typescript": "typescript@4.9.5"
         }
+      },
+      "@qnighy/dedent@0.1.1": {
+        "integrity": "sha512-1TogcOCQlxSL4fS2n3jUtwoTHIlXJN3cw3FmQKSdmVpbVr03gKeXTEskPxqqMT24xkid59bEGv4ZB6oUQqq2fw==",
+        "dependencies": {}
       },
       "@sindresorhus/is@4.6.0": {
         "integrity": "sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==",

@@ -1,4 +1,4 @@
-import { trimIndent } from "../../deps.ts";
+import { dedent } from "npm:@qnighy/dedent@0.1.1";
 
 interface Range {
   getValues(): string[][];
@@ -37,12 +37,12 @@ export const checkLength: CheckFunc = (
     ),
   );
   if (40 < length) {
-    return trimIndent`
+    return dedent`
       字数が全角 20 文字 (半角 40 文字) を超えています。
       原文: "${translate}" (${sheetName}:${sheetRowNumber})
     `;
   } else if (32 < length) {
-    return trimIndent`
+    return dedent`
       字数が全角 16 文字 (半角 32 文字) を超えています。
       原文: "${translate}" (${sheetName}:${sheetRowNumber})
     `;
