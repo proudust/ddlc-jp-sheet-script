@@ -17,6 +17,6 @@
     "lock": "(rm deno.lock || true) && deno cache -r *.ts **/*.ts npm:@google/clasp@2.4.2",
     "start:cli": "deno run --allow-read --allow-write cli/cli.ts",
     "test": "deno fmt --check & deno lint & deno test",
-    "udd": "(rm -r dist/dnt || true) && udd *.ts **/*.ts --dry-run"
+    "udd": "udd *.ts **/*.ts --dry-run"
   }
 }
